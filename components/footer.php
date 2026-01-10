@@ -3,11 +3,31 @@
  * Footer Component
  * Reusable footer với 3 cột: About Us, Contact, Support
  */
+
+// Tính đường dẫn base từ vị trí file gọi component này
+$backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
+$callerFile = isset($backtrace[0]['file']) ? $backtrace[0]['file'] : __FILE__;
+$callerDir = dirname($callerFile);
+$rootDir = dirname(__DIR__); // Root của project
+
+// Normalize paths
+$callerDir = realpath($callerDir);
+$rootDir = realpath($rootDir);
+
+// Tính số level cần lùi lại
+if ($callerDir && $rootDir && strpos($callerDir, $rootDir) === 0) {
+    $relativePath = str_replace($rootDir, '', $callerDir);
+    $relativePath = trim($relativePath, DIRECTORY_SEPARATOR);
+    $levels = $relativePath ? substr_count($relativePath, DIRECTORY_SEPARATOR) + 1 : 0;
+    $basePath = $levels > 0 ? str_repeat('../', $levels) : '';
+} else {
+    $basePath = '';
+}
 ?>
 <footer class="main-footer">
     <div class="container">
         <div class="footer-logo">
-            <img src="assets/img/logo.png" alt="MeowTea Fresh" class="footer-logo-img">
+            <img src="<?php echo $basePath; ?>assets/img/logo.png" alt="MeowTea Fresh" class="footer-logo-img">
             <span class="footer-logo-text">MeowTea Fresh</span>
         </div>
 
@@ -65,7 +85,7 @@
             <div class="footer-column">
                 <h3 class="footer-title">HỖ TRỢ</h3>
                 <ul class="footer-links">
-                    <li><a href="pages/about/index.php#contact">Liên hệ</a></li>
+                    <li><a href="<?php echo $basePath; ?>pages/about/index.php#contact">Liên hệ</a></li>
                     <li><a href="#">Câu hỏi thường gặp</a></li>
                     <li><a href="#">Chính sách bảo mật</a></li>
                     <li><a href="#">Điều khoản sử dụng</a></li>

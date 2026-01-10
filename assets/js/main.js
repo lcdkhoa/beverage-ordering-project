@@ -38,10 +38,27 @@ $(document).ready(function() {
         window.location.href = `pages/menu/product.php?id=${productId}`;
     });
 
-    // Update cart count (placeholder - sẽ implement sau)
+    // Update cart count
     function updateCartCount() {
+        // Tính đường dẫn API dựa trên vị trí hiện tại
+        const currentPath = window.location.pathname;
+        let apiPath = 'api/cart/count.php';
+        
+        // Nếu đang ở trong thư mục con (pages/...), cần thêm ../../
+        // Ví dụ: /projects_web_php/pages/menu/index.php -> cần ../../api/...
+        if (currentPath.includes('/pages/')) {
+            // Đếm số level từ pages/ về root
+            const pathParts = currentPath.split('/').filter(p => p);
+            const pagesIndex = pathParts.indexOf('pages');
+            if (pagesIndex >= 0) {
+                // Số level = số phần tử sau 'pages' + 1 (cho pages)
+                const levels = pathParts.length - pagesIndex - 1;
+                apiPath = '../'.repeat(levels) + apiPath;
+            }
+        }
+        
         $.ajax({
-            url: 'api/cart/count.php',
+            url: apiPath,
             method: 'GET',
             dataType: 'json',
             success: function(response) {

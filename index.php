@@ -115,6 +115,7 @@ $stores = getStores(1); // Get 1 store for display
                     <?php foreach ($bestSellerProducts as $product): ?>
                         <?php 
                             $product = $product;
+                            $basePath = ''; // Từ root, không cần prefix
                             include 'components/product-card.php'; 
                         ?>
                     <?php endforeach; ?>

@@ -111,4 +111,151 @@ function getProductOptions($productId) {
     $stmt->execute([$productId]);
     return $stmt->fetchAll();
 }
+
+/**
+ * Search products by name
+ */
+function searchProducts($keyword, $categoryId = null, $page = 1, $perPage = 12) {
+    $pdo = getDBConnection();
+    $offset = ($page - 1) * $perPage;
+    
+    $sql = "SELECT sp.*, c.TenCategory 
+            FROM SanPham sp 
+            INNER JOIN Category c ON sp.MaCategory = c.MaCategory 
+            WHERE sp.TrangThai = 1";
+    
+    $params = [];
+    
+    if (!empty($keyword)) {
+        $sql .= " AND sp.TenSP LIKE ?";
+        $params[] = "%{$keyword}%";
+    }
+    
+    if ($categoryId) {
+        $sql .= " AND sp.MaCategory = ?";
+        $params[] = $categoryId;
+    }
+    
+    $sql .= " ORDER BY sp.MaSP DESC LIMIT ? OFFSET ?";
+    $params[] = $perPage;
+    $params[] = $offset;
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Count total products for pagination
+ */
+function countProducts($keyword = null, $categoryId = null) {
+    $pdo = getDBConnection();
+    $sql = "SELECT COUNT(*) as total 
+            FROM SanPham sp 
+            WHERE sp.TrangThai = 1";
+    
+    $params = [];
+    
+    if (!empty($keyword)) {
+        $sql .= " AND sp.TenSP LIKE ?";
+        $params[] = "%{$keyword}%";
+    }
+    
+    if ($categoryId) {
+        $sql .= " AND sp.MaCategory = ?";
+        $params[] = $categoryId;
+    }
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $result = $stmt->fetch();
+    return $result['total'] ?? 0;
+}
+
+/**
+ * Get category icon name (for display)
+ */
+function getCategoryIcon($categoryName) {
+    $icons = [
+        'Cà phê truyền thống' => 'coffee',
+        'Trà sữa' => 'milk-tea',
+        'Trà trái cây' => 'fruit-tea',
+        'Đá xay' => 'blended',
+        'Sữa chua' => 'yogurt',
+        'Topping' => 'topping'
+    ];
+    return $icons[$categoryName] ?? 'default';
+}
+
+/**
+ * Normalize image path - đảm bảo đường dẫn hình ảnh luôn đúng từ root
+ * @param string $imagePath - Đường dẫn từ database
+ * @param string $currentDir - Thư mục hiện tại (__DIR__ hoặc __FILE__)
+ * @return string - Đường dẫn đã được normalize
+ */
+function normalizeImagePath($imagePath, $currentDir = null) {
+    if (empty($imagePath)) {
+        return 'assets/img/products/product_one.png';
+    }
+    
+    // Nếu đã là absolute path (bắt đầu bằng /), giữ nguyên
+    if (strpos($imagePath, '/') === 0) {
+        return $imagePath;
+    }
+    
+    // Nếu đã có http/https, giữ nguyên
+    if (strpos($imagePath, 'http://') === 0 || strpos($imagePath, 'https://') === 0) {
+        return $imagePath;
+    }
+    
+    // Xác định base path dựa trên vị trí file gọi function
+    if ($currentDir === null) {
+        // Mặc định từ root
+        return $imagePath;
+    }
+    
+    // Tính toán relative path từ currentDir về root
+    $rootPath = realpath(__DIR__);
+    $currentPath = realpath($currentDir);
+    
+    if ($currentPath && strpos($currentPath, $rootPath) === 0) {
+        // Tính số level cần lùi lại
+        $relativePath = str_replace($rootPath, '', $currentPath);
+        $levels = substr_count($relativePath, DIRECTORY_SEPARATOR);
+        
+        if ($levels > 0) {
+            $prefix = str_repeat('../', $levels);
+            return $prefix . $imagePath;
+        }
+    }
+    
+    return $imagePath;
+}
+
+/**
+ * Get image path from root - đơn giản hóa, luôn trả về đường dẫn từ root
+ * @param string $imagePath - Đường dẫn từ database
+ * @return string - Đường dẫn từ root
+ */
+function getImagePath($imagePath) {
+    if (empty($imagePath)) {
+        return 'assets/img/products/product_one.png';
+    }
+    
+    // Nếu đã là absolute path, giữ nguyên
+    if (strpos($imagePath, '/') === 0) {
+        return $imagePath;
+    }
+    
+    // Nếu đã có http/https, giữ nguyên
+    if (strpos($imagePath, 'http://') === 0 || strpos($imagePath, 'https://') === 0) {
+        return $imagePath;
+    }
+    
+    // Đảm bảo bắt đầu từ root (không có ../)
+    // Loại bỏ các ../ ở đầu nếu có
+    $imagePath = ltrim($imagePath, './');
+    
+    return $imagePath;
+}
 ?>
