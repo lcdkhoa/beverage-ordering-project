@@ -1,0 +1,89 @@
+<?php
+/**
+ * Footer Component
+ * Reusable footer với 3 cột: About Us, Contact, Support
+ */
+?>
+<footer class="main-footer">
+    <div class="container">
+        <div class="footer-logo">
+            <img src="assets/img/logo.png" alt="MeowTea Fresh" class="footer-logo-img">
+            <span class="footer-logo-text">MeowTea Fresh</span>
+        </div>
+
+        <div class="footer-content">
+            <!-- Column 1: About Us -->
+            <div class="footer-column">
+                <h3 class="footer-title">VỀ CHÚNG TÔI</h3>
+                <p class="footer-text">MeowTeaFresh - Lorem ipsum dolor sit amet</p>
+                <p class="footer-description">
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
+                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                </p>
+                <div class="footer-badge">
+                    <span class="badge-icon">✓</span>
+                    <span class="badge-text">ĐÃ THÔNG BÁO BỘ CÔNG THƯƠNG</span>
+                </div>
+            </div>
+
+            <!-- Column 2: Contact -->
+            <div class="footer-column">
+                <h3 class="footer-title">LIÊN HỆ</h3>
+                <div class="contact-info">
+                    <p><strong>Số điện thoại:</strong> (028) 3844 8358</p>
+                    <p><strong>Hotline:</strong> (84) 90 149 3366</p>
+                    <p><strong>Email:</strong> sasco@sasco.com.vn</p>
+                    <p><strong>Văn phòng:</strong> Sân bay Quốc tế Tân Sơn Nhất, Phường 2, Quận Tân Bình, TP Hồ Chí Minh</p>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon" aria-label="Twitter">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="Facebook">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="LinkedIn">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/>
+                            <circle cx="4" cy="4" r="2"/>
+                        </svg>
+                    </a>
+                    <a href="#" class="social-icon" aria-label="YouTube">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.42a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19c1.72.42 8.6.42 8.6.42s6.88 0 8.6-.42a2.78 2.78 0 001.94-2 29 29 0 00.46-5.33 29 29 0 00-.46-5.33z"/>
+                            <polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Column 3: Support -->
+            <div class="footer-column">
+                <h3 class="footer-title">HỖ TRỢ</h3>
+                <ul class="footer-links">
+                    <li><a href="pages/about/index.php#contact">Liên hệ</a></li>
+                    <li><a href="#">Câu hỏi thường gặp</a></li>
+                    <li><a href="#">Chính sách bảo mật</a></li>
+                    <li><a href="#">Điều khoản sử dụng</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p class="copyright">© 2025 Brand, Inc. • Privacy • Terms</p>
+        </div>
+    </div>
+</footer>
+
+<div class="back-to-top">
+    <a href="#top" class="back-to-top-link">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 15l-6-6-6 6"/>
+        </svg>
+        <span>Lên đầu trang</span>
+    </a>
+</div>
