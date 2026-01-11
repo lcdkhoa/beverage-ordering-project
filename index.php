@@ -6,6 +6,23 @@
 
 require_once 'functions.php';
 
+// Get all carousel images from directory
+$carouselDir = __DIR__ . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'carousel';
+$carouselImages = [];
+if (is_dir($carouselDir)) {
+    $files = scandir($carouselDir);
+    foreach ($files as $file) {
+        if ($file !== '.' && $file !== '..' && is_file($carouselDir . DIRECTORY_SEPARATOR . $file)) {
+            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                $carouselImages[] = 'assets/img/carousel/' . $file;
+            }
+        }
+    }
+    // Sort images for consistent order
+    sort($carouselImages);
+}
+
 // Get data from database
 $categories = getCategories();
 $bestSellerProducts = getProductsByCategory(null, 4); // Get 4 products
@@ -24,23 +41,14 @@ $stores = getStores(1); // Get 1 store for display
 <body>
     <?php include 'components/header.php'; ?>
 
-    <!-- Hero Section - Summer Delight Promotion -->
+    <!-- Hero Section - Carousel -->
     <section class="hero-section">
-        <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <div class="hero-promo">Summer Delight</div>
-                    <h1 class="hero-title">
-                        BUY 1<br>
-                        <span style="font-size: 120px;">GET 1</span>
-                    </h1>
-                    <p class="hero-subtitle">Fresh and Healthy</p>
-                </div>
-                <div class="hero-image">
-                    <img src="assets/img/carousel/one.png" alt="Summer Delight Drinks">
-                </div>
-            </div>
-        </div>
+        <?php 
+            $images = !empty($carouselImages) ? $carouselImages : ['assets/img/carousel/one.png'];
+            $carouselId = 'hero-carousel';
+            $autoPlayInterval = 500;
+            include 'components/carousel.php';
+        ?>
     </section>
 
     <!-- About Section -->
@@ -97,7 +105,14 @@ $stores = getStores(1); // Get 1 store for display
                         Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                         Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
                     </p>
-                    <a href="pages/stores/index.php" class="btn btn-primary">Xem thêm</a>
+                    <div class="btn-start">
+                        <?php 
+                            $text = 'Xem thêm';
+                            $type = 'outline';
+                            $href = 'pages/stores/index.php';
+                            include 'components/button.php';
+                        ?>
+                    </div>
                 </div>
             </div>
         </div>

@@ -60,8 +60,7 @@ $avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : 
             <!-- Logo -->
             <div class="logo">
                 <a href="<?php echo $indexPath; ?>">
-                    <img src="<?php echo $basePath; ?>assets/img/logo.png" alt="MeowTea Fresh" class="logo-img">
-                    <span class="logo-text">MeowTea Fresh</span>
+                    <img src="<?php echo $basePath; ?>assets/img/logo.png" alt="MeowTea Fresh" class="logo-img" style="width: 240px; height: 50px;">
                 </a>
             </div>
 
@@ -115,10 +114,6 @@ $avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : 
 
             <!-- User Actions -->
             <div class="header-actions">
-                <div class="currency-selector">
-                    <span>VND</span>
-                    <span class="flag-icon">🇻🇳</span>
-                </div>
                 <div class="separator">|</div>
                 <div class="cart-icon">
                     <a href="<?php echo $basePath; ?>pages/cart/index.php" class="cart-link">

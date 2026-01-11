@@ -27,8 +27,7 @@ if ($callerDir && $rootDir && strpos($callerDir, $rootDir) === 0) {
 <footer class="main-footer">
     <div class="container">
         <div class="footer-logo">
-            <img src="<?php echo $basePath; ?>assets/img/logo.png" alt="MeowTea Fresh" class="footer-logo-img">
-            <span class="footer-logo-text">MeowTea Fresh</span>
+            <img src="<?php echo $basePath; ?>assets/img/logo.png" alt="MeowTea Fresh" class="footer-logo-img" style="width: 240px; height: 50px;">
         </div>
 
         <div class="footer-content">
@@ -98,12 +97,3 @@ if ($callerDir && $rootDir && strpos($callerDir, $rootDir) === 0) {
         </div>
     </div>
 </footer>
-
-<div class="back-to-top">
-    <a href="#top" class="back-to-top-link">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 15l-6-6-6 6"/>
-        </svg>
-        <span>Lên đầu trang</span>
-    </a>
-</div>
