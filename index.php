@@ -54,11 +54,12 @@ $stores = getStores(1); // Get 1 store for display
     <!-- About Section -->
     <section class="section">
         <div class="container">
-            <h2 class="section-title">MeowTea Fresh</h2>
-            <p class="section-subtitle">Lorem ipsum dolor sit amet</p>
-            <p style="text-align: center; max-width: 800px; margin: 0 auto; color: var(--text-light); line-height: 1.8;">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            <h2 class="section-title" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">MeowTea Fresh</h2>
+            <p class="section-subtitle" style="text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15);">Hương vị tươi mới, trải nghiệm đẳng cấp</p>
+            <p style="text-align: justify; max-width: 800px; margin: 0 auto; color: var(--text-light); line-height: 1.8; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);">
+                MeowTea Fresh tự hào là thương hiệu đồ uống hàng đầu với cam kết mang đến những ly trà sữa, cà phê và trà trái cây tươi ngon nhất. 
+                Chúng tôi chọn lọc nguyên liệu chất lượng cao, pha chế theo công thức độc quyền và phục vụ với tâm huyết trong từng sản phẩm. 
+                Đến với MeowTea Fresh, bạn không chỉ thưởng thức một ly đồ uống, mà còn trải nghiệm một không gian thư giãn tuyệt vời và dịch vụ chuyên nghiệp.
             </p>
         </div>
     </section>
@@ -68,16 +69,19 @@ $stores = getStores(1); // Get 1 store for display
         <div class="container">
             <div class="categories-grid">
                 <div class="category-card" onclick="window.location.href='pages/menu/index.php?category=1'">
-                    <img src="assets/img/product_catalogue/coffee.png" alt="Cà Phê" class="category-image">
                     <h3 class="category-name">Cà Phê</h3>
+                    <img src="assets/img/product_catalogue/coffee.png" alt="Cà Phê" class="category-image">
+                    
                 </div>
                 <div class="category-card" onclick="window.location.href='pages/menu/index.php?category=2'">
-                    <img src="assets/img/product_catalogue/milk-tea.jpg" alt="Trà Sữa" class="category-image">
                     <h3 class="category-name">Trà Sữa</h3>
+                    <img src="assets/img/product_catalogue/milk-tea.jpg" alt="Trà Sữa" class="category-image">
+                    
                 </div>
                 <div class="category-card" onclick="window.location.href='pages/menu/index.php?category=3'">
-                    <img src="assets/img/product_catalogue/fruit-tea.png" alt="Trà Trái Cây" class="category-image">
                     <h3 class="category-name">Trà Trái Cây</h3>
+                    <img src="assets/img/product_catalogue/fruit-tea.png" alt="Trà Trái Cây" class="category-image">
+                    
                 </div>
             </div>
             <div class="btn-center">
@@ -96,14 +100,14 @@ $stores = getStores(1); // Get 1 store for display
         <div class="container">
             <div class="store-system-content">
                 <div>
-                    <img src="assets/img/stores/home-page.png" alt="Cửa hàng MeowTea Fresh" class="store-image">
+                    <img src="assets/img/stores/home-page.png" alt="Cửa hàng MeowTea Fresh" class="store-image" style="height: 320px; max-width: 100%;">
                 </div>
                 <div class="store-info">
-                    <h3>Hệ Thống Cửa Hàng</h3>
-                    <p class="store-count">12 cửa hàng trên toàn quốc</p>
-                    <p class="store-description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
+                    <h3 style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); font-size: 28px;">Hệ Thống Cửa Hàng</h3>
+                    <p class="store-count" style="text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.15); font-size: 16px; font-weight: bold;">12 cửa hàng trên toàn quốc</p>
+                    <p class="store-description" style="text-align: justify; text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); font-size: 15px;">
+                        Với hệ thống 12 cửa hàng trải dài trên khắp cả nước, MeowTea Fresh mang đến trải nghiệm đồ uống tươi ngon và không gian thư giãn hiện đại cho mọi khách hàng. 
+                        Mỗi cửa hàng được thiết kế với phong cách riêng biệt nhưng vẫn giữ được bản sắc thương hiệu, tạo nên điểm đến lý tưởng cho những ai yêu thích trà sữa và cà phê chất lượng.
                     </p>
                     <div class="btn-start">
                         <?php 
@@ -211,7 +215,16 @@ $stores = getStores(1); // Get 1 store for display
                 <?php endif; ?>
             </div>
         </div>
+        
     </section>
+    <div class="back-to-top">
+            <a href="#top" class="back-to-top-link">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 15l-6-6-6 6"/>
+                </svg>
+                <span>Lên đầu trang</span>
+            </a>
+    </div>
 
     <?php include 'components/footer.php'; ?>
 
