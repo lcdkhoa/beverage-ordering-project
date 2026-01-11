@@ -60,21 +60,38 @@ $autoPlayInterval = 3000;
     const $prevBtn = $carousel.find('.carousel-prev');
     const $nextBtn = $carousel.find('.carousel-next');
     const totalSlides = $slides.length;
-    
-    // Function to set carousel height based on viewport height minus header
+
+    let fixedHeight = null;
     function setCarouselHeight() {
-        const header = $('.main-header');
-        const headerHeight = header.length > 0 ? header.outerHeight() : 0;
-        const viewportHeight = window.innerHeight;
-        const carouselHeight = viewportHeight - headerHeight;
+        // Calculate height only once on first load
+        if (fixedHeight === null) {
+            const header = $('.main-header');
+            const headerHeight = header.length > 0 ? header.outerHeight() : 0;
+            const viewportHeight = window.innerHeight;
+            fixedHeight = viewportHeight - headerHeight;
+            
+            $('.hero-section').css('height', fixedHeight + 'px');
+        }
         
-        $wrapper.css('height', carouselHeight + 'px');
-        $slidesContainer.css('height', carouselHeight + 'px');
+        
+        $wrapper.css('height', fixedHeight + 'px');
+        $slidesContainer.css('height', fixedHeight + 'px');
     }
     
-    // Set height on load and resize
     setCarouselHeight();
-    $(window).on('resize', setCarouselHeight);
+    
+    
+    let resizeTimeout = null;
+    $(window).on('resize', function() {
+        if (resizeTimeout) {
+            clearTimeout(resizeTimeout);
+        }
+        resizeTimeout = setTimeout(function() {
+            fixedHeight = null;
+            setCarouselHeight();
+            resizeTimeout = null;
+        }, 250);
+    });
     
     if (totalSlides <= 1) return;
     
