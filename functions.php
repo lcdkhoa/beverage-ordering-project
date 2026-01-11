@@ -304,12 +304,25 @@ function getCurrentUser() {
     return [
         'id' => $_SESSION['user_id'] ?? null,
         'username' => $_SESSION['username'] ?? null,
+        'ho' => $_SESSION['user_ho'] ?? null,
+        'ten' => $_SESSION['user_ten'] ?? null,
         'name' => $_SESSION['user_name'] ?? null,
+        'gioi_tinh' => $_SESSION['user_gioi_tinh'] ?? null,
         'email' => $_SESSION['user_email'] ?? null,
         'phone' => $_SESSION['user_phone'] ?? null,
         'role' => $_SESSION['user_role'] ?? null,
         'role_name' => $_SESSION['user_role_name'] ?? null
     ];
+}
+
+/**
+ * Get full name from Ho and Ten
+ * @param string $ho - Last name
+ * @param string $ten - First name
+ * @return string - Full name
+ */
+function getFullName($ho, $ten) {
+    return trim($ho . ' ' . $ten);
 }
 
 /**
@@ -323,7 +336,7 @@ function logout() {
 
 /**
  * Get first character of name for avatar
- * @param string $name - Full name
+ * @param string $name - Full name or first name (Ten)
  * @return string - First character (uppercase)
  */
 function getAvatarInitial($name) {
@@ -337,5 +350,42 @@ function getAvatarInitial($name) {
     
     // Convert to uppercase
     return mb_strtoupper($firstChar, 'UTF-8');
+}
+
+/**
+ * Get avatar initial from Ho and Ten (prefer Ten)
+ * @param string $ho - Last name
+ * @param string $ten - First name
+ * @return string - First character (uppercase)
+ */
+function getAvatarInitialFromName($ho, $ten) {
+    // Prefer Ten (first name) for avatar initial
+    if (!empty($ten)) {
+        return getAvatarInitial($ten);
+    }
+    if (!empty($ho)) {
+        return getAvatarInitial($ho);
+    }
+    return 'U';
+}
+
+/**
+ * Get avatar image path based on gender
+ * @param string|null $gioiTinh - Gender: 'M', 'F', 'O', or null
+ * @param string $basePath - Base path for assets
+ * @return string - Avatar image path
+ */
+function getAvatarImagePath($gioiTinh, $basePath = '') {
+    $avatarFile = 'o.png'; // Default for Other or null
+    
+    if ($gioiTinh === 'M') {
+        $avatarFile = 'm.jpg';
+    } elseif ($gioiTinh === 'F') {
+        $avatarFile = 'f.jpg';
+    } elseif ($gioiTinh === 'O') {
+        $avatarFile = 'o.png';
+    }
+    
+    return $basePath . 'assets/img/avatar/' . $avatarFile;
 }
 ?>

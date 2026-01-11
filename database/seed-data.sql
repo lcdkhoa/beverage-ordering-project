@@ -13,10 +13,10 @@ INSERT INTO `Store` (TenStore, DiaChi, DienThoai, TrangThai) VALUES
 ('Coffee Shop Cầu Giấy', '45 Cầu Giấy, Hà Nội', '0909876543', 1);
 
 -- 3. Insert User (Password giả định là plain text cho demo, thực tế cần hash)
-INSERT INTO `User` (Username, Password, HoTen, DienThoai, Email, MaRole) VALUES
-('admin01', 'password123', 'Nguyễn Quản Lý', '0912345678', 'admin@shop.com', 1),
-('staff_q1', 'staff123', 'Trần Nhân Viên', '0987654321', 'staff1@shop.com', 2),
-('customer01', 'cust123', 'Lê Khách Hàng', '0911223344', 'customer@gmail.com', 3);
+INSERT INTO `User` (Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, MaRole) VALUES
+('admin01', 'password123', 'Nguyễn', 'Quản Lý', 'M', '0912345678', 'admin@shop.com', 1),
+('staff_q1', 'staff123', 'Trần', 'Nhân Viên', 'F', '0987654321', 'staff1@shop.com', 2),
+('customer01', 'cust123', 'Lê', 'Khách Hàng', 'M', '0911223344', 'customer@gmail.com', 3);
 
 -- Phân công nhân viên vào cửa hàng
 INSERT INTO `User_Store` (MaUser, MaStore) VALUES (2, 1);

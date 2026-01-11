@@ -61,9 +61,13 @@ try {
     }
 
     // Login successful - set session
+    $fullName = trim($user['Ho'] . ' ' . $user['Ten']);
     $_SESSION['user_id'] = $user['MaUser'];
     $_SESSION['username'] = $user['Username'];
-    $_SESSION['user_name'] = $user['HoTen'];
+    $_SESSION['user_ho'] = $user['Ho'];
+    $_SESSION['user_ten'] = $user['Ten'];
+    $_SESSION['user_name'] = $fullName;
+    $_SESSION['user_gioi_tinh'] = $user['GioiTinh'] ?? null;
     $_SESSION['user_email'] = $user['Email'];
     $_SESSION['user_phone'] = $user['DienThoai'];
     $_SESSION['user_role'] = $user['MaRole'];
@@ -76,7 +80,10 @@ try {
         'user' => [
             'id' => $user['MaUser'],
             'username' => $user['Username'],
-            'name' => $user['HoTen'],
+            'ho' => $user['Ho'],
+            'ten' => $user['Ten'],
+            'name' => $fullName,
+            'gioi_tinh' => $user['GioiTinh'] ?? null,
             'email' => $user['Email'],
             'phone' => $user['DienThoai'],
             'role' => $user['TenRole']

@@ -17,7 +17,9 @@ CREATE TABLE `User` (
     `MaUser` INT AUTO_INCREMENT PRIMARY KEY, -- PK: Mã người dùng
     `Username` VARCHAR(100) NOT NULL UNIQUE, -- Tên đăng nhập
     `Password` VARCHAR(255) NOT NULL, -- Mật khẩu đã mã hóa
-    `HoTen` VARCHAR(100) NOT NULL, -- Họ tên người dùng
+    `Ho` VARCHAR(50) NOT NULL, -- Họ người dùng
+    `Ten` VARCHAR(50) NOT NULL, -- Tên người dùng
+    `GioiTinh` ENUM('M', 'F', 'O') DEFAULT NULL, -- Giới tính: M=Nam, F=Nữ, O=Khác
     `DienThoai` VARCHAR(20), -- Số điện thoại
     `Email` VARCHAR(100), -- Email
     `TrangThai` TINYINT(1) DEFAULT 1, -- 1: Active, 0: Inactive

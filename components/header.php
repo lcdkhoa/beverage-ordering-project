@@ -48,8 +48,11 @@ $isAbout = strpos($currentPath, '/pages/about/') !== false;
 
 // Check if user is logged in
 $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
+$userHo = $isLoggedIn ? ($_SESSION['user_ho'] ?? '') : '';
+$userTen = $isLoggedIn ? ($_SESSION['user_ten'] ?? '') : '';
 $userName = $isLoggedIn ? ($_SESSION['user_name'] ?? '') : '';
-$avatarInitial = $isLoggedIn ? getAvatarInitial($userName) : '';
+$userGioiTinh = $isLoggedIn ? ($_SESSION['user_gioi_tinh'] ?? null) : null;
+$avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : '';
 ?>
 <header class="main-header">
     <div class="container">
@@ -131,7 +134,11 @@ $avatarInitial = $isLoggedIn ? getAvatarInitial($userName) : '';
                     <!-- User Info (when logged in) -->
                     <div class="user-info-wrapper">
                         <div class="user-avatar" title="<?php echo e($userName); ?>">
-                            <span class="avatar-initial"><?php echo e($avatarInitial); ?></span>
+                            <?php if (!empty($avatarImagePath)): ?>
+                                <img src="<?php echo e($avatarImagePath); ?>" alt="<?php echo e($userName); ?>" class="avatar-image">
+                            <?php else: ?>
+                                <span class="avatar-initial"><?php echo e(getAvatarInitialFromName($userHo, $userTen)); ?></span>
+                            <?php endif; ?>
                         </div>
                         <span class="user-name"><?php echo e($userName); ?></span>
                         <div class="user-dropdown">
