@@ -4,6 +4,13 @@
  * Reusable header với logo, navigation, cart, login
  */
 
+require_once __DIR__ . '/../functions.php';
+
+// Start session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Tính đường dẫn base từ vị trí file gọi component này
 $backtrace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 1);
 $callerFile = isset($backtrace[0]['file']) ? $backtrace[0]['file'] : __FILE__;
@@ -38,6 +45,11 @@ $isStores = strpos($currentPath, '/pages/stores/') !== false;
 $isNews = strpos($currentPath, '/pages/news/') !== false;
 $isCareer = strpos($currentPath, '/pages/career/') !== false;
 $isAbout = strpos($currentPath, '/pages/about/') !== false;
+
+// Check if user is logged in
+$isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
+$userName = $isLoggedIn ? ($_SESSION['user_name'] ?? '') : '';
+$avatarInitial = $isLoggedIn ? getAvatarInitial($userName) : '';
 ?>
 <header class="main-header">
     <div class="container">
@@ -115,15 +127,50 @@ $isAbout = strpos($currentPath, '/pages/about/') !== false;
                     </a>
                 </div>
                 <div class="separator">|</div>
-                <div class="login-icon">
-                    <a href="<?php echo $basePath; ?>pages/auth/login.php" class="login-link">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                        <span class="login-text">Đăng nhập</span>
-                    </a>
-                </div>
+                <?php if ($isLoggedIn): ?>
+                    <!-- User Info (when logged in) -->
+                    <div class="user-info-wrapper">
+                        <div class="user-avatar" title="<?php echo e($userName); ?>">
+                            <span class="avatar-initial"><?php echo e($avatarInitial); ?></span>
+                        </div>
+                        <span class="user-name"><?php echo e($userName); ?></span>
+                        <div class="user-dropdown">
+                            <button class="user-dropdown-toggle" aria-label="Menu người dùng">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </button>
+                            <div class="user-dropdown-menu">
+                                <a href="<?php echo $basePath; ?>pages/profile/index.php" class="dropdown-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                    <span>Thông tin tài khoản</span>
+                                </a>
+                                <a href="<?php echo $basePath; ?>api/auth/logout.php" class="dropdown-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                        <polyline points="16 17 21 12 16 7"/>
+                                        <line x1="21" y1="12" x2="9" y2="12"/>
+                                    </svg>
+                                    <span>Đăng xuất</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <!-- Login Link (when not logged in) -->
+                    <div class="login-icon">
+                        <a href="<?php echo $basePath; ?>pages/auth/login.php" class="login-link">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <span class="login-text">Đăng nhập</span>
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>

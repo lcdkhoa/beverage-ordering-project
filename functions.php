@@ -258,4 +258,84 @@ function getImagePath($imagePath) {
     
     return $imagePath;
 }
+
+/**
+ * Hash password using bcrypt
+ * @param string $password - Plain text password
+ * @return string - Hashed password
+ */
+function hashPassword($password) {
+    return password_hash($password, PASSWORD_BCRYPT);
+}
+
+/**
+ * Verify password
+ * @param string $password - Plain text password
+ * @param string $hash - Hashed password
+ * @return bool - True if password matches
+ */
+function verifyPassword($password, $hash) {
+    // If hash starts with $2y$, use password_verify
+    if (strpos($hash, '$2y$') === 0) {
+        return password_verify($password, $hash);
+    }
+    // Otherwise, compare directly (for demo/legacy passwords)
+    return ($password === $hash);
+}
+
+/**
+ * Check if user is logged in
+ * @return bool
+ */
+function isLoggedIn() {
+    session_start();
+    return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
+}
+
+/**
+ * Get current user data from session
+ * @return array|null - User data or null if not logged in
+ */
+function getCurrentUser() {
+    if (!isLoggedIn()) {
+        return null;
+    }
+    
+    return [
+        'id' => $_SESSION['user_id'] ?? null,
+        'username' => $_SESSION['username'] ?? null,
+        'name' => $_SESSION['user_name'] ?? null,
+        'email' => $_SESSION['user_email'] ?? null,
+        'phone' => $_SESSION['user_phone'] ?? null,
+        'role' => $_SESSION['user_role'] ?? null,
+        'role_name' => $_SESSION['user_role_name'] ?? null
+    ];
+}
+
+/**
+ * Logout user
+ */
+function logout() {
+    session_start();
+    $_SESSION = [];
+    session_destroy();
+}
+
+/**
+ * Get first character of name for avatar
+ * @param string $name - Full name
+ * @return string - First character (uppercase)
+ */
+function getAvatarInitial($name) {
+    if (empty($name)) {
+        return 'U';
+    }
+    
+    // Remove extra spaces and get first character
+    $name = trim($name);
+    $firstChar = mb_substr($name, 0, 1, 'UTF-8');
+    
+    // Convert to uppercase
+    return mb_strtoupper($firstChar, 'UTF-8');
+}
 ?>
