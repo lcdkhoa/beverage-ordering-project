@@ -68,11 +68,6 @@ $fallbackImage = $basePath . 'assets/img/products/product_one.png';
              alt="<?php echo $productName; ?>" 
              class="product-image" 
              onerror="this.onerror=null; if(this.src !== '<?php echo e($fallbackImage); ?>') { this.src='<?php echo e($fallbackImage); ?>'; } else { this.style.display='none'; }">
-        <button class="add-to-cart-btn" data-product-id="<?php echo $productId; ?>" title="Thêm vào giỏ hàng">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 5v14M5 12h14"/>
-            </svg>
-        </button>
     </div>
     <div class="product-info">
         <h3 class="product-name"><?php echo $productName; ?></h3>
@@ -86,8 +81,15 @@ $fallbackImage = $basePath . 'assets/img/products/product_one.png';
             <?php endif; ?>
         </div>
         <div class="product-price">
-            <span class="current-price"><?php echo $productPrice; ?></span>
-            <span class="old-price"><?php echo formatCurrency($product['GiaCoBan'] * 1.3); ?></span>
+            <div class="price-info">
+                <span class="current-price"><?php echo $productPrice; ?></span>
+                <span class="old-price"><?php echo formatCurrency($product['GiaCoBan'] * 1.3); ?></span>
+            </div>
+            <button class="add-to-cart-btn" data-product-id="<?php echo $productId; ?>" title="Thêm vào giỏ hàng">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14"/>
+                </svg>
+            </button>
         </div>
     </div>
 </div>

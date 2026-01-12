@@ -593,11 +593,15 @@ img {
 /* ===== PRODUCT CARD ===== */
 .product-card {
     background-color: var(--white);
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
     cursor: pointer;
+    width: 280px;
+    height: 420px;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-card:hover {
@@ -608,49 +612,52 @@ img {
 .product-image-wrapper {
     position: relative;
     overflow: hidden;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .product-image {
-    width: 100%;
-    height: 250px;
+    width: 260px;
+    height: 260px;
+    max-width: 100%;
     object-fit: cover;
-    transition: transform 0.3s ease;
-}
-
-.product-card:hover .product-image {
-    transform: scale(1.05);
+    border-radius: 20px;
+    display: block;
 }
 
 .add-to-cart-btn {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
     width: 45px;
     height: 45px;
     border-radius: 50%;
-    background-color: var(--primary-green);
-    color: var(--white);
-    border: none;
+    background-color: transparent;
+    color: var(--primary-green);
+    border: 2px solid var(--primary-green);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0;
     transition: all 0.3s ease;
-    box-shadow: var(--shadow);
-}
-
-.product-card:hover .add-to-cart-btn {
-    opacity: 1;
+    flex-shrink: 0;
 }
 
 .add-to-cart-btn:hover {
-    background-color: var(--light-green);
+    background-color: var(--primary-green);
+    color: var(--white);
     transform: scale(1.1);
 }
 
 .product-info {
     padding: 20px;
+    padding-top: 0;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
 }
 
 .product-name {
@@ -684,7 +691,15 @@ img {
 .product-price {
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
+}
+
+.price-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
 }
 
 .current-price {
