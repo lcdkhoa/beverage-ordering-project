@@ -273,10 +273,6 @@ if (strpos($imagePath, '/') !== 0 && strpos($imagePath, 'http') !== 0) {
                     dataType: 'json',
                     success: function(response) {
                         if (response.success) {
-                            // Show success message
-                            if (confirm('Đã thêm vào giỏ hàng!\n\nBạn có muốn xem giỏ hàng không?')) {
-                                window.location.href = '../../pages/cart/index.php';
-                            }
                             // Update cart count
                             if (response.cart_count !== undefined) {
                                 $('.cart-count').text(response.cart_count);

@@ -4,7 +4,9 @@
  * Xử lý đăng xuất người dùng
  */
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Destroy session
 $_SESSION = [];

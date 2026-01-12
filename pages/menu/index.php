@@ -238,6 +238,87 @@ if ($showBestSeller) {
         </a>
     </div>
 
+    <!-- Product Customization Side Menu -->
+    <div id="product-customize-modal" class="product-customize-modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-side-panel">
+            <button class="modal-close-btn" id="close-modal-btn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+            
+            <div class="modal-content">
+                <div id="modal-loading" class="modal-loading">
+                    <p>Đang tải...</p>
+                </div>
+                
+                <div id="modal-product-content" style="display: none;">
+                    <!-- Product Image -->
+                    <div class="modal-product-image-wrapper">
+                        <img id="modal-product-image" src="" alt="" class="modal-product-image">
+                    </div>
+                    
+                    <!-- Product Info -->
+                    <div class="modal-product-info">
+                        <h2 id="modal-product-name"></h2>
+                        <div class="modal-product-price">
+                            <span id="modal-current-price" class="modal-current-price"></span>
+                            <span id="modal-old-price" class="modal-old-price"></span>
+                        </div>
+                        
+                        <!-- Quantity Selector -->
+                        <div class="quantity-selector">
+                            <button type="button" class="quantity-btn" id="modal-decrease-qty">-</button>
+                            <input type="number" id="modal-quantity" class="quantity-input" value="1" min="1" max="10">
+                            <button type="button" class="quantity-btn" id="modal-increase-qty">+</button>
+                        </div>
+                        
+                        <!-- Options Form -->
+                        <form id="modal-product-form">
+                            <input type="hidden" id="modal-product-id" name="product_id">
+                            <input type="hidden" id="modal-base-price" name="base_price">
+                            
+                            <div id="modal-option-groups"></div>
+                            
+                            <!-- Note Section -->
+                            <div class="note-section">
+                                <label for="modal-product-note" class="note-label">Thêm ghi chú</label>
+                                <textarea 
+                                    id="modal-product-note" 
+                                    name="note" 
+                                    class="note-textarea" 
+                                    placeholder="Nhập nội dung ghi chú cho quán (nếu có)"
+                                    maxlength="52"
+                                ></textarea>
+                                <div class="char-count"><span id="modal-char-count">0</span>/52 ký tự</div>
+                            </div>
+                            
+                            <!-- Total Price Display -->
+                            <div class="total-price-display">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 20px; font-weight: bold; color: var(--primary-green);">Tổng tiền:</span>
+                                    <span id="modal-total-price" style="font-size: 28px; font-weight: bold; color: var(--primary-green);"></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="product-actions">
+                                <button type="button" id="modal-add-to-cart-btn" class="btn-add-cart">
+                                    Thêm vào giỏ
+                                </button>
+                                <a href="../../pages/cart/index.php" class="btn-view-cart">
+                                    Xem giỏ hàng
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <?php include '../../components/footer.php'; ?>
 
     <script src="../../assets/js/main.js"></script>

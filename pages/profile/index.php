@@ -68,6 +68,14 @@ $basePath = '../../';
                             </svg>
                             <span>Thông tin cá nhân</span>
                         </a>
+                        <a href="#orders" class="profile-nav-item" data-tab="orders">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                <path d="M9 12l2 2 4-4"/>
+                            </svg>
+                            <span>Đơn hàng</span>
+                        </a>
                         <a href="#password" class="profile-nav-item" data-tab="password">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -130,6 +138,33 @@ $basePath = '../../';
                                 <div class="info-label">Vai trò</div>
                                 <div class="info-value"><?php echo e($userRole); ?></div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Orders Tab -->
+                    <div id="ordersTab" class="profile-tab">
+                        <div class="profile-tab-header">
+                            <h1 class="profile-tab-title">Đơn hàng của tôi</h1>
+                            <p class="profile-tab-subtitle">Xem lịch sử đơn hàng và trạng thái đơn hàng của bạn</p>
+                        </div>
+
+                        <div class="orders-container">
+                            <div id="ordersLoading" class="orders-loading" style="display: none;">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                                    <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="0.75"/>
+                                </svg>
+                                <p>Đang tải đơn hàng...</p>
+                            </div>
+                            <div id="ordersEmpty" class="orders-empty" style="display: none;">
+                                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                    <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                </svg>
+                                <p>Bạn chưa có đơn hàng nào</p>
+                                <a href="<?php echo $basePath; ?>pages/menu/index.php" class="btn-primary">Đặt hàng ngay</a>
+                            </div>
+                            <div id="ordersList" class="orders-list"></div>
                         </div>
                     </div>
 
@@ -277,6 +312,9 @@ $basePath = '../../';
             $('.profile-tab').removeClass('active');
             if (tab === 'info') {
                 $('#infoTab').addClass('active');
+            } else if (tab === 'orders') {
+                $('#ordersTab').addClass('active');
+                loadOrders();
             } else if (tab === 'password') {
                 $('#passwordTab').addClass('active');
             }
@@ -411,6 +449,175 @@ $basePath = '../../';
                 }
             });
         });
+
+        // Load orders function
+        function loadOrders() {
+            const $loading = $('#ordersLoading');
+            const $empty = $('#ordersEmpty');
+            const $list = $('#ordersList');
+            
+            $loading.show();
+            $empty.hide();
+            $list.hide();
+            
+            $.ajax({
+                url: '../../api/order/get.php',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    $loading.hide();
+                    
+                    if (response.success && response.orders && response.orders.length > 0) {
+                        renderOrders(response.orders);
+                        $list.show();
+                    } else {
+                        $empty.show();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Load orders error:', error);
+                    $loading.hide();
+                    $empty.show();
+                }
+            });
+        }
+
+        // Render orders list
+        function renderOrders(orders) {
+            const $list = $('#ordersList');
+            $list.empty();
+            
+            orders.forEach(function(order) {
+                const orderHtml = `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div class="order-header-left">
+                                <h3 class="order-code">Mã đơn: #${order.OrderCode}</h3>
+                                <p class="order-date">Ngày đặt: ${order.NgayTaoFormatted}</p>
+                            </div>
+                            <div class="order-header-right">
+                                <span class="order-status status-${getStatusClass(order.TrangThai)}">${getStatusText(order.TrangThai)}</span>
+                            </div>
+                        </div>
+                        <div class="order-body">
+                            <div class="order-store">
+                                <strong>Cửa hàng:</strong> ${escapeHtml(order.TenStore)}
+                            </div>
+                            <div class="order-items">
+                                ${renderOrderItems(order.items)}
+                            </div>
+                            <div class="order-summary">
+                                <div class="order-summary-row">
+                                    <span>Tạm tính:</span>
+                                    <span>${formatCurrency(calculateSubtotal(order.items))}</span>
+                                </div>
+                                <div class="order-summary-row">
+                                    <span>Phí vận chuyển:</span>
+                                    <span>${formatCurrency(order.PhiVanChuyen || 0)}</span>
+                                </div>
+                                <div class="order-summary-row order-total">
+                                    <span>Tổng tiền:</span>
+                                    <span>${formatCurrency(order.TongTien)}</span>
+                                </div>
+                            </div>
+                            <div class="order-footer">
+                                <div class="order-payment">
+                                    <strong>Phương thức thanh toán:</strong> ${escapeHtml(order.PaymentMethod)}
+                                </div>
+                                <div class="order-address">
+                                    <strong>Địa chỉ giao hàng:</strong> ${escapeHtml(order.DiaChiGiao)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                $list.append(orderHtml);
+            });
+        }
+
+        // Render order items
+        function renderOrderItems(items) {
+            if (!items || items.length === 0) {
+                return '<p class="no-items">Không có sản phẩm</p>';
+            }
+            
+            let html = '<div class="order-items-list">';
+            items.forEach(function(item) {
+                const optionsHtml = item.options && item.options.length > 0 
+                    ? '<div class="item-options">' + item.options.map(function(opt) {
+                        return `<span class="item-option">${escapeHtml(opt.TenNhom)}: ${escapeHtml(opt.TenGiaTri)}</span>`;
+                    }).join(', ') + '</div>'
+                    : '';
+                
+                html += `
+                    <div class="order-item">
+                        <div class="item-info">
+                            <span class="item-name">${escapeHtml(item.TenSP)}</span>
+                            ${optionsHtml}
+                            <span class="item-quantity">x${item.SoLuong}</span>
+                        </div>
+                        <div class="item-price">${formatCurrency(item.ItemTotal || (item.GiaCoBan * item.SoLuong))}</div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            return html;
+        }
+
+        // Calculate subtotal from items
+        function calculateSubtotal(items) {
+            if (!items || items.length === 0) return 0;
+            let subtotal = 0;
+            items.forEach(function(item) {
+                subtotal += (item.ItemTotal || (item.GiaCoBan * item.SoLuong));
+            });
+            return subtotal;
+        }
+
+        // Get status class for styling
+        function getStatusClass(status) {
+            const statusLower = (status || '').toLowerCase();
+            if (statusLower === 'completed' || statusLower === 'hoàn thành') {
+                return 'completed';
+            } else if (statusLower === 'pending' || statusLower === 'chờ xử lý') {
+                return 'pending';
+            } else if (statusLower === 'processing' || statusLower === 'đang xử lý') {
+                return 'processing';
+            } else if (statusLower === 'cancelled' || statusLower === 'đã hủy') {
+                return 'cancelled';
+            }
+            return 'default';
+        }
+
+        // Get status text in Vietnamese
+        function getStatusText(status) {
+            const statusLower = (status || '').toLowerCase();
+            const statusMap = {
+                'pending': 'Chờ xử lý',
+                'processing': 'Đang xử lý',
+                'completed': 'Hoàn thành',
+                'cancelled': 'Đã hủy',
+                'delivering': 'Đang giao hàng'
+            };
+            return statusMap[statusLower] || status || 'Chờ xử lý';
+        }
+
+        // Format currency (consistent with PHP formatCurrency)
+        function formatCurrency(amount) {
+            return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return (text || '').replace(/[&<>"']/g, function(m) { return map[m]; });
+        }
     });
     </script>
 </body>

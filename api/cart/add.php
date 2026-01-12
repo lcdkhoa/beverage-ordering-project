@@ -8,7 +8,9 @@
 header('Content-Type: application/json');
 require_once '../../functions.php';
 
-session_start();
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
 
 // Initialize cart in session if not exists
 if (!isset($_SESSION['cart'])) {

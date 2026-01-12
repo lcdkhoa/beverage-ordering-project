@@ -70,6 +70,15 @@ function getStores($limit = null) {
 }
 
 /**
+ * Get payment methods
+ */
+function getPaymentMethods() {
+    $pdo = getDBConnection();
+    $stmt = $pdo->query("SELECT * FROM Payment_Method ORDER BY MaPayment");
+    return $stmt->fetchAll();
+}
+
+/**
  * Get news/articles
  */
 function getNews($limit = null) {
@@ -288,7 +297,9 @@ function verifyPassword($password, $hash) {
  * @return bool
  */
 function isLoggedIn() {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     return isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 }
 
@@ -329,7 +340,9 @@ function getFullName($ho, $ten) {
  * Logout user
  */
 function logout() {
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
     $_SESSION = [];
     session_destroy();
 }

@@ -62,7 +62,7 @@ img {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 15px;
     flex-wrap: nowrap;
 }
 
@@ -70,6 +70,7 @@ img {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-shrink: 0;
 }
 
 .logo-img {
@@ -80,15 +81,16 @@ img {
 
 
 .main-nav {
-    flex: 1;
+    flex: 1 1 auto;
     min-width: 0;
     overflow: hidden;
+    flex-shrink: 1;
 }
 
 .nav-list {
     display: flex;
     list-style: none;
-    gap: 20px;
+    gap: 15px;
     justify-content: center;
     flex-wrap: nowrap;
     white-space: nowrap;
@@ -100,13 +102,14 @@ img {
 
 .nav-link {
     color: var(--white);
-    font-size: 15px;
-    padding: 5px 8px;
+    font-size: 14px;
+    padding: 5px 6px;
     border-bottom: 2px solid transparent;
     transition: all 0.3s ease;
     display: inline-block;
     white-space: nowrap;
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .nav-link:hover {
@@ -123,7 +126,8 @@ img {
 .header-actions {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 10px;
+    flex-shrink: 0;
 }
 
 .currency-selector,
@@ -134,11 +138,14 @@ img {
     gap: 5px;
     color: var(--white);
     font-size: 13px;
+    flex-shrink: 0;
+    white-space: nowrap;
 }
 
 .separator {
     color: var(--white);
     opacity: 0.5;
+    flex-shrink: 0;
 }
 
 .cart-count {
@@ -159,8 +166,10 @@ img {
 .user-info-wrapper {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     position: relative;
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .user-avatar {
@@ -197,16 +206,19 @@ img {
 
 .user-name {
     color: var(--white);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
     white-space: nowrap;
-    max-width: 150px;
+    max-width: 100px;
     overflow: hidden;
     text-overflow: ellipsis;
+    flex-shrink: 1;
+    min-width: 0;
 }
 
 .user-dropdown {
     position: relative;
+    flex-shrink: 0;
 }
 
 .user-dropdown-toggle {
@@ -597,7 +609,7 @@ img {
     overflow: hidden;
     box-shadow: var(--shadow);
     transition: all 0.3s ease;
-    cursor: pointer;
+    cursor: default;
     width: 280px;
     height: 420px;
     display: flex;
@@ -1087,6 +1099,28 @@ img {
     .products-grid {
         grid-template-columns: repeat(3, 1fr);
     }
+
+    .header-content {
+        gap: 12px;
+    }
+
+    .nav-list {
+        gap: 12px;
+    }
+
+    .nav-link {
+        font-size: 13px;
+        padding: 5px 5px;
+    }
+
+    .user-name {
+        max-width: 90px;
+        font-size: 12px;
+    }
+
+    .header-actions {
+        gap: 8px;
+    }
 }
 
 @media (max-width: 768px) {
@@ -1101,8 +1135,8 @@ img {
     }
 
     .user-name {
-        max-width: 100px;
-        font-size: 13px;
+        max-width: 80px;
+        font-size: 12px;
     }
 
     .user-avatar {
@@ -1674,6 +1708,289 @@ img {
     margin-top: 20px;
 }
 
+/* Orders Tab */
+.orders-container {
+    margin-top: 20px;
+}
+
+.orders-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+}
+
+.orders-loading svg {
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+    color: var(--primary-green);
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.orders-loading p {
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+.orders-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-light);
+}
+
+.orders-empty svg {
+    margin-bottom: 20px;
+    color: var(--border-color);
+}
+
+.orders-empty p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+.orders-empty .btn-primary {
+    display: inline-block;
+    padding: 12px 24px;
+    background: var(--primary-green);
+    color: var(--white);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.orders-empty .btn-primary:hover {
+    background: #153d25;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    background: var(--white);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    box-shadow: var(--shadow-hover);
+    border-color: var(--primary-green);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    background: var(--bg-light);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.order-header-left {
+    flex: 1;
+}
+
+.order-code {
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-green);
+    margin-bottom: 5px;
+}
+
+.order-date {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.order-header-right {
+    margin-left: 20px;
+}
+
+.order-status {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.order-status.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.order-status.status-processing {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.order-status.status-completed {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.order-status.status-cancelled {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.order-status.status-default {
+    background: var(--bg-light);
+    color: var(--text-dark);
+}
+
+.order-body {
+    padding: 20px;
+}
+
+.order-store {
+    font-size: 15px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.order-store strong {
+    color: var(--primary-green);
+}
+
+.order-items {
+    margin-bottom: 20px;
+}
+
+.order-items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 12px;
+    background: var(--bg-light);
+    border-radius: 8px;
+}
+
+.item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.item-name {
+    font-weight: 600;
+    color: var(--text-dark);
+    font-size: 15px;
+}
+
+.item-options {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+.item-option {
+    display: inline;
+}
+
+.item-quantity {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+.item-price {
+    font-weight: 600;
+    color: var(--primary-green);
+    font-size: 15px;
+    white-space: nowrap;
+    margin-left: 15px;
+}
+
+.order-summary {
+    background: var(--bg-light);
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+}
+
+.order-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 15px;
+    color: var(--text-dark);
+}
+
+.order-summary-row.order-total {
+    border-top: 2px solid var(--border-color);
+    padding-top: 12px;
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--primary-green);
+}
+
+.order-footer {
+    padding-top: 15px;
+    border-top: 1px solid var(--border-color);
+}
+
+.order-payment,
+.order-address {
+    font-size: 14px;
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.order-payment:last-child,
+.order-address:last-child {
+    margin-bottom: 0;
+}
+
+.order-payment strong,
+.order-address strong {
+    color: var(--primary-green);
+    margin-right: 8px;
+}
+
+.no-items {
+    text-align: center;
+    color: var(--text-light);
+    padding: 20px;
+    font-style: italic;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .profile-layout {
@@ -1714,5 +2031,33 @@ img {
 
     .profile-tab-title {
         font-size: 24px;
+    }
+
+    .order-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .order-header-right {
+        margin-left: 0;
+        align-self: flex-start;
+    }
+
+    .order-item {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .item-price {
+        margin-left: 0;
+        align-self: flex-end;
+    }
+
+    .order-summary-row {
+        font-size: 14px;
+    }
+
+    .order-summary-row.order-total {
+        font-size: 16px;
     }
 }
