@@ -89,7 +89,7 @@ if ($showBestSeller) {
 
             <div class="menu-layout">
                 <!-- Sidebar - Categories -->
-                <aside class="menu-sidebar">
+                <aside >
                     <ul class="category-list">
                         <li class="category-item <?php echo $showBestSeller ? 'active' : ''; ?>">
                             <a href="?bestseller=1&search=<?php echo urlencode($keyword); ?>" class="category-link">
@@ -172,7 +172,7 @@ if ($showBestSeller) {
                         <?php endif; ?>
 
                         <!-- Pagination -->
-                        <?php if (!$showBestSeller && $totalPages > 1): ?>
+                        <?php if (!$showBestSeller && $totalPages > 0): ?>
                             <div class="pagination">
                                 <?php if ($page > 1): ?>
                                     <a href="?page=<?php echo $page - 1; ?>&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" class="pagination-btn">
@@ -229,7 +229,7 @@ if ($showBestSeller) {
         </div>
     </section>
 
-    <div class="back-to-top">
+    <div style="background-color: var(--light-green);" class="back-to-top">
         <a href="#top" class="back-to-top-link">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M18 15l-6-6-6 6"/>

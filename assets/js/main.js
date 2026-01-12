@@ -24,6 +24,23 @@ $(document).ready(function () {
     }
   });
 
+  // Helper function to get product detail page URL
+  function getProductDetailUrl(productId) {
+    const currentPath = window.location.pathname;
+    let productUrl = "pages/menu/product.php";
+
+    // Nếu đang ở trong pages/menu/, chỉ cần product.php (cùng thư mục)
+    if (currentPath.includes("/pages/menu/")) {
+      productUrl = "product.php";
+    } else if (currentPath.includes("/pages/")) {
+      // Nếu đang ở trong pages/ nhưng không phải menu/, cần ../menu/product.php
+      productUrl = "../menu/product.php";
+    }
+    // Nếu ở root, giữ nguyên pages/menu/product.php
+
+    return `${productUrl}?id=${productId}`;
+  }
+
   // Add to cart functionality
   $(".add-to-cart-btn").on("click", function (e) {
     e.preventDefault();
@@ -32,13 +49,13 @@ $(document).ready(function () {
     const productId = $(this).data("product-id");
 
     // Show product selection modal or redirect
-    window.location.href = `pages/menu/product.php?id=${productId}`;
+    window.location.href = getProductDetailUrl(productId);
   });
 
   // Product card click
   $(".product-card").on("click", function () {
     const productId = $(this).data("product-id");
-    window.location.href = `pages/menu/product.php?id=${productId}`;
+    window.location.href = getProductDetailUrl(productId);
   });
 
   // Update cart count

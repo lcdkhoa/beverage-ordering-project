@@ -138,31 +138,19 @@ require_once '../../functions.php';
                     MeowTea Fresh không chỉ là nơi để thưởng thức đồ uống, mà còn là không gian để bạn tận hưởng những khoảnh khắc thư giãn bên bạn bè và người thân.
                 </p>
             </div>
-
-            <div class="about-back-to-top">
-                <a href="#top" class="about-back-to-top-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 15l-6-6-6 6"/>
-                    </svg>
-                    <span>Lên đầu trang</span>
-                </a>
-            </div>
         </div>
     </section>
+     <div class="back-to-top">
+        <a href="#top" class="back-to-top-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 15l-6-6-6 6"/>
+            </svg>
+            <span>Lên đầu trang</span>
+        </a>
+    </div>
 
     <?php include '../../components/footer.php'; ?>
 
     <script src="../../assets/js/main.js"></script>
-    <script>
-        // Smooth scroll to top
-        $(document).ready(function() {
-            $('a[href="#top"]').on('click', function(e) {
-                e.preventDefault();
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600);
-            });
-        });
-    </script>
 </body>
 </html>

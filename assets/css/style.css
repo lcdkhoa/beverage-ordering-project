@@ -586,7 +586,7 @@ img {
 
 .products-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
 }
 
@@ -1067,7 +1067,6 @@ img {
 .back-to-top {
     text-align: center;
     padding: 20px 0;
-    background-color: var(--white);
 }
 
 .back-to-top-link {
@@ -1084,6 +1083,12 @@ img {
 }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+    .products-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
 @media (max-width: 768px) {
     .header-content {
         flex-direction: column;

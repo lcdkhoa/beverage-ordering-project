@@ -178,31 +178,12 @@ require_once '../../functions.php';
                     </p>
                 </div>
             </div>
-
-            <div class="career-back-to-top">
-                <a href="#top" class="career-back-to-top-link">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M18 15l-6-6-6 6"/>
-                    </svg>
-                    <span>Lên đầu trang</span>
-                </a>
-            </div>
         </div>
+        
     </section>
-
     <?php include '../../components/footer.php'; ?>
 
     <script src="../../assets/js/main.js"></script>
-    <script>
-        // Smooth scroll to top
-        $(document).ready(function() {
-            $('a[href="#top"]').on('click', function(e) {
-                e.preventDefault();
-                $('html, body').animate({
-                    scrollTop: 0
-                }, 600);
-            });
-        });
-    </script>
+    
 </body>
 </html>

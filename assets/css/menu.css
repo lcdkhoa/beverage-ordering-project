@@ -74,20 +74,9 @@
 
 .menu-layout {
     display: grid;
-    grid-template-columns: 250px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 40px;
 }
-
-/* ===== SIDEBAR ===== */
-/* .menu-sidebar {
-    background-color: var(--white);
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: var(--shadow);
-    height: fit-content;
-    position: sticky;
-    top: 100px;
-} */
 
 .best-seller-badge {
     background-color: var(--primary-green);
@@ -623,4 +612,32 @@
     .product-actions {
         flex-direction: column;
     }
+}
+
+/* ===== BACK TO TOP - Menu Page Style ===== */
+.menu-back-to-top {
+    background-color: #E8EDE8;
+    padding: 20px 0;
+}
+
+.menu-back-to-top .back-to-top-link {
+    color: var(--primary-green);
+}
+
+.menu-back-to-top .back-to-top-link:hover {
+    color: var(--primary-green);
+    transform: translateY(-3px);
+}
+
+/* ===== PAGINATION VISIBILITY ===== */
+.menu-products-section .pagination {
+    visibility: visible;
+    opacity: 1;
+    display: flex;
+}
+
+.menu-products-section .pagination-info {
+    visibility: visible;
+    opacity: 1;
+    display: block;
 }
