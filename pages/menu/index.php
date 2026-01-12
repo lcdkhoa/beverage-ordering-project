@@ -242,13 +242,6 @@ if ($showBestSeller) {
     <div id="product-customize-modal" class="product-customize-modal">
         <div class="modal-overlay"></div>
         <div class="modal-side-panel">
-            <button class="modal-close-btn" id="close-modal-btn">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <line x1="18" y1="6" x2="6" y2="18"/>
-                    <line x1="6" y1="6" x2="18" y2="18"/>
-                </svg>
-            </button>
-            
             <div class="modal-content">
                 <div id="modal-loading" class="modal-loading">
                     <p>Đang tải...</p>
@@ -271,7 +264,9 @@ if ($showBestSeller) {
                         <!-- Quantity Selector -->
                         <div class="quantity-selector">
                             <button type="button" class="quantity-btn" id="modal-decrease-qty">-</button>
-                            <input type="number" id="modal-quantity" class="quantity-input" value="1" min="1" max="10">
+                            <!-- Giữ input ẩn để logic JS dùng, hiển thị span để người dùng thấy -->
+                            <input type="hidden" id="modal-quantity" value="1" min="1" max="10">
+                            <span id="modal-quantity-display" class="quantity-input" aria-live="polite">1</span>
                             <button type="button" class="quantity-btn" id="modal-increase-qty">+</button>
                         </div>
                         
@@ -280,7 +275,7 @@ if ($showBestSeller) {
                             <input type="hidden" id="modal-product-id" name="product_id">
                             <input type="hidden" id="modal-base-price" name="base_price">
                             
-                            <div id="modal-option-groups"></div>
+                            <div id="modal-option-groups" style="margin-top: 20px;"></div>
                             
                             <!-- Note Section -->
                             <div class="note-section">

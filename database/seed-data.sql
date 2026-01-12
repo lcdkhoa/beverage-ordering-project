@@ -102,13 +102,17 @@ INSERT INTO `Product_Option_Group` (MaSP, MaOptionGroup) VALUES
 (8, 1), (8, 2), (8, 3);   -- Matcha Latte
 
 -- 12. Insert News
+-- NoiDung lưu đường dẫn tới file markdown: assets/md/news/{MaNews}.md
 INSERT INTO `News` (TieuDe, NoiDung, HinhAnh, TrangThai, NgayTao) VALUES
 ('Những lợi ích tuyệt vời của nước ép trái cây đối với sức khỏe', 
- 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+ 'assets/md/news/1.md',
  'assets/img/news/news_one.jpg', 1, '2024-12-24 10:00:00'),
 ('Cà Phê Cappuccino Dừa lần đầu tiên có mặt tại MeowTea Fresh',
- 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+ 'assets/md/news/2.md',
  'assets/img/news/news_two.jpg', 1, '2024-12-05 10:00:00'),
 ('MeowTea Fresh ra mắt dòng sản phẩm Matcha - dấu ấn độc đáo',
- 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
- 'assets/img/news/news_three.png', 1, '2024-12-09 10:00:00');
+ 'assets/md/news/3.md',
+ 'assets/img/news/news_three.png', 1, '2024-12-09 10:00:00'),
+('App Thành Viên MeowTea Fresh chính thức ra mắt trên Android & iOS',
+ 'assets/md/news/4.md',
+ 'assets/img/news/news_banner.jpg', 1, '2024-12-15 10:00:00');

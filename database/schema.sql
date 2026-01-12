@@ -193,7 +193,7 @@ DROP TABLE IF EXISTS `News`;
 CREATE TABLE `News` (
     `MaNews` INT AUTO_INCREMENT PRIMARY KEY,
     `TieuDe` VARCHAR(255) NOT NULL,
-    `NoiDung` TEXT,
+    `NoiDung` VARCHAR(255) NOT NULL, -- Đường dẫn tới file markdown: assets/md/news/{MaNews}.md
     `HinhAnh` VARCHAR(255),
     `TrangThai` TINYINT(1) DEFAULT 1,
     `NgayTao` DATETIME DEFAULT CURRENT_TIMESTAMP

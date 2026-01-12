@@ -92,6 +92,80 @@ function getNews($limit = null) {
 }
 
 /**
+ * Read markdown file content
+ * @param string $filePath - Path to markdown file relative to project root
+ * @return string - File content or empty string if file not found
+ */
+function readMarkdownFile($filePath) {
+    $rootPath = realpath(__DIR__);
+    $fullPath = $rootPath . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $filePath);
+    
+    if (file_exists($fullPath)) {
+        return file_get_contents($fullPath);
+    }
+    return '';
+}
+
+/**
+ * Get excerpt from markdown content
+ * @param string $markdownContent - Markdown content
+ * @param int $length - Maximum length of excerpt
+ * @return string - Excerpt text
+ */
+function getMarkdownExcerpt($markdownContent, $length = 150) {
+    if (empty($markdownContent)) {
+        return 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...';
+    }
+    
+    // Remove markdown headers (# ## ###)
+    $text = preg_replace('/^#{1,6}\s+/m', '', $markdownContent);
+    
+    // Remove markdown images ![alt](url)
+    $text = preg_replace('/!\[.*?\]\(.*?\)/', '', $text);
+    
+    // Remove markdown links [text](url) but keep text
+    $text = preg_replace('/\[([^\]]+)\]\([^\)]+\)/', '$1', $text);
+    
+    // Remove markdown bold/italic markers
+    $text = preg_replace('/\*\*([^\*]+)\*\*/', '$1', $text);
+    $text = preg_replace('/\*([^\*]+)\*/', '$1', $text);
+    
+    // Remove horizontal rules
+    $text = preg_replace('/^---$/m', '', $text);
+    
+    // Strip HTML tags if any
+    $text = strip_tags($text);
+    
+    // Remove extra whitespace
+    $text = preg_replace('/\s+/', ' ', $text);
+    $text = trim($text);
+    
+    // Get excerpt
+    if (mb_strlen($text) > $length) {
+        $text = mb_substr($text, 0, $length);
+        // Try to cut at word boundary
+        $lastSpace = mb_strrpos($text, ' ');
+        if ($lastSpace !== false) {
+            $text = mb_substr($text, 0, $lastSpace);
+        }
+        $text .= '...';
+    }
+    
+    return $text;
+}
+
+/**
+ * Get news excerpt from markdown file path
+ * @param string $markdownPath - Path to markdown file
+ * @param int $length - Maximum length of excerpt
+ * @return string - Excerpt text
+ */
+function getNewsExcerpt($markdownPath, $length = 150) {
+    $content = readMarkdownFile($markdownPath);
+    return getMarkdownExcerpt($content, $length);
+}
+
+/**
  * Get product by ID
  */
 function getProductById($productId) {

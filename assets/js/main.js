@@ -196,8 +196,9 @@ $(document).ready(function () {
     }
     $("#modal-product-image").attr("src", imageUrl).attr("alt", product.TenSP);
 
-    // Reset quantity
+    // Reset quantity (format with leading zero)
     $("#modal-quantity").val(1);
+    $("#modal-quantity-display").text("01");
     $("#modal-product-note").val("");
     $("#modal-char-count").text("0");
 
@@ -207,10 +208,24 @@ $(document).ready(function () {
 
     optionGroups.forEach(function (group) {
       const $groupDiv = $('<div class="option-group"></div>');
+      const titleText = group.IsMultiple
+        ? `Thêm ${group.TenNhom}`
+        : `Chọn ${group.TenNhom}`;
+      const instructionText = group.IsMultiple ? "" : "Tối đa 1 loại";
       $groupDiv.append(
-        `<h3 class="option-group-title">Chọn ${group.TenNhom}</h3>`
+        `<h3 class="option-group-title">
+          ${titleText}
+          ${
+            instructionText
+              ? `<span class="option-group-instruction">${instructionText}</span>`
+              : ""
+          }
+        </h3>`
       );
-      const $optionList = $('<div class="option-list"></div>');
+      const listClass = group.IsMultiple
+        ? "option-list option-list-checkbox"
+        : "option-list option-list-radio";
+      const $optionList = $('<div class="' + listClass + '"></div>');
 
       group.options.forEach(function (option, index) {
         const isFirst = index === 0;
@@ -276,6 +291,11 @@ $(document).ready(function () {
       $("#modal-total-price").text(formatCurrency(total));
     }
 
+    // Helper to format quantity with leading zero
+    function formatQuantity(num) {
+      return num < 10 ? "0" + num : num.toString();
+    }
+
     // Quantity controls
     $("#modal-increase-qty")
       .off("click")
@@ -283,6 +303,7 @@ $(document).ready(function () {
         if (quantity < 10) {
           quantity++;
           $("#modal-quantity").val(quantity);
+          $("#modal-quantity-display").text(formatQuantity(quantity));
           updateModalTotalPrice();
         }
       });
@@ -293,6 +314,7 @@ $(document).ready(function () {
         if (quantity > 1) {
           quantity--;
           $("#modal-quantity").val(quantity);
+          $("#modal-quantity-display").text(formatQuantity(quantity));
           updateModalTotalPrice();
         }
       });
@@ -302,6 +324,7 @@ $(document).ready(function () {
       .on("change", function () {
         quantity = Math.max(1, Math.min(10, parseInt($(this).val()) || 1));
         $(this).val(quantity);
+        $("#modal-quantity-display").text(formatQuantity(quantity));
         updateModalTotalPrice();
       });
 
@@ -403,7 +426,13 @@ $(document).ready(function () {
   }
 
   // Close modal handlers
-  $("#close-modal-btn, .modal-overlay").on("click", function (e) {
+  $("#close-modal-btn").on("click", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    closeProductModal();
+  });
+
+  $(".modal-overlay").on("click", function (e) {
     if (e.target === this) {
       closeProductModal();
     }
