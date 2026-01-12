@@ -56,10 +56,40 @@ if ($showBestSeller) {
     <!-- Menu Content -->
     <section class="menu-content-section" id="menu-content-section">
         <div class="container">
+            <!-- Menu Title and Search Bar -->
+            <div class="menu-header">
+                <h1 class="sidebar-title">Menu</h1>
+                <div class="menu-search">
+                    <form method="GET" action="" class="search-form">
+                        <?php if ($categoryId): ?>
+                            <input type="hidden" name="category" value="<?php echo $categoryId; ?>">
+                        <?php endif; ?>
+                        <?php if ($showBestSeller): ?>
+                            <input type="hidden" name="bestseller" value="1">
+                        <?php endif; ?>
+                        <div class="search-input-wrapper">
+                            <input 
+                                type="text" 
+                                name="search" 
+                                class="search-input" 
+                                placeholder="Hôm nay bạn muốn uống gì?" 
+                                value="<?php echo e($keyword); ?>"
+                            >
+                            <svg class="search-mic-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+                                <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+                                <line x1="12" y1="19" x2="12" y2="23"/>
+                                <line x1="8" y1="23" x2="16" y2="23"/>
+                            </svg>
+                        </div>
+                        
+                    </form>
+                </div>
+            </div>
+
             <div class="menu-layout">
                 <!-- Sidebar - Categories -->
                 <aside class="menu-sidebar">
-
                     <ul class="category-list">
                         <li class="category-item <?php echo $showBestSeller ? 'active' : ''; ?>">
                             <a href="?bestseller=1&search=<?php echo urlencode($keyword); ?>" class="category-link">
@@ -100,28 +130,6 @@ if ($showBestSeller) {
 
                 <!-- Main Content - Products -->
                 <main class="menu-main">
-                    <!-- Search Bar -->
-                    <div class="menu-search">
-                        <form method="GET" action="" class="search-form">
-                            <?php if ($categoryId): ?>
-                                <input type="hidden" name="category" value="<?php echo $categoryId; ?>">
-                            <?php endif; ?>
-                            <div class="search-input-wrapper">
-                                <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <circle cx="11" cy="11" r="8"/>
-                                    <path d="m21 21-4.35-4.35"/>
-                                </svg>
-                                <input 
-                                    type="text" 
-                                    name="search" 
-                                    class="search-input" 
-                                    placeholder="Hôm nay bạn muốn uống gì?" 
-                                    value="<?php echo e($keyword); ?>"
-                                >
-                            </div>
-                            <button type="submit" class="search-btn">Tìm kiếm</button>
-                        </form>
-                    </div>
 
                     <!-- Products Grid -->
                     <div class="menu-products-section">

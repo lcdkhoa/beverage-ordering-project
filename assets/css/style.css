@@ -12,7 +12,7 @@
 
 :root {
     --primary-green: #1a4d2e;
-    --light-green: #a8d5ba;
+    --light-green: #E8EDE8;
     --cream: #f5f5dc;
     --white: #ffffff;
     --text-dark: #333333;
@@ -1060,12 +1060,11 @@ img {
     align-items: center;
     gap: 8px;
     color: var(--primary-green);
-    font-weight: bold;
     transition: all 0.3s ease;
 }
 
 .back-to-top-link:hover {
-    color: var(--light-green);
+    color: var(--primary-green);
     transform: translateY(-3px);
 }
 

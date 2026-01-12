@@ -25,9 +25,9 @@ if (is_dir($carouselDir)) {
 
 // Get data from database
 $categories = getCategories();
-$bestSellerProducts = getProductsByCategory(null, 4); // Get 4 products
-$news = getNews(3); // Get 3 latest news
-$stores = getStores(1); // Get 1 store for display
+$bestSellerProducts = getProductsByCategory(null, 4);
+$news = getNews(3); 
+$stores = getStores(1); 
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -134,7 +134,7 @@ $stores = getStores(1); // Get 1 store for display
                     <?php foreach ($bestSellerProducts as $product): ?>
                         <?php 
                             $product = $product;
-                            $basePath = ''; // Từ root, không cần prefix
+                            $basePath = ''; 
                             include 'components/product-card.php'; 
                         ?>
                     <?php endforeach; ?>
