@@ -63,8 +63,11 @@ CREATE TABLE `SanPham` (
     `GiaCoBan` DECIMAL(15, 0) NOT NULL DEFAULT 0, -- Giá bán cơ bản
     `HinhAnh` VARCHAR(255), -- URL hình ảnh
     `TrangThai` TINYINT(1) DEFAULT 1, -- Trạng thái
+    `Rating` DECIMAL(3, 2) DEFAULT NULL, -- Đánh giá từ 1.00 đến 5.00
+    `SoLuotRating` INT DEFAULT 0, -- Số lượt đánh giá
     `MaCategory` INT NOT NULL, -- FK: Danh mục
-    CONSTRAINT `FK_SP_Category` FOREIGN KEY (`MaCategory`) REFERENCES `Category` (`MaCategory`)
+    CONSTRAINT `FK_SP_Category` FOREIGN KEY (`MaCategory`) REFERENCES `Category` (`MaCategory`),
+    CONSTRAINT `CHK_Rating_Range` CHECK (`Rating` IS NULL OR (`Rating` >= 1.00 AND `Rating` <= 5.00))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 7. Bảng OPTION_GROUP

@@ -12,6 +12,16 @@ $productName = e($product['TenSP']);
 $productPrice = formatCurrency($product['GiaCoBan']);
 $productId = $product['MaSP'];
 
+// Get rating data from database
+$rating = isset($product['Rating']) && $product['Rating'] !== null ? (float)$product['Rating'] : 0;
+$ratingCount = isset($product['SoLuotRating']) ? (int)$product['SoLuotRating'] : 0;
+
+// Format rating value (1 decimal place)
+$ratingValue = $rating > 0 ? number_format($rating, 1, ',', '.') : '0,0';
+
+// Generate stars based on rating (0-5 scale)
+$starsDisplay = renderStars($rating);
+
 // Xử lý đường dẫn hình ảnh
 $imagePath = !empty($product['HinhAnh']) ? $product['HinhAnh'] : 'assets/img/products/product_one.png';
 
@@ -41,13 +51,11 @@ if (!isset($basePath)) {
     }
 }
 
-// Normalize basePath - đảm bảo không có trailing slash
 $basePath = rtrim($basePath, '/\\');
 if ($basePath) {
     $basePath .= '/';
 }
 
-// Normalize imagePath - loại bỏ leading slash
 $imagePath = ltrim($imagePath, '/\\');
 
 // Tạo đường dẫn đầy đủ
@@ -69,9 +77,13 @@ $fallbackImage = $basePath . 'assets/img/products/product_one.png';
     <div class="product-info">
         <h3 class="product-name"><?php echo $productName; ?></h3>
         <div class="product-rating">
-            <span class="stars">★★★★★</span>
-            <span class="rating-value">4.9</span>
-            <span class="rating-count">(109 đánh giá)</span>
+            <span class="stars"><?php echo $starsDisplay; ?></span>
+            <span class="rating-value"><?php echo $ratingValue; ?></span>
+            <?php if ($ratingCount > 0): ?>
+                <span class="rating-count">(<?php echo number_format($ratingCount, 0, ',', '.'); ?> đánh giá)</span>
+            <?php else: ?>
+                <span class="rating-count">(Chưa có đánh giá)</span>
+            <?php endif; ?>
         </div>
         <div class="product-price">
             <span class="current-price"><?php echo $productPrice; ?></span>

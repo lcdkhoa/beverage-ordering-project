@@ -9,18 +9,22 @@ require_once '../../functions.php';
 // Get parameters
 $categoryId = isset($_GET['category']) ? (int)$_GET['category'] : null;
 $keyword = isset($_GET['search']) ? trim($_GET['search']) : '';
+$showBestSeller = isset($_GET['bestseller']) && $_GET['bestseller'] == '1';
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $perPage = 12;
 
-// Get data from database
+
 $categories = getCategories();
+$bestSellers = getBestSellerProducts(2);
 $products = searchProducts($keyword, $categoryId, $page, $perPage);
 $totalProducts = countProducts($keyword, $categoryId);
 $totalPages = ceil($totalProducts / $perPage);
 
-// Get selected category name
+
 $selectedCategoryName = 'Tất cả';
-if ($categoryId) {
+if ($showBestSeller) {
+    $selectedCategoryName = 'Best Seller';
+} elseif ($categoryId) {
     foreach ($categories as $cat) {
         if ($cat['MaCategory'] == $categoryId) {
             $selectedCategoryName = $cat['TenCategory'];
@@ -42,34 +46,28 @@ if ($categoryId) {
 <body>
     <?php include '../../components/header.php'; ?>
 
-    <!-- Hero Banner Section -->
-    <section class="menu-hero">
-        <div class="container">
-            <div class="menu-hero-content">
-                <div class="menu-hero-text">
-                    <h1 class="menu-hero-title">Menu</h1>
-                    <p class="menu-hero-subtitle">Hôm nay bạn muốn uống gì?</p>
-                </div>
-                <div class="menu-hero-image">
-                    <img src="../../assets/img/carousel/one.png" alt="Fresh Juice">
-                </div>
-            </div>
+    <!-- Hero Banner Section
+    <!-- <section class="menu-hero" id="menu-hero-section">
+        <div class="menu-hero-image">
+            <img src="../../assets/img/products/product_banner.png" alt="Fresh Juice">
         </div>
-    </section>
+    </section> -->
 
     <!-- Menu Content -->
-    <section class="menu-content-section">
+    <section class="menu-content-section" id="menu-content-section">
         <div class="container">
             <div class="menu-layout">
                 <!-- Sidebar - Categories -->
                 <aside class="menu-sidebar">
-                    <div class="best-seller-badge">BEST SELLER</div>
-                    <h3 class="sidebar-title">Danh mục</h3>
+
                     <ul class="category-list">
-                        <li class="category-item <?php echo !$categoryId ? 'active' : ''; ?>">
-                            <a href="?search=<?php echo urlencode($keyword); ?>" class="category-link">
-                                <span class="category-icon">☕</span>
-                                <span class="category-name">Tất cả</span>
+                        <li class="category-item <?php echo $showBestSeller ? 'active' : ''; ?>">
+                            <a href="?bestseller=1&search=<?php echo urlencode($keyword); ?>" class="category-link">
+                                <span class="category-icon">
+                                    <img src="../../assets/img/products/menu/best_seller.svg" 
+                                         alt="Best Seller" 
+                                         class="category-icon-img">
+                                </span>
                             </a>
                         </li>
                         <?php foreach ($categories as $category): ?>
@@ -78,18 +76,22 @@ if ($categoryId) {
                                     <span class="category-icon">
                                         <?php
                                         $icon = getCategoryIcon($category['TenCategory']);
-                                        $icons = [
-                                            'coffee' => '☕',
-                                            'milk-tea' => '🧋',
-                                            'fruit-tea' => '🍹',
-                                            'blended' => '🥤',
-                                            'yogurt' => '🥛',
-                                            'topping' => '🍮'
+                                        $iconMap = [
+                                            'coffee' => 'coffee.svg',
+                                            'milk-tea' => 'milk_tea.svg',
+                                            'fruit-tea' => 'fruit_tea.svg',
+                                            'blended' => 'grinded_ice.svg',
+                                            'yogurt' => 'yoghurt.svg',
+                                            'topping' => 'topping.svg',
+                                            'default' => 'coffee.svg'
                                         ];
-                                        echo $icons[$icon] ?? '☕';
+                                        $iconFile = $iconMap[$icon] ?? 'coffee.svg';
                                         ?>
+                                        <img src="../../assets/img/products/menu/<?php echo $iconFile; ?>" 
+                                             alt="<?php echo e($category['TenCategory']); ?>" 
+                                             class="category-icon-img">
                                     </span>
-                                    <span class="category-name"><?php echo e($category['TenCategory']); ?></span>
+                                    
                                 </a>
                             </li>
                         <?php endforeach; ?>
@@ -125,12 +127,26 @@ if ($categoryId) {
                     <div class="menu-products-section">
                         <h2 class="section-heading">
                             <?php echo e($selectedCategoryName); ?>
-                            <?php if ($totalProducts > 0): ?>
+                            <?php if ($showBestSeller && !empty($bestSellers)): ?>
+                                <span class="product-count">(<?php echo count($bestSellers); ?> sản phẩm)</span>
+                            <?php elseif (!$showBestSeller && $totalProducts > 0): ?>
                                 <span class="product-count">(<?php echo $totalProducts; ?> sản phẩm)</span>
                             <?php endif; ?>
                         </h2>
                         
-                        <?php if (!empty($products)): ?>
+                        <?php if ($showBestSeller && !empty($bestSellers)): ?>
+                            <!-- Render Best Sellers -->
+                            <div class="products-grid">
+                                <?php foreach ($bestSellers as $product): ?>
+                                    <?php 
+                                        $product = $product;
+                                        $basePath = '../../'; // Từ pages/menu/ về root
+                                        include '../../components/product-card.php'; 
+                                    ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php elseif (!$showBestSeller && !empty($products)): ?>
+                            <!-- Render Regular Products -->
                             <div class="products-grid">
                                 <?php foreach ($products as $product): ?>
                                     <?php 
@@ -148,7 +164,7 @@ if ($categoryId) {
                         <?php endif; ?>
 
                         <!-- Pagination -->
-                        <?php if ($totalPages > 1): ?>
+                        <?php if (!$showBestSeller && $totalPages > 1): ?>
                             <div class="pagination">
                                 <?php if ($page > 1): ?>
                                     <a href="?page=<?php echo $page - 1; ?>&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" class="pagination-btn">

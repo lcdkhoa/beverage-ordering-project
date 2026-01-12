@@ -32,15 +32,19 @@ require_once '../../functions.php';
         .about-intro {
             max-width: 900px;
             margin: 0 auto 50px;
-            text-align: center;
+            text-align: justify;
             color: var(--text-light);
             line-height: 1.8;
             font-size: 16px;
         }
 
+        .about-intro p {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+
         .about-hero-image {
             width: 100%;
-            max-width: 1200px;
+            max-width: 900px;
             margin: 0 auto 50px;
             border-radius: 10px;
             overflow: hidden;
@@ -56,10 +60,14 @@ require_once '../../functions.php';
         .about-content {
             max-width: 900px;
             margin: 0 auto;
-            text-align: center;
+            text-align: justify;
             color: var(--text-light);
             line-height: 1.8;
             font-size: 16px;
+        }
+
+        .about-content p {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .about-back-to-top {
@@ -111,9 +119,9 @@ require_once '../../functions.php';
             
             <div class="about-intro">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                    MeowTea Fresh là thương hiệu trà sữa và đồ uống tươi mát được yêu thích tại Việt Nam. 
+                    Với cam kết mang đến những sản phẩm chất lượng cao, nguyên liệu tươi ngon và hương vị độc đáo, 
+                    chúng tôi đã và đang tạo nên những trải nghiệm tuyệt vời cho khách hàng trên khắp cả nước.
                 </p>
             </div>
 
@@ -123,10 +131,11 @@ require_once '../../functions.php';
 
             <div class="about-content">
                 <p>
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
-                    Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. 
-                    Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. 
-                    Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                    Từ những ngày đầu thành lập, MeowTea Fresh đã đặt chất lượng và sự hài lòng của khách hàng lên hàng đầu. 
+                    Chúng tôi tự hào sử dụng 100% nguyên liệu tự nhiên, không chất bảo quản, được tuyển chọn kỹ lưỡng từ những nhà cung cấp uy tín. 
+                    Mỗi ly trà sữa, mỗi thức uống đều được pha chế tỉ mỉ bởi đội ngũ barista chuyên nghiệp, đảm bảo hương vị hoàn hảo và nhất quán. 
+                    Không chỉ dừng lại ở trà sữa truyền thống, chúng tôi không ngừng sáng tạo với các dòng sản phẩm mới như matcha, fruit tea, coffee và nhiều loại topping độc đáo. 
+                    MeowTea Fresh không chỉ là nơi để thưởng thức đồ uống, mà còn là không gian để bạn tận hưởng những khoảnh khắc thư giãn bên bạn bè và người thân.
                 </p>
             </div>
 

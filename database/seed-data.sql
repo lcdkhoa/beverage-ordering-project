@@ -54,11 +54,11 @@ INSERT INTO `Option_Value` (TenGiaTri, GiaThem, MaOptionGroup) VALUES
 ('Pudding trứng', 10000, 3);
 
 -- 7. Insert SanPham
-INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, MaCategory) VALUES
-('Cà phê đen đá', 25000, 'assets/img/products/product_one.png', 1),
-('Cà phê sữa đá', 29000, 'assets/img/products/product_two.png', 1),
-('Trà sữa truyền thống', 35000, 'assets/img/products/product_three.jpg', 2),
-('Trà sữa Matcha', 40000, 'assets/img/products/product_four.jpg', 2);
+INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
+('Cà phê đen đá', 25000, 'assets/img/products/product_one.png', 4.50, 128, 1),
+('Cà phê sữa đá', 29000, 'assets/img/products/product_two.png', 4.75, 256, 1),
+('Trà sữa truyền thống', 35000, 'assets/img/products/product_three.jpg', 4.85, 512, 2),
+('Trà sữa Matcha', 40000, 'assets/img/products/product_four.jpg', 4.60, 384, 2);
 
 -- 8. Link SanPham với Option Group (Product_Option_Group)
 -- Cà phê đen (SP 1) chỉ có Đường (1) và Đá (2)
@@ -88,11 +88,11 @@ INSERT INTO `Order_Item_Option` (MaOrderItem, MaOptionValue, GiaThem) VALUES
 (1, 10, 10000); -- Pudding trứng
 
 -- 11. Insert thêm sản phẩm để có đủ best seller
-INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, MaCategory) VALUES
-('Mê Dừa Non', 35000, 'assets/img/products/product_one.png', 2),
-('Trà sữa Hồng D\'Ran', 35000, 'assets/img/products/product_two.png', 2),
-('Nước ép Kiwi', 35000, 'assets/img/products/product_three.jpg', 3),
-('Matcha Latte', 40000, 'assets/img/products/product_four.jpg', 2);
+INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
+('Mê Dừa Non', 35000, 'assets/img/products/product_one.png', 4.90, 645, 2),
+('Trà sữa Hồng D\'Ran', 35000, 'assets/img/products/product_two.png', 4.65, 298, 2),
+('Nước ép Kiwi', 35000, 'assets/img/products/product_three.jpg', 4.20, 156, 3),
+('Matcha Latte', 40000, 'assets/img/products/product_four.jpg', 4.55, 432, 2);
 
 -- Link options cho các sản phẩm mới
 INSERT INTO `Product_Option_Group` (MaSP, MaOptionGroup) VALUES 

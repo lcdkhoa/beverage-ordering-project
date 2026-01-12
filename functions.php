@@ -388,4 +388,52 @@ function getAvatarImagePath($gioiTinh, $basePath = '') {
     
     return $basePath . 'assets/img/avatar/' . $avatarFile;
 }
+
+/**
+ * Get best seller products based on rating and number of ratings
+ * @param int $limit - Number of products to return
+ * @return array - Array of best seller products
+ */
+function getBestSellerProducts($limit = 8) {
+    $db = getDBConnection(); 
+    $sql = "
+        SELECT sp.*, c.TenCategory
+        FROM SanPham sp
+        INNER JOIN Category c ON sp.MaCategory = c.MaCategory
+        WHERE sp.TrangThai = 1 
+          AND sp.Rating IS NOT NULL
+          AND sp.SoLuotRating > 0
+        ORDER BY sp.Rating DESC, sp.SoLuotRating DESC
+        LIMIT :limit
+    ";
+
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $stmt->execute();
+
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Render stars based on rating value (0-5 scale)
+ * @param float $rating - Rating value from 0 to 5
+ * @return string - HTML string with stars (★ for full, ☆ for empty/half)
+ */
+function renderStars($rating) {
+    // Ensure rating is between 0 and 5
+    $rating = max(0, min(5, (float)$rating));
+    
+    $fullStars = floor($rating); // Số sao đầy
+    $hasHalfStar = ($rating - $fullStars) >= 0.5; // Có nửa sao không (>= 0.5)
+    $emptyStars = 5 - $fullStars - ($hasHalfStar ? 1 : 0); // Số sao rỗng
+    
+    $stars = str_repeat('★', $fullStars); // Sao đầy
+    if ($hasHalfStar) {
+        $stars .= '☆'; // Nửa sao (hiển thị như sao rỗng, có thể dùng CSS để style)
+    }
+    $stars .= str_repeat('☆', $emptyStars); // Sao rỗng
+    
+    return $stars;
+}
+
 ?>
