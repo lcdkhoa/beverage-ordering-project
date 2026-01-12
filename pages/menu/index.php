@@ -299,13 +299,15 @@ if ($showBestSeller) {
                             </div>
                             
                             <!-- Action Buttons -->
-                            <div class="product-actions">
+                            <div class="product-actions" style="position: fixed; bottom: 0; background-color: var(--white); padding: 20px; border-top: 1px solid var(--border-color);">
                                 <button type="button" id="modal-add-to-cart-btn" class="btn-add-cart">
                                     Thêm vào giỏ
                                 </button>
-                                <a href="../../pages/cart/index.php" class="btn-view-cart">
-                                    Xem giỏ hàng
-                                </a>
+                                <button type="button" id="modal-add-to-cart-btn" class="btn-view-cart">
+                                    <a href="../../pages/cart/index.php">
+                                        Xem giỏ hàng
+                                    </a>
+                                </button>
                             </div>
                         </form>
                     </div>

@@ -507,16 +507,20 @@
 }
 
 .btn-add-cart {
-    flex: 1;
-    padding: 18px 30px;
+    padding: 0 20px;
     background-color: var(--white);
     color: var(--primary-green);
     border: 2px solid var(--primary-green);
-    border-radius: 8px;
+    border-radius: 30px;
+    height: 40px;
+    width: 200px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-add-cart:hover {
@@ -524,19 +528,21 @@
 }
 
 .btn-view-cart {
-    flex: 1;
-    padding: 18px 30px;
+    padding: 0 20px;
     background-color: var(--primary-green);
     color: var(--white);
     border: none;
-    border-radius: 8px;
+    border-radius: 30px;
+    height: 40px;
+    width: 200px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
     text-decoration: none;
-    display: inline-block;
-    text-align: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-view-cart:hover {
@@ -972,11 +978,10 @@
 }
 
 /* Total Price Display */
-.modal-product-info .total-price-display {
-    margin-bottom: 20px;
+.total-price-display {
     padding: 15px;
     background-color: rgba(26, 77, 46, 0.05);
-    border-radius: 8px;
+    border-radius: 20px;
 }
 
 /* Product Actions */
@@ -992,7 +997,6 @@
     background-color: var(--white);
     color: var(--primary-green);
     border: 2px solid var(--primary-green);
-    border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -1004,19 +1008,12 @@
 }
 
 .modal-product-info .btn-view-cart {
-    flex: 1;
-    padding: 14px 24px;
     background-color: var(--primary-green);
     color: var(--white);
-    border: none;
-    border-radius: 8px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
-    text-decoration: none;
-    display: inline-block;
-    text-align: center;
 }
 
 .modal-product-info .btn-view-cart:hover {
