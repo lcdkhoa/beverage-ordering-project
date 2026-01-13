@@ -7,10 +7,24 @@ INSERT INTO `Role` (TenRole) VALUES
 ('Staff'), 
 ('Customer');
 
--- 2. Insert Store
+-- 2. Insert Store (12 cửa hàng trải dài khắp Việt Nam)
 INSERT INTO `Store` (TenStore, DiaChi, DienThoai, TrangThai) VALUES
-('Coffee Shop Quận 1', '123 Nguyễn Huệ, Q1, TP.HCM', '0901234567', 1),
-('Coffee Shop Cầu Giấy', '45 Cầu Giấy, Hà Nội', '0909876543', 1);
+-- Hồ Chí Minh (5 cửa hàng)
+('Đồng Khởi', '91 Đồng Khởi, Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '033492824', 1),
+('Cộng Hòa', '123 Cộng Hòa, Phường 12, Tân Bình, Thành Phố Hồ Chí Minh', '033492825', 1),
+('Điện Biên Phủ', '456 Điện Biên Phủ, Phường 25, Bình Thạnh, Thành Phố Hồ Chí Minh', '033492826', 1),
+('Nguyễn Huệ', '789 Nguyễn Huệ, Bến Nghé, Quận 1, Thành Phố Hồ Chí Minh', '033492827', 1),
+('Lê Văn Việt', '321 Lê Văn Việt, Hiệp Phú, Quận 9, Thành Phố Hồ Chí Minh', '033492828', 1),
+-- Hà Nội (4 cửa hàng)
+('Cầu Giấy', '45 Cầu Giấy, Quận Cầu Giấy, Hà Nội', '033492829', 1),
+('Hoàn Kiếm', '67 Phố Hàng Bông, Hoàn Kiếm, Hà Nội', '033492830', 1),
+('Ba Đình', '89 Nguyễn Trãi, Nguyễn Trung Trực, Ba Đình, Hà Nội', '033492831', 1),
+('Đống Đa', '234 Tây Sơn, Trung Liệt, Đống Đa, Hà Nội', '033492832', 1),
+-- Cần Thơ (2 cửa hàng)
+('Ninh Kiều', '123 Trần Hưng Đạo, Tân An, Ninh Kiều, Cần Thơ', '033492833', 1),
+('Cái Răng', '456 Nguyễn Văn Cừ, Lê Bình, Cái Răng, Cần Thơ', '033492834', 1),
+-- Đà Nẵng (1 cửa hàng)
+('Hải Châu', '789 Trần Phú, Hải Châu 1, Hải Châu, Đà Nẵng', '033492835', 1);
 
 -- 3. Insert User (Password giả định là plain text cho demo, thực tế cần hash)
 INSERT INTO `User` (Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, MaRole) VALUES

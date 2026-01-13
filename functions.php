@@ -70,6 +70,102 @@ function getStores($limit = null) {
 }
 
 /**
+ * Search stores by name
+ */
+function searchStoresByName($keyword) {
+    $pdo = getDBConnection();
+    $sql = "SELECT * FROM Store WHERE TrangThai = 1";
+    
+    $params = [];
+    if (!empty($keyword)) {
+        $sql .= " AND TenStore LIKE ?";
+        $params[] = "%{$keyword}%";
+    }
+    
+    $sql .= " ORDER BY TenStore";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Search stores by location (province/city and ward/commune)
+ */
+function searchStoresByLocation($province = null, $ward = null) {
+    $pdo = getDBConnection();
+    $sql = "SELECT * FROM Store WHERE TrangThai = 1";
+    
+    $params = [];
+    if (!empty($province)) {
+        $sql .= " AND DiaChi LIKE ?";
+        $params[] = "%{$province}%";
+    }
+    if (!empty($ward)) {
+        $sql .= " AND DiaChi LIKE ?";
+        $params[] = "%{$ward}%";
+    }
+    
+    $sql .= " ORDER BY TenStore";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Get all stores with search filters
+ */
+function getStoresWithFilters($keyword = null, $province = null, $ward = null) {
+    $pdo = getDBConnection();
+    $sql = "SELECT * FROM Store WHERE TrangThai = 1";
+    
+    $params = [];
+    if (!empty($keyword)) {
+        $sql .= " AND TenStore LIKE ?";
+        $params[] = "%{$keyword}%";
+    }
+    if (!empty($province)) {
+        $sql .= " AND DiaChi LIKE ?";
+        $params[] = "%{$province}%";
+    }
+    if (!empty($ward)) {
+        $sql .= " AND DiaChi LIKE ?";
+        $params[] = "%{$ward}%";
+    }
+    
+    $sql .= " ORDER BY TenStore";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll();
+}
+
+/**
+ * Count total stores
+ */
+function countStores($keyword = null, $province = null, $ward = null) {
+    $pdo = getDBConnection();
+    $sql = "SELECT COUNT(*) as total FROM Store WHERE TrangThai = 1";
+    
+    $params = [];
+    if (!empty($keyword)) {
+        $sql .= " AND TenStore LIKE ?";
+        $params[] = "%{$keyword}%";
+    }
+    if (!empty($province)) {
+        $sql .= " AND DiaChi LIKE ?";
+        $params[] = "%{$province}%";
+    }
+    if (!empty($ward)) {
+        $sql .= " AND DiaChi LIKE ?";
+        $params[] = "%{$ward}%";
+    }
+    
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    $result = $stmt->fetch();
+    return $result['total'] ?? 0;
+}
+
+/**
  * Get payment methods
  */
 function getPaymentMethods() {
