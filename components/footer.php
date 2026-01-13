@@ -34,27 +34,25 @@ if ($callerDir && $rootDir && strpos($callerDir, $rootDir) === 0) {
             <!-- Column 1: About Us -->
             <div class="footer-column">
                 <h3 class="footer-title">VỀ CHÚNG TÔI</h3>
-                <p class="footer-text">MeowTeaFresh - Lorem ipsum dolor sit amet</p>
+                <p class="footer-text">MeowTeaFresh - Thương hiệu trà sữa tươi ngon</p>
                 <p class="footer-description">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor 
-                    incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+                    Chúng tôi mang đến những ly trà sữa tươi ngon, được pha chế từ nguyên liệu chất lượng cao. 
+                    Với cam kết về hương vị tự nhiên và dịch vụ tận tâm.
                 </p>
-                <div class="footer-badge">
-                    <span class="badge-icon">✓</span>
-                    <span class="badge-text">ĐÃ THÔNG BÁO BỘ CÔNG THƯƠNG</span>
+                <div >
+                    <img src="/assets/img/bocongthuong.png" alt="MeowTea Fresh" style="width: 150px;">
                 </div>
             </div>
 
             <!-- Column 2: Contact -->
-            <div class="footer-column">
+            <div class="footer-column" style="display: flex; flex-direction: column;">
                 <h3 class="footer-title">LIÊN HỆ</h3>
                 <div class="contact-info">
-                    <p><strong>Số điện thoại:</strong> (028) 3844 8358</p>
-                    <p><strong>Hotline:</strong> (84) 90 149 3366</p>
-                    <p><strong>Email:</strong> sasco@sasco.com.vn</p>
-                    <p><strong>Văn phòng:</strong> Sân bay Quốc tế Tân Sơn Nhất, Phường 2, Quận Tân Bình, TP Hồ Chí Minh</p>
+                    <p><strong>Hotline:</strong> 1900 1111</p>
+                    <p><strong>Email:</strong> info@meowteafresh.com</p>
+                    <p><strong>Văn phòng:</strong>  số 09 Nguyễn Bỉnh Khiêm, Phường Sài Gòn, TP. Hồ Chí Minh</p>
                 </div>
-                <div class="social-icons">
+                <div class="social-icons" style="margin-top: auto;">
                     <a href="#" class="social-icon" aria-label="Twitter">
                         <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
@@ -93,7 +91,7 @@ if ($callerDir && $rootDir && strpos($callerDir, $rootDir) === 0) {
         </div>
 
         <div class="footer-bottom">
-            <p class="copyright">© 2025 Brand, Inc. • Privacy • Terms</p>
+            <p class="copyright">© 2026 MeowTea Fresh. All rights reserved. • Privacy • Terms</p>
         </div>
     </div>
 </footer>

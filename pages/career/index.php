@@ -173,8 +173,8 @@ require_once '../../functions.php';
                     <h3 class="career-contact-title">Bạn muốn gửi hồ sơ ứng tuyển?</h3>
                     <p class="career-contact-text">
                         Nếu bạn quan tâm đến cơ hội làm việc tại MeowTea Fresh, 
-                        vui lòng gửi hồ sơ của bạn đến email: <strong>hr@meowtea.com</strong> 
-                        hoặc liên hệ hotline: <strong>(84) 91 123 45678</strong> để được tư vấn.
+                        vui lòng gửi hồ sơ của bạn đến email: <strong>info@meowteafresh.com</strong> 
+                        hoặc liên hệ hotline: <strong>1900 1111</strong> để được tư vấn.
                     </p>
                 </div>
             </div>
