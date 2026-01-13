@@ -90,7 +90,7 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
                                 onerror="this.src='../../assets/img/products/product_banner.png'"
                             >
                             <div class="store-info">
-                                <h3 class="store-name">MeowTea Fresh <?php echo e($store['TenStore']); ?></h3>
+                                <h3 class="store-name">MeowTea Fresh<br><?php echo e($store['TenStore']); ?></h3>
                                 <div class="store-hours">Mở cửa đến 22:00</div>
                                 <div class="store-address">
                                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -106,11 +106,12 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
                                     <span><?php echo e($store['DienThoai']); ?></span>
                                 </div>
                                 <div class="store-actions">
-                                    <a href="../menu/index.php" class="btn-order">Đặt ngay</a>
+                                    <a href="../menu/index.php" class="btn-order" style="width: 150px;">Đặt ngay</a>
                                     <a 
                                         href="https://www.google.com/maps/search/?api=1&query=<?php echo urlencode($store['DiaChi']); ?>" 
                                         target="_blank" 
                                         class="btn-directions"
+                                        style="width: 200px;"
                                     >
                                         Chỉ đường
                                     </a>
@@ -126,15 +127,7 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
             <?php endif; ?>
         </div>
 
-        <!-- Back to Top -->
-        <div class="back-to-top">
-            <a href="#top" class="back-to-top-link">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 15l-6-6-6 6"/>
-                </svg>
-                <span>Lên đầu trang</span>
-            </a>
-        </div>
+       
     </section>
 
     <?php include '../../components/footer.php'; ?>

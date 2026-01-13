@@ -141,7 +141,7 @@ $basePath = '../../';
                         <span class="total-label">Tổng tiền</span>
                         <span class="total-amount" id="cart-total-amount"><?php echo formatCurrency($totalAmount); ?></span>
                     </div>
-                    <button class="btn btn-checkout" id="checkout-btn">Đặt hàng</button>
+                    <button class="btn btn-checkout" style="width: 200px;" id="checkout-btn">Đặt hàng</button>
                 </div>
             <?php endif; ?>
         </div>

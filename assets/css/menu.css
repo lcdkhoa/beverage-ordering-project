@@ -340,21 +340,6 @@
     display: block;
 }
 
-/* ===== BACK TO TOP - Menu Page Style ===== */
-.menu-back-to-top {
-    background-color: #E8EDE8;
-    padding: 20px 0;
-}
-
-.menu-back-to-top .back-to-top-link {
-    color: var(--primary-green);
-}
-
-.menu-back-to-top .back-to-top-link:hover {
-    color: var(--primary-green);
-    transform: translateY(-3px);
-}
-
 /* ===== RESPONSIVE ===== */
 @media (max-width: 968px) {
     .menu-layout {

@@ -218,12 +218,12 @@ $stores = getStores(1);
         
     </section>
     <div class="back-to-top">
-            <a href="#top" class="back-to-top-link">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 15l-6-6-6 6"/>
-                </svg>
-                <span>Lên đầu trang</span>
-            </a>
+        <a href="#top" class="back-to-top-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 15l-6-6-6 6"/>
+            </svg>
+            <span>Lên đầu trang</span>
+        </a>
     </div>
 
     <?php include 'components/footer.php'; ?>

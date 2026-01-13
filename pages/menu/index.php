@@ -304,8 +304,9 @@ if ($showBestSeller) {
                                 <button type="button" id="modal-add-to-cart-btn" class="btn-add-cart">
                                     Thêm vào giỏ
                                 </button>
-                                <button type="button" id="modal-add-to-cart-btn" class="btn-view-cart">
-                                    <a href="../../pages/cart/index.php">
+                                
+                                    <a href="../cart/index.php">
+                                        <button type="button" id="modal-add-to-cart-btn" class="btn-view-cart" style="width: 250px;">
                                         Xem giỏ hàng
                                     </a>
                                 </button>

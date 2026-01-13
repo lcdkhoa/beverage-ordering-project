@@ -318,11 +318,13 @@
 }
 
 .btn-checkout {
-    padding: 15px 40px;
+    padding: 0px 20px;
+    border-radius: 30px;
+    height: 40px;
+    width: auto;
     background: var(--primary-green);
     color: var(--white);
-    border: none;
-    border-radius: 8px;
+    border: 2px solid var(--primary-green);
     font-size: 18px;
     font-weight: 600;
     cursor: pointer;
@@ -662,7 +664,7 @@
     accent-color: var(--primary-green);
 }
 
-.payment-method-option input[type="radio"]:checked + .payment-method-name {
+.payment-method-option input[type="radio"]:checked+.payment-method-name {
     color: var(--primary-green);
     font-weight: 600;
 }
@@ -1059,7 +1061,7 @@
     top: -25px;
 }
 
-.progress-step.completed + .progress-line {
+.progress-step.completed+.progress-line {
     background: var(--primary-green);
 }
 

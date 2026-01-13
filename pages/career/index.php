@@ -98,32 +98,6 @@ require_once '../../functions.php';
             color: var(--text-dark);
         }
 
-        .career-back-to-top {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px 0;
-        }
-
-        .career-back-to-top-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary-green);
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .career-back-to-top-link:hover {
-            color: var(--light-green);
-            transform: translateY(-3px);
-        }
-
-        .career-back-to-top-link svg {
-            width: 20px;
-            height: 20px;
-        }
-
         @media (max-width: 768px) {
             .career-title {
                 font-size: 36px;
