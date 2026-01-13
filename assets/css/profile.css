@@ -302,9 +302,11 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 24px;
-  border: none;
-  border-radius: 10px;
+  padding: 0px 20px;
+  border: 2px solid var(--primary-green);
+  border-radius: 30px;
+  height: 40px;
+  width: auto;
   background: var(--primary-green);
   color: var(--white);
   font-weight: 600;
