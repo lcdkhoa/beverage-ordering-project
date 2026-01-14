@@ -140,11 +140,14 @@ CREATE TABLE `Orders` (
     `MaStore` INT NOT NULL, -- FK: Cửa hàng xử lý
     `DiaChiGiao` TEXT NOT NULL, -- Địa chỉ giao hàng
     `PhiVanChuyen` DECIMAL(15, 0) DEFAULT 0,
+    `MaPromotion` INT DEFAULT NULL, -- FK: Mã khuyến mãi
+    `GiamGia` DECIMAL(15, 0) DEFAULT 0, -- Số tiền giảm giá
     `TongTien` DECIMAL(15, 0) NOT NULL,
     `TrangThai` VARCHAR(50) DEFAULT 'Pending', -- Trạng thái đơn
     `NgayTao` DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT `FK_Order_User` FOREIGN KEY (`MaUser`) REFERENCES `User` (`MaUser`),
-    CONSTRAINT `FK_Order_Store` FOREIGN KEY (`MaStore`) REFERENCES `Store` (`MaStore`)
+    CONSTRAINT `FK_Order_Store` FOREIGN KEY (`MaStore`) REFERENCES `Store` (`MaStore`),
+    CONSTRAINT `FK_Order_Promotion` FOREIGN KEY (`MaPromotion`) REFERENCES `Promotion` (`MaPromotion`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 14. Bảng ORDER_ITEM
@@ -182,10 +185,11 @@ DROP TABLE IF EXISTS `Promotion`;
 CREATE TABLE `Promotion` (
     `MaPromotion` INT AUTO_INCREMENT PRIMARY KEY, -- PK: Mã khuyến mãi
     `Code` VARCHAR(50) NOT NULL UNIQUE,
-    `LoaiGiamGia` VARCHAR(50), -- Percentage
+    `LoaiGiamGia` VARCHAR(50), -- Percentage / Fixed
     `GiaTri` DECIMAL(15, 0) NOT NULL,
     `NgayBatDau` DATETIME,
-    `NgayKetThuc` DATETIME
+    `NgayKetThuc` DATETIME,
+    `TrangThai` TINYINT(1) DEFAULT 1 -- 1: Active, 0: Inactive
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 18. Bảng NEWS

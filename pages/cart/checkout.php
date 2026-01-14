@@ -232,10 +232,20 @@ $basePath = '../../';
                         <!-- Promotion Code -->
                         <div class="promotion-section">
                             <label class="promotion-label">Khuyến mãi</label>
-                            <input type="text" 
-                                   class="promotion-input" 
-                                   id="promotion-code" 
-                                   placeholder="Nhập hoặc chọn mã khuyến mãi">
+                            <div class="promotion-input-wrapper">
+                                <input type="text" 
+                                       class="promotion-input" 
+                                       id="promotion-code" 
+                                       placeholder="Nhập mã khuyến mãi"
+                                       autocomplete="off">
+                                <button type="button" class="btn-apply-promotion" id="btn-apply-promotion">
+                                    Áp dụng
+                                </button>
+                            </div>
+                            <div class="promotion-message" id="promotion-message"></div>
+                            <button type="button" class="btn-remove-promotion" id="btn-remove-promotion" style="display: none;">
+                                Xóa mã
+                            </button>
                         </div>
 
                         <!-- Payment Summary -->

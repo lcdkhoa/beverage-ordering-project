@@ -46,6 +46,7 @@ $isNews = strpos($currentPath, '/pages/news/') !== false;
 $isCareer = strpos($currentPath, '/pages/career/') !== false;
 $isAbout = strpos($currentPath, '/pages/about/') !== false;
 $isManagement = strpos($currentPath, '/pages/management/') !== false;
+$isPromotion = strpos($currentPath, '/pages/promotion/') !== false;
 
 // Check if user is logged in
 $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
@@ -53,6 +54,7 @@ $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 // Check user role for management access
 $userRole = $isLoggedIn ? ($_SESSION['user_role_name'] ?? '') : '';
 $showManagement = $isLoggedIn && ($userRole === 'Staff' || $userRole === 'Admin');
+$isAdmin = $isLoggedIn && ($userRole === 'Admin');
 $userHo = $isLoggedIn ? ($_SESSION['user_ho'] ?? '') : '';
 $userTen = $isLoggedIn ? ($_SESSION['user_ten'] ?? '') : '';
 $userName = $isLoggedIn ? ($_SESSION['user_name'] ?? '') : '';
@@ -163,6 +165,15 @@ $avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : 
                                         <line x1="3" y1="9" x2="21" y2="9"/>
                                     </svg>
                                     <span>Quản lý sản phẩm</span>
+                                </a>
+                                <?php endif; ?>
+                                <?php if ($isAdmin): ?>
+                                <a href="<?php echo $basePath; ?>pages/promotion/index.php" class="dropdown-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                                        <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
+                                    </svg>
+                                    <span>Quản lý khuyến mãi</span>
                                 </a>
                                 <?php endif; ?>
                                 <a href="<?php echo $basePath; ?>api/auth/logout.php" class="dropdown-item">

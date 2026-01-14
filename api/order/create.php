@@ -31,6 +31,9 @@ try {
     $vatTaxId = isset($_POST['vat_tax_id']) ? trim($_POST['vat_tax_id']) : '';
     $vatCompany = isset($_POST['vat_company']) ? trim($_POST['vat_company']) : '';
     $vatAddress = isset($_POST['vat_address']) ? trim($_POST['vat_address']) : '';
+    $promotionCode = isset($_POST['promotion_code']) ? trim($_POST['promotion_code']) : '';
+    $promotionId = isset($_POST['promotion_id']) ? (int)$_POST['promotion_id'] : 0;
+    $promotionDiscount = isset($_POST['promotion_discount']) ? (float)$_POST['promotion_discount'] : 0;
 
     // Validate required fields
     if (!$storeId) {
@@ -55,23 +58,85 @@ try {
     }
 
     $shippingFee = 30000; // Default shipping fee
-    $totalAmount = $subtotal + $shippingFee;
-
+    
     // Get delivery address (for now, use default)
     $deliveryAddress = "54/31 Đ. Phổ Quang, Phường 2, Quận Tân Bình, Hồ Chí Minh";
 
     // Get database connection
     $pdo = getDBConnection();
+    
+    // Validate promotion if provided
+    if (!empty($promotionCode) && $promotionId > 0) {
+        $sql = "SELECT * FROM Promotion 
+                WHERE MaPromotion = ? AND Code = ? AND TrangThai = 1";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$promotionId, $promotionCode]);
+        $promotion = $stmt->fetch();
+        
+        if ($promotion) {
+            // Check date validity
+            $now = new DateTime();
+            $isValid = true;
+            
+            if (!empty($promotion['NgayBatDau'])) {
+                $startDate = new DateTime($promotion['NgayBatDau']);
+                if ($now < $startDate) {
+                    $isValid = false;
+                }
+            }
+            
+            if (!empty($promotion['NgayKetThuc'])) {
+                $endDate = new DateTime($promotion['NgayKetThuc']);
+                if ($now > $endDate) {
+                    $isValid = false;
+                }
+            }
+            
+            if (!$isValid) {
+                // Promotion is invalid, reset discount
+                $promotionDiscount = 0;
+                $promotionCode = '';
+                $promotionId = 0;
+            } else {
+                // Recalculate discount to ensure it's correct
+                $loaiGiamGia = $promotion['LoaiGiamGia'] ?? 'Percentage';
+                $giaTri = (float)$promotion['GiaTri'];
+                
+                if ($loaiGiamGia === 'Percentage') {
+                    $promotionDiscount = ($subtotal * $giaTri) / 100;
+                    if ($promotionDiscount > $subtotal) {
+                        $promotionDiscount = $subtotal;
+                    }
+                } else {
+                    $promotionDiscount = $giaTri;
+                    if ($promotionDiscount > $subtotal) {
+                        $promotionDiscount = $subtotal;
+                    }
+                }
+            }
+        } else {
+            // Promotion not found, reset discount
+            $promotionDiscount = 0;
+            $promotionCode = '';
+            $promotionId = 0;
+        }
+    } else {
+        // No promotion provided
+        $promotionDiscount = 0;
+    }
+    
+    $totalAmount = $subtotal + $shippingFee - $promotionDiscount;
 
     // Start transaction
     $pdo->beginTransaction();
 
     try {
         // Create order (Note: MaPayment is not in schema, so we store it in session)
-        $sql = "INSERT INTO Orders (MaUser, MaStore, DiaChiGiao, PhiVanChuyen, TongTien, TrangThai) 
-                VALUES (?, ?, ?, ?, ?, 'Pending')";
+        $sql = "INSERT INTO Orders (MaUser, MaStore, DiaChiGiao, PhiVanChuyen, MaPromotion, GiamGia, TongTien, TrangThai) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$userId, $storeId, $deliveryAddress, $shippingFee, $totalAmount]);
+        $promotionIdForDB = ($promotionId > 0 && !empty($promotionCode)) ? $promotionId : null;
+        $stmt->execute([$userId, $storeId, $deliveryAddress, $shippingFee, $promotionIdForDB, $promotionDiscount, $totalAmount]);
         $orderId = $pdo->lastInsertId();
         
         // Store payment method in session for this order
