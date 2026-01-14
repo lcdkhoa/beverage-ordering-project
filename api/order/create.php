@@ -101,9 +101,18 @@ try {
                 // Recalculate discount to ensure it's correct
                 $loaiGiamGia = $promotion['LoaiGiamGia'] ?? 'Percentage';
                 $giaTri = (float)$promotion['GiaTri'];
+                $giaTriToiDa = isset($promotion['GiaTriToiDa']) && $promotion['GiaTriToiDa'] !== null ? (float)$promotion['GiaTriToiDa'] : null;
                 
                 if ($loaiGiamGia === 'Percentage') {
                     $promotionDiscount = ($subtotal * $giaTri) / 100;
+                    
+                    // Apply maximum value limit if set
+                    if ($giaTriToiDa !== null && $giaTriToiDa > 0) {
+                        if ($promotionDiscount > $giaTriToiDa) {
+                            $promotionDiscount = $giaTriToiDa;
+                        }
+                    }
+                    
                     if ($promotionDiscount > $subtotal) {
                         $promotionDiscount = $subtotal;
                     }

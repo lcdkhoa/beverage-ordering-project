@@ -187,6 +187,7 @@ CREATE TABLE `Promotion` (
     `Code` VARCHAR(50) NOT NULL UNIQUE,
     `LoaiGiamGia` VARCHAR(50), -- Percentage / Fixed
     `GiaTri` DECIMAL(15, 0) NOT NULL,
+    `GiaTriToiDa` DECIMAL(15, 0) DEFAULT NULL, -- Giá trị tối đa cho khuyến mãi phần trăm (NULL nếu không giới hạn)
     `NgayBatDau` DATETIME,
     `NgayKetThuc` DATETIME,
     `TrangThai` TINYINT(1) DEFAULT 1 -- 1: Active, 0: Inactive

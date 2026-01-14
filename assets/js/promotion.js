@@ -34,7 +34,36 @@ $(document).ready(function () {
     // Reset to default values
     $("#promotion-loai-giam-gia").val("Percentage");
     $("#promotion-trang-thai").val("1");
+    toggleMaxValueField();
   });
+
+  // Toggle max value field based on discount type
+  function toggleMaxValueField() {
+    const loaiGiamGia = $("#promotion-loai-giam-gia").val();
+    const editLoaiGiamGia = $("#edit-promotion-loai-giam-gia").val();
+
+    if (loaiGiamGia === "Percentage") {
+      $("#promotion-max-value-group").slideDown(300);
+    } else {
+      $("#promotion-max-value-group").slideUp(300);
+      $("#promotion-gia-tri-toi-da").val("");
+    }
+
+    if (editLoaiGiamGia === "Percentage") {
+      $("#edit-promotion-max-value-group").slideDown(300);
+    } else {
+      $("#edit-promotion-max-value-group").slideUp(300);
+      $("#edit-promotion-gia-tri-toi-da").val("");
+    }
+  }
+
+  // Listen to discount type changes
+  $("#promotion-loai-giam-gia, #edit-promotion-loai-giam-gia").on(
+    "change",
+    function () {
+      toggleMaxValueField();
+    }
+  );
 
   $("#close-add-modal, #cancel-add-promotion, .modal-overlay").on(
     "click",
@@ -55,6 +84,7 @@ $(document).ready(function () {
     const promotionCode = $(this).data("promotion-code");
     const loaiGiamGia = $(this).data("loai-giam-gia");
     const giaTri = $(this).data("gia-tri");
+    const giaTriToiDa = $(this).data("gia-tri-toi-da");
     const ngayBatDau = $(this).data("ngay-bat-dau");
     const ngayKetThuc = $(this).data("ngay-ket-thuc");
     const trangThai = $(this).data("trang-thai");
@@ -63,6 +93,10 @@ $(document).ready(function () {
     $("#edit-promotion-code").val(promotionCode);
     $("#edit-promotion-loai-giam-gia").val(loaiGiamGia || "Percentage");
     $("#edit-promotion-gia-tri").val(giaTri);
+    $("#edit-promotion-gia-tri-toi-da").val(giaTriToiDa || "");
+
+    // Toggle max value field visibility
+    toggleMaxValueField();
 
     // Convert datetime to datetime-local format
     if (ngayBatDau) {
@@ -164,6 +198,7 @@ $(document).ready(function () {
       code: $("#promotion-code").val().trim(),
       loai_giam_gia: $("#promotion-loai-giam-gia").val(),
       gia_tri: $("#promotion-gia-tri").val(),
+      gia_tri_toi_da: $("#promotion-gia-tri-toi-da").val() || "",
       ngay_bat_dau: $("#promotion-ngay-bat-dau").val() || "",
       ngay_ket_thuc: $("#promotion-ngay-ket-thuc").val() || "",
       trang_thai: $("#promotion-trang-thai").val(),
@@ -223,6 +258,7 @@ $(document).ready(function () {
       code: $("#edit-promotion-code").val().trim(),
       loai_giam_gia: $("#edit-promotion-loai-giam-gia").val(),
       gia_tri: $("#edit-promotion-gia-tri").val(),
+      gia_tri_toi_da: $("#edit-promotion-gia-tri-toi-da").val() || "",
       ngay_bat_dau: $("#edit-promotion-ngay-bat-dau").val() || "",
       ngay_ket_thuc: $("#edit-promotion-ngay-ket-thuc").val() || "",
       trang_thai: $("#edit-promotion-trang-thai").val(),
@@ -371,6 +407,9 @@ $(document).ready(function () {
         '" ' +
         'data-gia-tri="' +
         promotion.GiaTri +
+        '" ' +
+        'data-gia-tri-toi-da="' +
+        (promotion.GiaTriToiDa || "") +
         '" ' +
         'data-ngay-bat-dau="' +
         (promotion.NgayBatDau || "") +

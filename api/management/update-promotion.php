@@ -30,6 +30,7 @@ try {
     $code = isset($_POST['code']) ? trim($_POST['code']) : '';
     $loaiGiamGia = isset($_POST['loai_giam_gia']) ? trim($_POST['loai_giam_gia']) : 'Percentage';
     $giaTri = isset($_POST['gia_tri']) ? trim($_POST['gia_tri']) : '';
+    $giaTriToiDa = isset($_POST['gia_tri_toi_da']) && !empty($_POST['gia_tri_toi_da']) ? trim($_POST['gia_tri_toi_da']) : null;
     $ngayBatDau = isset($_POST['ngay_bat_dau']) ? trim($_POST['ngay_bat_dau']) : null;
     $ngayKetThuc = isset($_POST['ngay_ket_thuc']) ? trim($_POST['ngay_ket_thuc']) : null;
     $trangThai = isset($_POST['trang_thai']) ? (int)$_POST['trang_thai'] : 1;
@@ -49,6 +50,19 @@ try {
 
     if ($loaiGiamGia === 'Percentage' && ($giaTri > 100 || $giaTri < 0)) {
         throw new Exception('Phần trăm giảm giá phải từ 0 đến 100');
+    }
+
+    // Validate maximum value for percentage discount
+    if ($loaiGiamGia === 'Percentage' && $giaTriToiDa !== null) {
+        $giaTriToiDaFloat = (float)$giaTriToiDa;
+        if ($giaTriToiDaFloat < 0) {
+            throw new Exception('Giá trị tối đa phải lớn hơn hoặc bằng 0');
+        }
+    }
+
+    // If not percentage, clear maximum value
+    if ($loaiGiamGia !== 'Percentage') {
+        $giaTriToiDa = null;
     }
 
     // Validate dates
@@ -84,12 +98,15 @@ try {
     $ngayBatDauFormatted = !empty($ngayBatDau) ? date('Y-m-d H:i:s', strtotime($ngayBatDau)) : null;
     $ngayKetThucFormatted = !empty($ngayKetThuc) ? date('Y-m-d H:i:s', strtotime($ngayKetThuc)) : null;
 
+    // Convert maximum value to proper format
+    $giaTriToiDaFormatted = ($giaTriToiDa !== null && $loaiGiamGia === 'Percentage') ? (float)$giaTriToiDa : null;
+
     // Update promotion
     $sql = "UPDATE Promotion 
-            SET Code = ?, LoaiGiamGia = ?, GiaTri = ?, NgayBatDau = ?, NgayKetThuc = ?, TrangThai = ?
+            SET Code = ?, LoaiGiamGia = ?, GiaTri = ?, GiaTriToiDa = ?, NgayBatDau = ?, NgayKetThuc = ?, TrangThai = ?
             WHERE MaPromotion = ?";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$code, $loaiGiamGia, $giaTri, $ngayBatDauFormatted, $ngayKetThucFormatted, $trangThai, $promotionId]);
+    $stmt->execute([$code, $loaiGiamGia, $giaTri, $giaTriToiDaFormatted, $ngayBatDauFormatted, $ngayKetThucFormatted, $trangThai, $promotionId]);
 
     if ($stmt->rowCount() === 0) {
         throw new Exception('Không có thay đổi nào được cập nhật');

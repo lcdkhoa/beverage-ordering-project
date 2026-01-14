@@ -90,6 +90,11 @@ $basePath = '../../';
                         <input type="number" id="promotion-gia-tri" name="gia_tri" class="form-input" min="0" step="0.01" required>
                         <small class="form-help">Nhập phần trăm (0-100) hoặc số tiền (₫)</small>
                     </div>
+                    <div class="form-group" id="promotion-max-value-group" style="display: none;">
+                        <label for="promotion-gia-tri-toi-da">Giá trị tối đa (₫)</label>
+                        <input type="number" id="promotion-gia-tri-toi-da" name="gia_tri_toi_da" class="form-input" min="0" step="1" placeholder="Không giới hạn">
+                        <small class="form-help">Giới hạn số tiền giảm tối đa cho khuyến mãi phần trăm (để trống nếu không giới hạn)</small>
+                    </div>
                     <div class="form-group">
                         <label for="promotion-ngay-bat-dau">Ngày bắt đầu</label>
                         <input type="datetime-local" id="promotion-ngay-bat-dau" name="ngay_bat_dau" class="form-input">
@@ -144,6 +149,11 @@ $basePath = '../../';
                         <label for="edit-promotion-gia-tri">Giá trị giảm giá <span class="required">*</span></label>
                         <input type="number" id="edit-promotion-gia-tri" name="gia_tri" class="form-input" min="0" step="0.01" required>
                         <small class="form-help">Nhập phần trăm (0-100) hoặc số tiền (₫)</small>
+                    </div>
+                    <div class="form-group" id="edit-promotion-max-value-group" style="display: none;">
+                        <label for="edit-promotion-gia-tri-toi-da">Giá trị tối đa (₫)</label>
+                        <input type="number" id="edit-promotion-gia-tri-toi-da" name="gia_tri_toi_da" class="form-input" min="0" step="1" placeholder="Không giới hạn">
+                        <small class="form-help">Giới hạn số tiền giảm tối đa cho khuyến mãi phần trăm (để trống nếu không giới hạn)</small>
                     </div>
                     <div class="form-group">
                         <label for="edit-promotion-ngay-bat-dau">Ngày bắt đầu</label>
