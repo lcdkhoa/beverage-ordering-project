@@ -13,6 +13,7 @@
 @import url('product-card.css');
 @import url('news-card.css');
 @import url('buttons.css');
+@import url('pagination.css');
 
 /* Import page-specific styles */
 @import url('home.css');

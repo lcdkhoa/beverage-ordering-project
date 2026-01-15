@@ -255,77 +255,8 @@
 }
 
 /* ===== PAGINATION ===== */
-.pagination {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 40px;
-    flex-wrap: wrap;
-}
-
-.pagination-btn {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    padding: 10px 20px;
-    background-color: var(--white);
-    color: var(--primary-green);
-    border: 2px solid var(--primary-green);
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.pagination-btn:hover {
-    background-color: var(--primary-green);
-    color: var(--white);
-}
-
-.pagination-numbers {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.pagination-number {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    background-color: var(--white);
-    color: var(--primary-green);
-    border: 2px solid var(--border-color);
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: bold;
-    transition: all 0.3s ease;
-}
-
-.pagination-number:hover {
-    border-color: var(--primary-green);
-    background-color: var(--light-green);
-}
-
-.pagination-number.active {
-    background-color: var(--primary-green);
-    color: var(--white);
-    border-color: var(--primary-green);
-}
-
-.pagination-dots {
-    padding: 0 5px;
-    color: var(--text-light);
-}
-
-.pagination-info {
-    text-align: center;
-    margin-top: 15px;
-    color: var(--text-light);
-    font-size: 14px;
-}
+/* Pagination styles moved to pagination.css */
+/* Keep only menu-specific pagination visibility rules */
 
 /* ===== PAGINATION VISIBILITY ===== */
 .menu-products-section .pagination {

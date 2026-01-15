@@ -209,55 +209,16 @@ if ($showBestSeller) {
 
                         <!-- Pagination -->
                         <?php if (!$showBestSeller && !$showTopping && $totalPages > 0): ?>
-                            <div class="pagination">
-                                <?php if ($page > 1): ?>
-                                    <a href="?page=<?php echo $page - 1; ?>&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" class="pagination-btn">
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M15 18l-6-6 6-6"/>
-                                        </svg>
-                                        Trước
-                                    </a>
-                                <?php endif; ?>
-
-                                <div class="pagination-numbers">
-                                    <?php
-                                    $startPage = max(1, $page - 2);
-                                    $endPage = min($totalPages, $page + 2);
-                                    
-                                    if ($startPage > 1): ?>
-                                        <a href="?page=1&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" class="pagination-number">1</a>
-                                        <?php if ($startPage > 2): ?>
-                                            <span class="pagination-dots">...</span>
-                                        <?php endif; ?>
-                                    <?php endif; ?>
-
-                                    <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
-                                        <a href="?page=<?php echo $i; ?>&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" 
-                                           class="pagination-number <?php echo $i == $page ? 'active' : ''; ?>">
-                                            <?php echo $i; ?>
-                                        </a>
-                                    <?php endfor; ?>
-
-                                    <?php if ($endPage < $totalPages): ?>
-                                        <?php if ($endPage < $totalPages - 1): ?>
-                                            <span class="pagination-dots">...</span>
-                                        <?php endif; ?>
-                                        <a href="?page=<?php echo $totalPages; ?>&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" class="pagination-number"><?php echo $totalPages; ?></a>
-                                    <?php endif; ?>
-                                </div>
-
-                                <?php if ($page < $totalPages): ?>
-                                    <a href="?page=<?php echo $page + 1; ?>&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" class="pagination-btn">
-                                        Sau
-                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M9 18l6-6-6-6"/>
-                                        </svg>
-                                    </a>
-                                <?php endif; ?>
-                            </div>
-                            <div class="pagination-info">
-                                Trang <?php echo $page; ?> trên <?php echo $totalPages; ?>
-                            </div>
+                            <?php
+                                $queryParams = [];
+                                if ($categoryId) {
+                                    $queryParams['category'] = $categoryId;
+                                }
+                                if ($keyword) {
+                                    $queryParams['search'] = $keyword;
+                                }
+                                include '../../components/pagination.php';
+                            ?>
                         <?php endif; ?>
                     </div>
                 </main>
