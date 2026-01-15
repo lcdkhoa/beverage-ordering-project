@@ -31,7 +31,6 @@ $(document).ready(function () {
   $("#btn-add-promotion").on("click", function () {
     $("#add-promotion-modal").addClass("active");
     $("#add-promotion-form")[0].reset();
-    // Reset to default values
     $("#promotion-loai-giam-gia").val("Percentage");
     $("#promotion-trang-thai").val("1");
     toggleMaxValueField();

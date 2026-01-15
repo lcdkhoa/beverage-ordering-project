@@ -45,15 +45,15 @@ $basePath = '../../';
                         <p class="login-subtitle">Hãy đăng nhập/đăng ký để tiếp tục nhé!</p>
 
                         <form id="loginForm" class="login-form" method="POST">
-                            <!-- Email/Phone Field -->
+                            <!-- Username/Email Field -->
                             <div class="form-group">
-                                <label for="email_or_phone" class="form-label">Email hoặc số điện thoại</label>
+                                <label for="username_or_email" class="form-label">Tên đăng nhập hoặc Email</label>
                                 <input 
                                     type="text" 
-                                    id="email_or_phone" 
-                                    name="email_or_phone" 
+                                    id="username_or_email" 
+                                    name="username_or_email" 
                                     class="form-input" 
-                                    placeholder="Nhập email hoặc số điện thoại"
+                                    placeholder="Nhập tên đăng nhập hoặc email"
                                     required
                                     autocomplete="username"
                                 >

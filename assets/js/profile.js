@@ -155,6 +155,82 @@ $(document).ready(function() {
         });
     });
 
+    // Update profile form submit
+    $('#updateProfileForm').on('submit', function(e) {
+        e.preventDefault();
+        
+        const $form = $(this);
+        const $btn = $('#updateProfileBtn');
+        const $btnText = $btn.find('.btn-text');
+        const $btnLoading = $btn.find('.btn-loading');
+        const $message = $('#updateProfileMessage');
+        
+        // Reset message
+        $message.hide().removeClass('success error').text('');
+        
+        // Disable button and show loading
+        $btn.prop('disabled', true);
+        $btnText.hide();
+        $btnLoading.show();
+        
+        // Get form data
+        const formData = {
+            gioi_tinh: $('#gioi_tinh').val() || null,
+            email: $('#email').val().trim() || null,
+            dien_thoai: $('#dien_thoai').val().trim() || null
+        };
+        
+        // AJAX request
+        $.ajax({
+            url: '../../api/auth/update-profile.php',
+            method: 'POST',
+            data: formData,
+            dataType: 'json',
+            success: function(response) {
+                if (response.success) {
+                    // Show success message
+                    $message.addClass('success').text(response.message || 'Cập nhật thông tin thành công!').show();
+                    
+                    // Reload page after 1.5 seconds to reflect changes
+                    setTimeout(function() {
+                        window.location.reload();
+                    }, 1500);
+                } else {
+                    // Show error message
+                    $message.addClass('error').text(response.message || 'Cập nhật thông tin thất bại. Vui lòng thử lại.').show();
+                    
+                    // Re-enable button
+                    $btn.prop('disabled', false);
+                    $btnText.show();
+                    $btnLoading.hide();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('Update profile error:', error);
+                let errorMessage = 'Có lỗi xảy ra. Vui lòng thử lại sau.';
+                
+                // Try to parse error response
+                if (xhr.responseText) {
+                    try {
+                        const errorResponse = JSON.parse(xhr.responseText);
+                        if (errorResponse.message) {
+                            errorMessage = errorResponse.message;
+                        }
+                    } catch (e) {
+                        // Use default error message
+                    }
+                }
+                
+                $message.addClass('error').text(errorMessage).show();
+                
+                // Re-enable button
+                $btn.prop('disabled', false);
+                $btnText.show();
+                $btnLoading.hide();
+            }
+        });
+    });
+
     // Load orders function
     function loadOrders() {
         const $loading = $('#ordersLoading');

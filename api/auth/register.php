@@ -18,10 +18,9 @@ try {
     // Get POST data
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
-    $confirmPassword = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
     $ho = isset($_POST['ho']) ? trim($_POST['ho']) : '';
     $ten = isset($_POST['ten']) ? trim($_POST['ten']) : '';
-    $gioiTinh = isset($_POST['gioi_tinh']) ? trim($_POST['gioi_tinh']) : null;
+    $gioiTinh = null; // Gender field removed from form
     $dienThoai = isset($_POST['dien_thoai']) ? trim($_POST['dien_thoai']) : null;
     $email = isset($_POST['email']) ? trim($_POST['email']) : null;
 
@@ -46,10 +45,6 @@ try {
         throw new Exception('Mật khẩu phải có ít nhất 6 ký tự');
     }
 
-    if ($password !== $confirmPassword) {
-        throw new Exception('Mật khẩu xác nhận không khớp');
-    }
-
     if (empty($ho)) {
         throw new Exception('Vui lòng nhập họ');
     }
@@ -64,11 +59,6 @@ try {
 
     if (strlen($ten) > 50) {
         throw new Exception('Tên không được vượt quá 50 ký tự');
-    }
-
-    // Validate gender if provided
-    if ($gioiTinh !== null && !in_array($gioiTinh, ['M', 'F', 'O'])) {
-        throw new Exception('Giới tính không hợp lệ');
     }
 
     // Validate phone if provided

@@ -45,6 +45,64 @@ $basePath = '../../';
                         <p class="login-subtitle">Đăng ký để nhận nhiều ưu đãi hấp dẫn từ MeowTea Fresh!</p>
 
                         <form id="registerForm" class="login-form" method="POST">
+                            <!-- Ho and Ten (Last Name and First Name) Fields - Inline -->
+                            <div class="form-group-inline-row">
+                                <div class="form-group form-group-half">
+                                    <label for="ho" class="form-label">Họ <span class="required">*</span></label>
+                                    <input 
+                                        type="text" 
+                                        id="ho" 
+                                        name="ho" 
+                                        class="form-input" 
+                                        placeholder="Nhập họ"
+                                        required
+                                        maxlength="50"
+                                        autocomplete="family-name"
+                                    >
+                                </div>
+                                <div class="form-group form-group-half">
+                                    <label for="ten" class="form-label">Tên <span class="required">*</span></label>
+                                    <input 
+                                        type="text" 
+                                        id="ten" 
+                                        name="ten" 
+                                        class="form-input" 
+                                        placeholder="Nhập tên"
+                                        required
+                                        maxlength="50"
+                                        autocomplete="given-name"
+                                    >
+                                </div>
+                            </div>
+
+                            <!-- DienThoai and Email Fields - Inline -->
+                            <div class="form-group-inline-row">
+                                <div class="form-group form-group-half">
+                                    <label for="dien_thoai" class="form-label">Số điện thoại</label>
+                                    <input 
+                                        type="tel" 
+                                        id="dien_thoai" 
+                                        name="dien_thoai" 
+                                        class="form-input" 
+                                        placeholder="Nhập số điện thoại"
+                                        maxlength="20"
+                                        autocomplete="tel"
+                                    >
+                                </div>
+                                <div class="form-group form-group-half">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input 
+                                        type="email" 
+                                        id="email" 
+                                        name="email" 
+                                        class="form-input" 
+                                        placeholder="Nhập email"
+                                        maxlength="100"
+                                        autocomplete="email"
+                                    >
+                                </div>
+                            </div>
+
                             <!-- Username Field -->
                             <div class="form-group">
                                 <label for="username" class="form-label">Tên đăng nhập <span class="required">*</span></label>
@@ -93,111 +151,6 @@ $basePath = '../../';
                                         </svg>
                                     </button>
                                 </div>
-                            </div>
-
-                            <!-- Confirm Password Field -->
-                            <div class="form-group">
-                                <label for="confirm_password" class="form-label">Xác nhận mật khẩu <span class="required">*</span></label>
-                                <div class="password-input-wrapper">
-                                    <input 
-                                        type="password" 
-                                        id="confirm_password" 
-                                        name="confirm_password" 
-                                        class="form-input" 
-                                        placeholder="Nhập lại mật khẩu"
-                                        required
-                                        autocomplete="new-password"
-                                        minlength="6"
-                                    >
-                                    <button 
-                                        type="button" 
-                                        class="password-toggle" 
-                                        id="confirmPasswordToggle"
-                                        aria-label="Hiển thị mật khẩu"
-                                    >
-                                        <svg class="eye-icon eye-icon-hidden" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                                            <circle cx="12" cy="12" r="3"/>
-                                        </svg>
-                                        <svg class="eye-icon eye-icon-visible" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
-                                            <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/>
-                                            <line x1="1" y1="1" x2="23" y2="23"/>
-                                        </svg>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- Ho (Last Name) Field -->
-                            <div class="form-group">
-                                <label for="ho" class="form-label">Họ <span class="required">*</span></label>
-                                <input 
-                                    type="text" 
-                                    id="ho" 
-                                    name="ho" 
-                                    class="form-input" 
-                                    placeholder="Nhập họ"
-                                    required
-                                    maxlength="50"
-                                    autocomplete="family-name"
-                                >
-                            </div>
-
-                            <!-- Ten (First Name) Field -->
-                            <div class="form-group">
-                                <label for="ten" class="form-label">Tên <span class="required">*</span></label>
-                                <input 
-                                    type="text" 
-                                    id="ten" 
-                                    name="ten" 
-                                    class="form-input" 
-                                    placeholder="Nhập tên"
-                                    required
-                                    maxlength="50"
-                                    autocomplete="given-name"
-                                >
-                            </div>
-
-                            <!-- GioiTinh (Gender) Field -->
-                            <div class="form-group">
-                                <label for="gioi_tinh" class="form-label">Giới tính</label>
-                                <select 
-                                    id="gioi_tinh" 
-                                    name="gioi_tinh" 
-                                    class="form-input"
-                                >
-                                    <option value="">-- Chọn giới tính --</option>
-                                    <option value="M">Nam</option>
-                                    <option value="F">Nữ</option>
-                                    <option value="O">Khác</option>
-                                </select>
-                            </div>
-
-                            <!-- DienThoai (Phone) Field -->
-                            <div class="form-group">
-                                <label for="dien_thoai" class="form-label">Số điện thoại</label>
-                                <input 
-                                    type="tel" 
-                                    id="dien_thoai" 
-                                    name="dien_thoai" 
-                                    class="form-input" 
-                                    placeholder="Nhập số điện thoại"
-                                    maxlength="20"
-                                    autocomplete="tel"
-                                >
-                            </div>
-
-                            <!-- Email Field -->
-                            <div class="form-group">
-                                <label for="email" class="form-label">Email</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email" 
-                                    class="form-input" 
-                                    placeholder="Nhập email"
-                                    maxlength="100"
-                                    autocomplete="email"
-                                >
                             </div>
 
                             <!-- Error/Success Message -->

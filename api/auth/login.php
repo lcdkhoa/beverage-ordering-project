@@ -15,12 +15,12 @@ $response = ['success' => false, 'message' => ''];
 
 try {
     // Get POST data
-    $emailOrPhone = isset($_POST['email_or_phone']) ? trim($_POST['email_or_phone']) : '';
+    $usernameOrEmail = isset($_POST['username_or_email']) ? trim($_POST['username_or_email']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
 
     // Validation
-    if (empty($emailOrPhone)) {
-        throw new Exception('Vui lòng nhập email hoặc số điện thoại');
+    if (empty($usernameOrEmail)) {
+        throw new Exception('Vui lòng nhập tên đăng nhập hoặc email');
     }
 
     if (empty($password)) {
@@ -30,18 +30,18 @@ try {
     // Get database connection
     $pdo = getDBConnection();
 
-    // Find user by email or phone
+    // Find user by username or email
     $sql = "SELECT u.*, r.TenRole 
             FROM User u 
             INNER JOIN Role r ON u.MaRole = r.MaRole 
-            WHERE (u.Email = ? OR u.DienThoai = ?) AND u.TrangThai = 1";
+            WHERE (u.Username = ? OR u.Email = ?) AND u.TrangThai = 1";
     
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$emailOrPhone, $emailOrPhone]);
+    $stmt->execute([$usernameOrEmail, $usernameOrEmail]);
     $user = $stmt->fetch();
 
     if (!$user) {
-        throw new Exception('Email/số điện thoại hoặc mật khẩu không đúng');
+        throw new Exception('Tên đăng nhập/email hoặc mật khẩu không đúng');
     }
 
     // Verify password
@@ -59,7 +59,7 @@ try {
     }
 
     if (!$passwordMatch) {
-        throw new Exception('Email/số điện thoại hoặc mật khẩu không đúng');
+        throw new Exception('Tên đăng nhập/email hoặc mật khẩu không đúng');
     }
 
     // Login successful - set session
