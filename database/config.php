@@ -1,15 +1,14 @@
 <?php
 /**
  * Database Configuration
- * Kết nối tới MySQL database sử dụng XAMPP
+ * Kết nối tới SQL Server (MSSQL)
  */
 
 // Database credentials
-define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
+define('DB_HOST', 'localhost\\SQLEXPRESS'); // Update instance/name theo môi trường thực tế
+define('DB_USER', 'sa');
+define('DB_PASS', 'yourStrong(!)Password');
 define('DB_NAME', 'meowtea_schema');
-define('DB_CHARSET', 'utf8mb4');
 
 /**
  * Get database connection
@@ -20,13 +19,13 @@ function getDBConnection() {
     
     if ($pdo === null) {
         try {
-            $dsn = "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME . ";charset=" . DB_CHARSET;
+            // DSN cho SQL Server (PDO_SQLSRV)
+            $dsn = "sqlsrv:Server=" . DB_HOST . ";Database=" . DB_NAME . ";TrustServerCertificate=true";
             $options = [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => false,
             ];
-            
+
             $pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
         } catch (PDOException $e) {
             error_log("Database connection failed: " . $e->getMessage());

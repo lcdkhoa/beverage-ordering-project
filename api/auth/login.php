@@ -32,7 +32,7 @@ try {
 
     // Find user by username or email
     $sql = "SELECT u.*, r.TenRole 
-            FROM User u 
+            FROM [User] u 
             INNER JOIN Role r ON u.MaRole = r.MaRole 
             WHERE (u.Username = ? OR u.Email = ?) AND u.TrangThai = 1";
     

@@ -63,7 +63,7 @@ try {
     $pdo = getDBConnection();
 
     // Get current user data
-    $stmt = $pdo->prepare("SELECT Email, DienThoai FROM User WHERE MaUser = ? AND TrangThai = 1");
+    $stmt = $pdo->prepare("SELECT Email, DienThoai FROM [User] WHERE MaUser = ? AND TrangThai = 1");
     $stmt->execute([$userId]);
     $currentUser = $stmt->fetch();
 
@@ -73,7 +73,7 @@ try {
 
     // Check if email already exists (if provided and different from current)
     if ($email !== null && $email !== '' && $email !== $currentUser['Email']) {
-        $stmt = $pdo->prepare("SELECT MaUser FROM User WHERE Email = ? AND MaUser != ?");
+        $stmt = $pdo->prepare("SELECT MaUser FROM [User] WHERE Email = ? AND MaUser != ?");
         $stmt->execute([$email, $userId]);
         if ($stmt->fetch()) {
             throw new Exception('Email đã được sử dụng. Vui lòng sử dụng email khác');
@@ -82,7 +82,7 @@ try {
 
     // Check if phone already exists (if provided and different from current)
     if ($dienThoai !== null && $dienThoai !== '' && $dienThoai !== $currentUser['DienThoai']) {
-        $stmt = $pdo->prepare("SELECT MaUser FROM User WHERE DienThoai = ? AND MaUser != ?");
+        $stmt = $pdo->prepare("SELECT MaUser FROM [User] WHERE DienThoai = ? AND MaUser != ?");
         $stmt->execute([$dienThoai, $userId]);
         if ($stmt->fetch()) {
             throw new Exception('Số điện thoại đã được sử dụng. Vui lòng sử dụng số khác');
@@ -116,13 +116,13 @@ try {
     $updateValues[] = $userId;
 
     // Update user
-    $sql = "UPDATE User SET " . implode(', ', $updateFields) . " WHERE MaUser = ?";
+    $sql = "UPDATE [User] SET " . implode(', ', $updateFields) . " WHERE MaUser = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute($updateValues);
 
     // Get updated user data
     $stmt = $pdo->prepare("SELECT u.*, r.TenRole 
-                          FROM User u 
+                          FROM [User] u 
                           INNER JOIN Role r ON u.MaRole = r.MaRole 
                           WHERE u.MaUser = ? AND u.TrangThai = 1");
     $stmt->execute([$userId]);

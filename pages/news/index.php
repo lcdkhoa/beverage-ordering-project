@@ -18,7 +18,7 @@ $totalPages = ceil($totalNews / $perPage);
 
 // Get news for current page
 $offset = ($page - 1) * $perPage;
-$sql = "SELECT * FROM News WHERE TrangThai = 1 ORDER BY NgayTao DESC LIMIT :limit OFFSET :offset";
+$sql = "SELECT * FROM News WHERE TrangThai = 1 ORDER BY NgayTao DESC OFFSET :offset ROWS FETCH NEXT :limit ROWS ONLY";
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':limit', $perPage, PDO::PARAM_INT);
 $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);

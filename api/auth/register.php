@@ -86,7 +86,7 @@ try {
     $pdo = getDBConnection();
 
     // Check if username already exists
-    $stmt = $pdo->prepare("SELECT MaUser FROM User WHERE Username = ?");
+    $stmt = $pdo->prepare("SELECT MaUser FROM [User] WHERE Username = ?");
     $stmt->execute([$username]);
     if ($stmt->fetch()) {
         throw new Exception('Tên đăng nhập đã tồn tại. Vui lòng chọn tên khác');
@@ -94,7 +94,7 @@ try {
 
     // Check if email already exists (if provided)
     if ($email !== null && !empty($email)) {
-        $stmt = $pdo->prepare("SELECT MaUser FROM User WHERE Email = ?");
+        $stmt = $pdo->prepare("SELECT MaUser FROM [User] WHERE Email = ?");
         $stmt->execute([$email]);
         if ($stmt->fetch()) {
             throw new Exception('Email đã được sử dụng. Vui lòng sử dụng email khác');
@@ -103,7 +103,7 @@ try {
 
     // Check if phone already exists (if provided)
     if ($dienThoai !== null && !empty($dienThoai)) {
-        $stmt = $pdo->prepare("SELECT MaUser FROM User WHERE DienThoai = ?");
+        $stmt = $pdo->prepare("SELECT MaUser FROM [User] WHERE DienThoai = ?");
         $stmt->execute([$dienThoai]);
         if ($stmt->fetch()) {
             throw new Exception('Số điện thoại đã được sử dụng. Vui lòng sử dụng số khác');
@@ -111,7 +111,7 @@ try {
     }
 
     // Get Customer role ID (MaRole = 3)
-    $stmt = $pdo->prepare("SELECT MaRole FROM Role WHERE TenRole = 'Customer' LIMIT 1");
+    $stmt = $pdo->prepare("SELECT TOP 1 MaRole FROM Role WHERE TenRole = 'Customer'");
     $stmt->execute();
     $role = $stmt->fetch();
 
@@ -125,7 +125,7 @@ try {
     $hashedPassword = hashPassword($password);
 
     // Insert new user
-    $sql = "INSERT INTO User (Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, TrangThai, MaRole) 
+    $sql = "INSERT INTO [User] (Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, TrangThai, MaRole) 
             VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)";
     
     $stmt = $pdo->prepare($sql);

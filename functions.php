@@ -38,8 +38,8 @@ function getProductsByCategory($categoryId = null, $limit = null) {
     $sql .= " ORDER BY sp.MaSP DESC";
     
     if ($limit) {
-        $sql .= " LIMIT ?";
-        $params[] = $limit;
+        $sql .= " OFFSET 0 ROWS FETCH NEXT ? ROWS ONLY";
+        $params[] = (int)$limit;
     }
     
     $stmt = $pdo->prepare($sql);
@@ -63,7 +63,7 @@ function getStores($limit = null) {
     $pdo = getDBConnection();
     $sql = "SELECT * FROM Store WHERE TrangThai = 1 ORDER BY TenStore";
     if ($limit) {
-        $sql .= " LIMIT " . (int)$limit;
+        $sql .= " OFFSET 0 ROWS FETCH NEXT " . (int)$limit . " ROWS ONLY";
     }
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll();
@@ -181,7 +181,7 @@ function getNews($limit = null) {
     $pdo = getDBConnection();
     $sql = "SELECT * FROM News WHERE TrangThai = 1 ORDER BY NgayTao DESC";
     if ($limit) {
-        $sql .= " LIMIT " . (int)$limit;
+        $sql .= " OFFSET 0 ROWS FETCH NEXT " . (int)$limit . " ROWS ONLY";
     }
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll();
@@ -315,9 +315,9 @@ function searchProducts($keyword, $categoryId = null, $page = 1, $perPage = 12) 
         $params[] = $categoryId;
     }
     
-    $sql .= " ORDER BY sp.MaSP DESC LIMIT ? OFFSET ?";
-    $params[] = $perPage;
+    $sql .= " ORDER BY sp.MaSP DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
     $params[] = $offset;
+    $params[] = $perPage;
     
     $stmt = $pdo->prepare($sql);
     $stmt->execute($params);
@@ -587,7 +587,7 @@ function getBestSellerProducts($limit = 8) {
           AND sp.Rating IS NOT NULL
           AND sp.SoLuotRating > 0
         ORDER BY sp.Rating DESC, sp.SoLuotRating DESC
-        LIMIT :limit
+        OFFSET 0 ROWS FETCH NEXT :limit ROWS ONLY
     ";
 
     $stmt = $db->prepare($sql);

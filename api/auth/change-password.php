@@ -58,7 +58,7 @@ try {
     $pdo = getDBConnection();
 
     // Get current user data
-    $stmt = $pdo->prepare("SELECT Password FROM User WHERE MaUser = ? AND TrangThai = 1");
+    $stmt = $pdo->prepare("SELECT Password FROM [User] WHERE MaUser = ? AND TrangThai = 1");
     $stmt->execute([$userId]);
     $user = $stmt->fetch();
 
@@ -86,7 +86,7 @@ try {
     $hashedPassword = hashPassword($newPassword);
 
     // Update password
-    $stmt = $pdo->prepare("UPDATE User SET Password = ? WHERE MaUser = ?");
+    $stmt = $pdo->prepare("UPDATE [User] SET Password = ? WHERE MaUser = ?");
     $stmt->execute([$hashedPassword, $userId]);
 
     $response = [
