@@ -76,7 +76,7 @@ $basePath = '../../';
                 </button>
             </div>
             <div class="modal-body">
-                <form id="add-product-form">
+                <form id="add-product-form" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="product-name">Tên sản phẩm <span class="required">*</span></label>
                         <input type="text" id="product-name" name="ten_sp" class="form-input" required>
@@ -92,9 +92,12 @@ $basePath = '../../';
                         <input type="number" id="product-price" name="gia_co_ban" class="form-input" min="0" step="1" required>
                     </div>
                     <div class="form-group">
-                        <label for="product-image">Hình ảnh (URL)</label>
-                        <input type="text" id="product-image" name="hinh_anh" class="form-input" placeholder="assets/img/products/product_one.png">
-                        <small class="form-help">Để trống để sử dụng hình ảnh mặc định</small>
+                        <label for="product-image">Hình ảnh</label>
+                        <input type="file" id="product-image" name="hinh_anh" class="form-input" accept="image/*">
+                        <small class="form-help">Để trống để sử dụng hình ảnh mặc định. Chỉ chấp nhận file ảnh (JPG, PNG, GIF, etc.)</small>
+                        <div id="image-preview" style="margin-top: 10px; display: none;">
+                            <img id="preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" id="cancel-add-product">Hủy</button>

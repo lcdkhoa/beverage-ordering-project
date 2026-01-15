@@ -132,45 +132,68 @@ $(document).ready(function () {
     });
   });
 
+  // Image preview handler
+  $("#product-image").on("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $("#preview-img").attr("src", e.target.result);
+        $("#image-preview").show();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      $("#image-preview").hide();
+    }
+  });
+
   // ===== FORM SUBMISSIONS =====
   // Add Product Form
   $("#add-product-form").on("submit", function (e) {
     e.preventDefault();
 
-    const formData = {
-      ten_sp: $("#product-name").val().trim(),
-      ma_category: $("#product-category").val(),
-      gia_co_ban: $("#product-price").val(),
-      hinh_anh: $("#product-image").val().trim() || "",
-    };
-
     // Validation
-    if (!formData.ten_sp) {
+    const tenSP = $("#product-name").val().trim();
+    const maCategory = $("#product-category").val();
+    const giaCoBan = $("#product-price").val();
+    const imageFile = $("#product-image")[0].files[0];
+
+    if (!tenSP) {
       showAlert("Vui lòng nhập tên sản phẩm", "error");
       return;
     }
 
-    if (!formData.ma_category) {
+    if (!maCategory) {
       showAlert("Vui lòng chọn danh mục", "error");
       return;
     }
 
-    if (!formData.gia_co_ban || formData.gia_co_ban < 0) {
+    if (!giaCoBan || giaCoBan < 0) {
       showAlert("Vui lòng nhập giá bán hợp lệ", "error");
       return;
     }
+
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append("ten_sp", tenSP);
+    formData.append("ma_category", maCategory);
+    formData.append("gia_co_ban", giaCoBan);
+    formData.append("hinh_anh", imageFile);
 
     // Submit via AJAX
     $.ajax({
       url: apiBasePath + "create-product.php",
       method: "POST",
       data: formData,
+      processData: false,
+      contentType: false,
       dataType: "json",
       success: function (response) {
         if (response.success) {
           showAlert(response.message, "success");
           $("#add-product-modal").removeClass("active");
           $("#add-product-form")[0].reset();
+          $("#image-preview").hide();
           loadProducts(); // Reload products list
         } else {
           showAlert(response.message || "Có lỗi xảy ra", "error");
@@ -178,10 +201,23 @@ $(document).ready(function () {
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
-        showAlert(
-          "Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.",
-          "error"
-        );
+        console.error("Status:", status);
+        console.error("Response:", xhr.responseText);
+        let errorMessage = "Có lỗi xảy ra khi thêm sản phẩm. Vui lòng thử lại.";
+
+        // Try to parse error response
+        if (xhr.responseText) {
+          try {
+            const errorResponse = JSON.parse(xhr.responseText);
+            if (errorResponse.message) {
+              errorMessage = errorResponse.message;
+            }
+          } catch (e) {
+            // Use default error message
+          }
+        }
+
+        showAlert(errorMessage, "error");
       },
     });
   });

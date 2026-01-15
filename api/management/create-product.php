@@ -29,7 +29,6 @@ try {
     $tenSP = isset($_POST['ten_sp']) ? trim($_POST['ten_sp']) : '';
     $giaCoBan = isset($_POST['gia_co_ban']) ? trim($_POST['gia_co_ban']) : '';
     $maCategory = isset($_POST['ma_category']) ? (int)$_POST['ma_category'] : 0;
-    $hinhAnh = isset($_POST['hinh_anh']) ? trim($_POST['hinh_anh']) : '';
 
     // Validation
     if (empty($tenSP)) {
@@ -54,9 +53,77 @@ try {
         throw new Exception('Danh mục không tồn tại');
     }
 
-    // Default image if not provided
-    if (empty($hinhAnh)) {
-        $hinhAnh = 'assets/img/products/product_one.png';
+    // Handle image upload
+    $hinhAnh = 'assets/img/products/product_one.png'; // Default image
+    
+    // Check if file was uploaded
+    if (isset($_FILES['hinh_anh']) && 
+        isset($_FILES['hinh_anh']['name']) && 
+        !empty($_FILES['hinh_anh']['name']) &&
+        $_FILES['hinh_anh']['error'] === UPLOAD_ERR_OK) {
+        
+        $file = $_FILES['hinh_anh'];
+        $fileError = $file['error'];
+        
+        $uploadDir = __DIR__ . '/../../assets/img/products/';
+        
+        // Create uploads directory if it doesn't exist
+        if (!file_exists($uploadDir)) {
+            if (!mkdir($uploadDir, 0755, true)) {
+                throw new Exception('Không thể tạo thư mục upload: ' . $uploadDir);
+            }
+        }
+
+        $fileName = $file['name'];
+        $fileTmpName = $file['tmp_name'];
+        $fileSize = $file['size'];
+
+        // Validate file type
+        $allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp'];
+        $fileExtension = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        
+        if (empty($fileExtension) || !in_array($fileExtension, $allowedExtensions)) {
+            throw new Exception('Chỉ chấp nhận file ảnh (JPG, PNG, GIF, WEBP)');
+        }
+
+        // Validate file size (max 5MB)
+        $maxFileSize = 5 * 1024 * 1024; // 5MB
+        if ($fileSize > $maxFileSize) {
+            throw new Exception('Kích thước file không được vượt quá 5MB');
+        }
+
+        // Validate file is actually an image
+        $imageInfo = @getimagesize($fileTmpName);
+        if ($imageInfo === false) {
+            throw new Exception('File không phải là hình ảnh hợp lệ');
+        }
+
+        // Generate unique filename
+        $newFileName = uniqid('product_', true) . '.' . $fileExtension;
+        $uploadPath = $uploadDir . $newFileName;
+
+        // Move uploaded file
+        if (!move_uploaded_file($fileTmpName, $uploadPath)) {
+            throw new Exception('Không thể upload file. Vui lòng kiểm tra quyền ghi file.');
+        }
+
+        // Verify file was moved successfully
+        if (!file_exists($uploadPath)) {
+            throw new Exception('File không được lưu thành công');
+        }
+
+        // Set image path for database (relative to root)
+        $hinhAnh = 'assets/img/products/' . $newFileName;
+        
+        // Log for debugging
+        error_log("Image uploaded successfully: " . $hinhAnh);
+    } else {
+        // Log when no file is uploaded
+        if (isset($_FILES['hinh_anh'])) {
+            error_log("No file uploaded or upload error. Error code: " . ($_FILES['hinh_anh']['error'] ?? 'N/A'));
+        } else {
+            error_log("No file field in request");
+        }
     }
 
     // Insert new product

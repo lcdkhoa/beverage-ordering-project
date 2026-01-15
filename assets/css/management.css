@@ -373,19 +373,48 @@
     border: 1px solid var(--border-color);
     border-radius: 6px;
     font-size: 14px;
-    transition: border-color 0.3s ease;
+    background: var(--white);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
     font-family: inherit;
+}
+
+.form-input:disabled,
+.form-input[readonly] {
+    background-color: var(--bg-light);
+    color: var(--text-light);
+    cursor: not-allowed;
 }
 
 .form-input:focus {
     outline: none;
     border-color: var(--primary-green);
+    background: var(--white);
     box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.1);
 }
 
-.form-input:read-only {
-    background-color: var(--bg-light);
+.form-input:focus:disabled,
+.form-input:focus[readonly] {
+    background: var(--bg-light);
+    box-shadow: none;
+    border-color: var(--border-color);
+}
+
+/* Select dropdown styling */
+select.form-input {
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 35px;
+    background-color: var(--white);
+}
+
+select.form-input:disabled {
     cursor: not-allowed;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+    background-color: var(--bg-light);
 }
 
 .form-help {
@@ -393,6 +422,41 @@
     margin-top: 5px;
     font-size: 12px;
     color: var(--text-light);
+}
+
+/* File input styling */
+input[type="file"].form-input {
+    padding: 8px;
+    cursor: pointer;
+}
+
+input[type="file"].form-input::-webkit-file-upload-button {
+    padding: 8px 16px;
+    margin-right: 12px;
+    background-color: var(--primary-green);
+    color: var(--white);
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+input[type="file"].form-input::-webkit-file-upload-button:hover {
+    background-color: #0f3a1f;
+}
+
+#image-preview {
+    margin-top: 10px;
+}
+
+#preview-img {
+    max-width: 200px;
+    max-height: 200px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    object-fit: cover;
 }
 
 .form-actions {
