@@ -89,6 +89,7 @@ $stores = getStores(1);
                     $text = 'ĐẶT NGAY';
                     $type = 'primary';
                     $href = 'pages/menu/index.php';
+                    $width = '200px';
                     include 'components/button.php';
                 ?>
             </div>
@@ -114,6 +115,7 @@ $stores = getStores(1);
                             $text = 'Xem thêm';
                             $type = 'outline';
                             $href = 'pages/stores/index.php';
+                            $width = '200px';
                             include 'components/button.php';
                         ?>
                     </div>

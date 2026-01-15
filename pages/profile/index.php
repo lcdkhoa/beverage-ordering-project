@@ -238,7 +238,13 @@ $basePath = '../../';
                                     <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
                                 </svg>
                                 <p>Bạn chưa có đơn hàng nào</p>
-                                <a href="<?php echo $basePath; ?>pages/menu/index.php" class="btn-primary" style="width: 200px; border-radius: 30px; height: 40px; padding: 0px 20px; display: inline-flex; align-items: center; justify-content: center;">Đặt hàng ngay</a>
+                                <?php 
+                                    $text = 'Đặt hàng ngay';
+                                    $type = 'primary';
+                                    $href = $basePath . 'pages/menu/index.php';
+                                    $width = '200px';
+                                    include '../../components/button.php';
+                                ?>
                             </div>
                             <div id="ordersList" class="orders-list"></div>
                         </div>

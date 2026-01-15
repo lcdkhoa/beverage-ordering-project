@@ -52,12 +52,15 @@ $basePath = '../../';
                 <div class="management-header">
                     <h1 class="page-title">Quản lý sản phẩm</h1>
                     <?php if ($isAdmin): ?>
-                        <button type="button" class="btn btn-primary" id="btn-add-product">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 5v14M5 12h14"/>
-                            </svg>
-                            Thêm sản phẩm mới
-                        </button>
+                        <?php 
+                            $text = 'Thêm sản phẩm mới';
+                            $type = 'primary';
+                            $id = 'btn-add-product';
+                            $icon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>';
+                            $iconPosition = 'left';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     <?php endif; ?>
                 </div>
 
@@ -74,12 +77,15 @@ $basePath = '../../';
                 <div class="management-header">
                     <h1 class="page-title">Quản lý Topping</h1>
                     <?php if ($isAdmin): ?>
-                        <button type="button" class="btn btn-primary" id="btn-add-topping">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 5v14M5 12h14"/>
-                            </svg>
-                            Thêm topping mới
-                        </button>
+                        <?php 
+                            $text = 'Thêm topping mới';
+                            $type = 'primary';
+                            $id = 'btn-add-topping';
+                            $icon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>';
+                            $iconPosition = 'left';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     <?php endif; ?>
                 </div>
 
@@ -131,8 +137,20 @@ $basePath = '../../';
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-add-product">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+                        <?php 
+                            $text = 'Hủy';
+                            $type = 'secondary';
+                            $id = 'cancel-add-product';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
+                        <?php 
+                            $text = 'Thêm sản phẩm';
+                            $type = 'primary';
+                            $buttonType = 'submit';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     </div>
                 </form>
             </div>
@@ -165,8 +183,20 @@ $basePath = '../../';
                         <input type="number" id="edit-product-price" name="price" class="form-input" min="0" step="1" required>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-edit-price">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Cập nhật giá</button>
+                        <?php 
+                            $text = 'Hủy';
+                            $type = 'secondary';
+                            $id = 'cancel-edit-price';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
+                        <?php 
+                            $text = 'Cập nhật giá';
+                            $type = 'primary';
+                            $buttonType = 'submit';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     </div>
                 </form>
             </div>
@@ -206,8 +236,20 @@ $basePath = '../../';
                         </div>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-add-topping">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Thêm topping</button>
+                        <?php 
+                            $text = 'Hủy';
+                            $type = 'secondary';
+                            $id = 'cancel-add-topping';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
+                        <?php 
+                            $text = 'Thêm topping';
+                            $type = 'primary';
+                            $buttonType = 'submit';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     </div>
                 </form>
             </div>
@@ -240,8 +282,20 @@ $basePath = '../../';
                         <input type="number" id="edit-topping-price" name="price" class="form-input" min="0" step="1" required>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-edit-topping-price">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Cập nhật giá</button>
+                        <?php 
+                            $text = 'Hủy';
+                            $type = 'secondary';
+                            $id = 'cancel-edit-topping-price';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
+                        <?php 
+                            $text = 'Cập nhật giá';
+                            $type = 'primary';
+                            $buttonType = 'submit';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     </div>
                 </form>
             </div>

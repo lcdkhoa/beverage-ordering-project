@@ -44,7 +44,13 @@ $basePath = '../../';
             <?php if (empty($cartItems)): ?>
                 <div class="cart-empty">
                     <p>Giỏ hàng của bạn đang trống</p>
-                    <a href="<?php echo $basePath; ?>pages/menu/index.php" class="btn btn-primary">Tiếp tục mua sắm</a>
+                    <?php 
+                        $text = 'Tiếp tục mua sắm';
+                        $type = 'primary';
+                        $href = $basePath . 'pages/menu/index.php';
+                        $width = 'auto';
+                        include '../../components/button.php';
+                    ?>
                 </div>
             <?php else: ?>
                 <!-- Cart Header -->
@@ -141,7 +147,14 @@ $basePath = '../../';
                         <span class="total-label">Tổng tiền</span>
                         <span class="total-amount" id="cart-total-amount"><?php echo formatCurrency($totalAmount); ?></span>
                     </div>
-                    <button class="btn btn-checkout" style="width: 200px;" id="checkout-btn">Đặt hàng</button>
+                    <?php 
+                        $text = 'Đặt hàng';
+                        $type = 'primary';
+                        $id = 'checkout-btn';
+                        $class = 'btn-checkout';
+                        $width = '200px';
+                        include '../../components/button.php';
+                    ?>
                 </div>
             <?php endif; ?>
         </div>

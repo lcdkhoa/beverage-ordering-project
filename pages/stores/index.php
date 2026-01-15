@@ -106,15 +106,23 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
                                     <span><?php echo e($store['DienThoai']); ?></span>
                                 </div>
                                 <div class="store-actions">
-                                    <a href="../menu/index.php" class="btn-order" style="width: 150px;">Đặt ngay</a>
-                                    <a 
-                                        href="https://www.google.com/maps/search/?api=1&query=<?php echo urlencode($store['DiaChi']); ?>" 
-                                        target="_blank" 
-                                        class="btn-directions"
-                                        style="width: 200px;"
-                                    >
-                                        Chỉ đường
-                                    </a>
+                                    <?php 
+                                        $text = 'Đặt ngay';
+                                        $type = 'primary';
+                                        $href = '../menu/index.php';
+                                        $class = 'btn-order';
+                                        $width = '150px';
+                                        include '../../components/button.php';
+                                    ?>
+                                    <?php 
+                                        $text = 'Chỉ đường';
+                                        $type = 'outline';
+                                        $href = 'https://www.google.com/maps/search/?api=1&query=' . urlencode($store['DiaChi']);
+                                        $class = 'btn-directions';
+                                        $width = '200px';
+                                        $target = '_blank';
+                                        include '../../components/button.php';
+                                    ?>
                                 </div>
                             </div>
                         </div>

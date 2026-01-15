@@ -135,7 +135,13 @@ $basePath = '../../';
                                 <label class="form-label">Mã số thuế *</label>
                                 <div class="form-group-inline">
                                     <input type="text" class="form-input" name="vat_tax_id" placeholder="Nhập Mã số thuế">
-                                    <button type="button" class="btn-lookup">Tra cứu</button>
+                                    <?php 
+                                        $text = 'Tra cứu';
+                                        $type = 'secondary';
+                                        $class = 'btn-lookup';
+                                        $width = 'auto';
+                                        include '../../components/button.php';
+                                    ?>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -238,14 +244,24 @@ $basePath = '../../';
                                        id="promotion-code" 
                                        placeholder="Nhập mã khuyến mãi"
                                        autocomplete="off">
-                                <button type="button" class="btn-apply-promotion" id="btn-apply-promotion">
-                                    Áp dụng
-                                </button>
+                                <?php 
+                                    $text = 'Áp dụng';
+                                    $type = 'primary';
+                                    $id = 'btn-apply-promotion';
+                                    $class = 'btn-apply-promotion';
+                                    $width = 'auto';
+                                    include '../../components/button.php';
+                                ?>
                             </div>
                             <div class="promotion-message" id="promotion-message"></div>
-                            <button type="button" class="btn-remove-promotion" id="btn-remove-promotion" style="display: none;">
-                                Xóa mã
-                            </button>
+                            <?php 
+                                $text = 'Xóa mã';
+                                $type = 'secondary';
+                                $id = 'btn-remove-promotion';
+                                $class = 'btn-remove-promotion';
+                                $width = 'auto';
+                                include '../../components/button.php';
+                            ?>
                         </div>
 
                         <!-- Payment Summary -->
@@ -275,7 +291,14 @@ $basePath = '../../';
                         </label>
 
                         <!-- Checkout Button -->
-                        <button type="button" class="btn-pay-now" id="pay-now-btn">Thanh toán ngay</button>
+                        <?php 
+                            $text = 'Thanh toán ngay';
+                            $type = 'primary';
+                            $id = 'pay-now-btn';
+                            $class = 'btn-pay-now';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     </div>
                 </div>
             </div>

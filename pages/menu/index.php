@@ -197,7 +197,13 @@ if ($showBestSeller) {
                         <?php else: ?>
                             <div class="no-products">
                                 <p>Không tìm thấy sản phẩm nào.</p>
-                                <a href="index.php" class="btn btn-primary">Xem tất cả sản phẩm</a>
+                                <?php 
+                                    $text = 'Xem tất cả sản phẩm';
+                                    $type = 'primary';
+                                    $href = 'index.php';
+                                    $width = 'auto';
+                                    include '../../components/button.php';
+                                ?>
                             </div>
                         <?php endif; ?>
 

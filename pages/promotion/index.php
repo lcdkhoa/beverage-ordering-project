@@ -43,12 +43,15 @@ $basePath = '../../';
         <div class="container">
             <div class="management-header">
                 <h1 class="page-title">Quản lý khuyến mãi</h1>
-                <button type="button" class="btn btn-primary" id="btn-add-promotion">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M12 5v14M5 12h14"/>
-                    </svg>
-                    Thêm khuyến mãi mới
-                </button>
+                <?php 
+                    $text = 'Thêm khuyến mãi mới';
+                    $type = 'primary';
+                    $id = 'btn-add-promotion';
+                    $icon = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>';
+                    $iconPosition = 'left';
+                    $width = 'auto';
+                    include '../../components/button.php';
+                ?>
             </div>
 
             <div class="management-content">
@@ -111,8 +114,20 @@ $basePath = '../../';
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-add-promotion">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Thêm khuyến mãi</button>
+                        <?php 
+                            $text = 'Hủy';
+                            $type = 'secondary';
+                            $id = 'cancel-add-promotion';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
+                        <?php 
+                            $text = 'Thêm khuyến mãi';
+                            $type = 'primary';
+                            $buttonType = 'submit';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     </div>
                 </form>
             </div>
@@ -171,8 +186,20 @@ $basePath = '../../';
                         </select>
                     </div>
                     <div class="form-actions">
-                        <button type="button" class="btn btn-secondary" id="cancel-edit-promotion">Hủy</button>
-                        <button type="submit" class="btn btn-primary">Cập nhật khuyến mãi</button>
+                        <?php 
+                            $text = 'Hủy';
+                            $type = 'secondary';
+                            $id = 'cancel-edit-promotion';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
+                        <?php 
+                            $text = 'Cập nhật khuyến mãi';
+                            $type = 'primary';
+                            $buttonType = 'submit';
+                            $width = 'auto';
+                            include '../../components/button.php';
+                        ?>
                     </div>
                 </form>
             </div>

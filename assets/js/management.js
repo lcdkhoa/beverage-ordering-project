@@ -183,12 +183,20 @@ $(document).ready(function () {
           showAlert(response.message, "success", ".management-content");
           loadToppings(); // Reload toppings list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
+          showAlert(
+            response.message || "Có lỗi xảy ra",
+            "error",
+            ".management-content"
+          );
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
-        showAlert("Có lỗi xảy ra khi xóa topping. Vui lòng thử lại.", "error", ".management-content");
+        showAlert(
+          "Có lỗi xảy ra khi xóa topping. Vui lòng thử lại.",
+          "error",
+          ".management-content"
+        );
       },
     });
   });
@@ -237,12 +245,20 @@ $(document).ready(function () {
           showAlert(response.message, "success", ".management-content");
           loadProducts(); // Reload products list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
+          showAlert(
+            response.message || "Có lỗi xảy ra",
+            "error",
+            ".management-content"
+          );
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
-        showAlert("Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.", "error", ".management-content");
+        showAlert(
+          "Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.",
+          "error",
+          ".management-content"
+        );
       },
     });
   });
@@ -311,7 +327,11 @@ $(document).ready(function () {
           $("#image-preview").hide();
           loadProducts(); // Reload products list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
+          showAlert(
+            response.message || "Có lỗi xảy ra",
+            "error",
+            ".management-content"
+          );
         }
       },
       error: function (xhr, status, error) {
@@ -364,12 +384,20 @@ $(document).ready(function () {
           $("#edit-price-modal").removeClass("active");
           loadProducts(); // Reload products list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
+          showAlert(
+            response.message || "Có lỗi xảy ra",
+            "error",
+            ".management-content"
+          );
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
-        showAlert("Có lỗi xảy ra khi cập nhật giá. Vui lòng thử lại.", "error", ".management-content");
+        showAlert(
+          "Có lỗi xảy ra khi cập nhật giá. Vui lòng thử lại.",
+          "error",
+          ".management-content"
+        );
       },
     });
   });
@@ -389,7 +417,11 @@ $(document).ready(function () {
     }
 
     if (!giaThem || giaThem < 0) {
-      showAlert("Vui lòng nhập giá thêm hợp lệ", "error", ".management-content");
+      showAlert(
+        "Vui lòng nhập giá thêm hợp lệ",
+        "error",
+        ".management-content"
+      );
       return;
     }
 
@@ -415,7 +447,11 @@ $(document).ready(function () {
           $("#topping-image-preview").hide();
           loadToppings(); // Reload toppings list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
+          showAlert(
+            response.message || "Có lỗi xảy ra",
+            "error",
+            ".management-content"
+          );
         }
       },
       error: function (xhr, status, error) {
@@ -452,7 +488,11 @@ $(document).ready(function () {
 
     // Validation
     if (!formData.price || formData.price < 0) {
-      showAlert("Vui lòng nhập giá thêm hợp lệ", "error", ".management-content");
+      showAlert(
+        "Vui lòng nhập giá thêm hợp lệ",
+        "error",
+        ".management-content"
+      );
       return;
     }
 
@@ -468,7 +508,11 @@ $(document).ready(function () {
           $("#edit-topping-price-modal").removeClass("active");
           loadToppings(); // Reload toppings list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
+          showAlert(
+            response.message || "Có lỗi xảy ra",
+            "error",
+            ".management-content"
+          );
         }
       },
       error: function (xhr, status, error) {
