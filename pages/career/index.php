@@ -155,6 +155,9 @@ require_once '../../functions.php';
         </div>
         
     </section>
+
+    <?php include '../../components/back-to-top.php'; ?>
+
     <?php include '../../components/footer.php'; ?>
 
     <script src="../../assets/js/common.js"></script>

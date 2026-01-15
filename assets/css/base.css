@@ -73,17 +73,41 @@ img {
   padding: 20px 0;
 }
 
+/* Background variants */
+.back-to-top.bg-light-green {
+  background-color: var(--light-green);
+}
+
+.back-to-top.bg-white {
+  background-color: var(--white);
+}
+
+.back-to-top.bg-transparent,
+.back-to-top:not(.bg-light-green):not(.bg-white) {
+  background-color: transparent;
+}
+
 .back-to-top-link {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   color: var(--primary-green);
+  text-decoration: none;
+  font-weight: 600;
   transition: all 0.3s ease;
+  background: transparent;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 30px;
 }
 
 .back-to-top-link:hover {
-  color: var(--primary-green);
+
   transform: translateY(-3px);
+}
+
+.back-to-top-link svg {
+  flex-shrink: 0;
 }
 
 /* ===== RESPONSIVE ===== */

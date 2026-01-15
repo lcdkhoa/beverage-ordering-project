@@ -7,11 +7,9 @@
  * @param int $totalPages - Total number of pages
  * @param string $baseUrl - Base URL for pagination links (default: current URL without page param)
  * @param array $queryParams - Additional query parameters to preserve (e.g., ['category' => '1', 'search' => 'keyword'])
- * @param bool $showInfo - Show pagination info text (default: true)
  */
 if (!isset($page)) $page = 1;
 if (!isset($totalPages)) $totalPages = 1;
-if (!isset($showInfo)) $showInfo = true;
 if (!isset($queryParams)) $queryParams = [];
 
 // Build base URL
@@ -87,9 +85,3 @@ $endPage = min($totalPages, $page + 2);
         ?>
     <?php endif; ?>
 </div>
-
-<?php if ($showInfo): ?>
-    <div class="pagination-info">
-        Trang <?php echo $page; ?> trên <?php echo $totalPages; ?>
-    </div>
-<?php endif; ?>

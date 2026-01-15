@@ -70,31 +70,6 @@ require_once '../../functions.php';
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
         }
 
-        .about-back-to-top {
-            text-align: center;
-            margin-top: 50px;
-            padding: 20px 0;
-        }
-
-        .about-back-to-top-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--primary-green);
-            font-weight: bold;
-            transition: all 0.3s ease;
-            text-decoration: none;
-        }
-
-        .about-back-to-top-link:hover {
-            color: var(--light-green);
-            transform: translateY(-3px);
-        }
-
-        .about-back-to-top-link svg {
-            width: 20px;
-            height: 20px;
-        }
 
         @media (max-width: 768px) {
             .about-title {
@@ -140,14 +115,7 @@ require_once '../../functions.php';
             </div>
         </div>
     </section>
-     <div class="back-to-top">
-        <a href="#top" class="back-to-top-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 15l-6-6-6 6"/>
-            </svg>
-            <span>Lên đầu trang</span>
-        </a>
-    </div>
+    <?php include '../../components/back-to-top.php'; ?>
 
     <?php include '../../components/footer.php'; ?>
 

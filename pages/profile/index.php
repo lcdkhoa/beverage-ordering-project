@@ -377,6 +377,11 @@ $basePath = '../../';
         </div>
     </section>
 
+    <?php 
+        $bgType = 'light-green';
+        include '../../components/back-to-top.php';
+    ?>
+
     <?php include '../../components/footer.php'; ?>
 
     <script src="<?php echo $basePath; ?>assets/js/common.js"></script>

@@ -160,6 +160,8 @@ $basePath = '../../';
         </div>
     </main>
 
+    <?php include '../../components/back-to-top.php'; ?>
+
     <?php include '../../components/footer.php'; ?>
 
     <script src="<?php echo $basePath; ?>assets/js/common.js"></script>

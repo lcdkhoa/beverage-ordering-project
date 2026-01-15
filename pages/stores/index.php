@@ -138,6 +138,11 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
        
     </section>
 
+    <?php 
+        $bgType = 'light-green';
+        include '../../components/back-to-top.php';
+    ?>
+
     <?php include '../../components/footer.php'; ?>
 
     <script src="../../assets/js/common.js"></script>
