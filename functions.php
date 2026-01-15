@@ -280,7 +280,7 @@ function getProductById($productId) {
 function getProductOptions($productId) {
     $pdo = getDBConnection();
     $sql = "SELECT og.MaOptionGroup, og.TenNhom, og.IsMultiple,
-                   ov.MaOptionValue, ov.TenGiaTri, ov.GiaThem
+                   ov.MaOptionValue, ov.TenGiaTri, ov.GiaThem, ov.HinhAnh
             FROM Product_Option_Group pog
             INNER JOIN Option_Group og ON pog.MaOptionGroup = og.MaOptionGroup
             INNER JOIN Option_Value ov ON og.MaOptionGroup = ov.MaOptionGroup
@@ -625,29 +625,21 @@ function renderStars($rating) {
  */
 function getToppings() {
     $pdo = getDBConnection();
-    $stmt = $pdo->query("SELECT ov.MaOptionValue, ov.TenGiaTri, ov.GiaThem
+    $stmt = $pdo->query("SELECT ov.MaOptionValue, ov.TenGiaTri, ov.GiaThem, ov.HinhAnh
                         FROM Option_Value ov
                         INNER JOIN Option_Group og ON ov.MaOptionGroup = og.MaOptionGroup
                         WHERE og.MaOptionGroup = 3
                         ORDER BY ov.MaOptionValue");
     $toppings = $stmt->fetchAll(PDO::FETCH_ASSOC);
     
-    // Map topping names to image files
-    $toppingImageMap = [
-        'Trân châu đen' => 'assets/img/products/topping/topping-tranchau.png',
-        'Thạch dừa' => 'assets/img/products/topping/topping-thachdua.png',
-        'Pudding trứng' => 'assets/img/products/topping/topping-pudding.png',
-        'Sương sáo' => 'assets/img/products/topping/topping-suongsao.png',
-        'Củ năng' => 'assets/img/products/topping/toppingcunang.png'
-    ];
-    
-    // Fallback image if topping name doesn't match
+    // Fallback image if no image is set
     $defaultToppingImage = 'assets/img/products/topping/topping-tranchau.png';
     
     // Format toppings to match product structure for display
     $formattedToppings = [];
     foreach ($toppings as $topping) {
-        $imagePath = $toppingImageMap[$topping['TenGiaTri']] ?? $defaultToppingImage;
+        // Use image from database, fallback to default if not set
+        $imagePath = !empty($topping['HinhAnh']) ? $topping['HinhAnh'] : $defaultToppingImage;
         
         $formattedToppings[] = [
             'MaSP' => 'topping_' . $topping['MaOptionValue'], // Prefix để phân biệt với sản phẩm thật

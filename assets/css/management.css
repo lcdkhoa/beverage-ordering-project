@@ -10,6 +10,46 @@
     min-height: calc(100vh - 200px);
 }
 
+/* ===== TAB NAVIGATION ===== */
+.management-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.tab-btn {
+    padding: 12px 24px;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    bottom: -2px;
+}
+
+.tab-btn:hover {
+    color: var(--primary-green);
+}
+
+.tab-btn.active {
+    color: var(--primary-green);
+    border-bottom-color: var(--primary-green);
+    font-weight: 600;
+}
+
+.management-section-content {
+    display: none;
+}
+
+.management-section-content.active {
+    display: block;
+}
+
 .management-header {
     display: flex;
     justify-content: space-between;
@@ -117,6 +157,11 @@
 
 /* ===== PRODUCTS TABLE ===== */
 .products-table-wrapper {
+    overflow-x: auto;
+    padding: 20px;
+}
+
+.toppings-table-wrapper {
     overflow-x: auto;
     padding: 20px;
 }

@@ -63,12 +63,12 @@ INSERT INTO `Option_Value` (TenGiaTri, GiaThem, MaOptionGroup) VALUES
 ('Không đá', 0, 2);
 
 -- Topping (Group 3)
-INSERT INTO `Option_Value` (TenGiaTri, GiaThem, MaOptionGroup) VALUES
-('Trân châu đen', 5000, 3),
-('Thạch dừa', 5000, 3),
-('Pudding trứng', 10000, 3),
-('Sương sáo', 5000, 3),
-('Cù năng', 5000, 3);
+INSERT INTO `Option_Value` (TenGiaTri, GiaThem, HinhAnh, MaOptionGroup) VALUES
+('Trân châu đen', 5000, 'assets/img/products/topping/topping-tranchau.png', 3),
+('Thạch dừa', 5000, 'assets/img/products/topping/topping-thachdua.png', 3),
+('Pudding trứng', 10000, 'assets/img/products/topping/topping-pudding.png', 3),
+('Sương sáo', 5000, 'assets/img/products/topping/topping-suongsao.png', 3),
+('Cù năng', 5000, 'assets/img/products/topping/toppingcunang.png', 3);
 
 -- 7. Insert SanPham
 -- Cà phê truyền thống (MaCategory = 1)

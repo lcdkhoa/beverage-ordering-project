@@ -31,7 +31,7 @@ $basePath = '../../';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý sản phẩm - MeowTea Fresh</title>
+    <title>Quản lý sản phẩm & Topping - MeowTea Fresh</title>
     <link rel="stylesheet" href="../../assets/css/main.css">
     <link rel="stylesheet" href="../../assets/css/management.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -41,22 +41,53 @@ $basePath = '../../';
 
     <section class="management-section">
         <div class="container">
-            <div class="management-header">
-                <h1 class="page-title">Quản lý sản phẩm</h1>
-                <?php if ($isAdmin): ?>
-                    <button type="button" class="btn btn-primary" id="btn-add-product">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 5v14M5 12h14"/>
-                        </svg>
-                        Thêm sản phẩm mới
-                    </button>
-                <?php endif; ?>
+            <!-- Tab Navigation -->
+            <div class="management-tabs">
+                <button type="button" class="tab-btn active" data-tab="products">Sản phẩm</button>
+                <button type="button" class="tab-btn" data-tab="toppings">Topping</button>
             </div>
 
-            <div class="management-content">
-                <!-- Products Accordion -->
-                <div id="products-accordion" class="products-accordion">
-                    <div class="loading-spinner">Đang tải...</div>
+            <!-- Products Section -->
+            <div id="products-section" class="management-section-content active">
+                <div class="management-header">
+                    <h1 class="page-title">Quản lý sản phẩm</h1>
+                    <?php if ($isAdmin): ?>
+                        <button type="button" class="btn btn-primary" id="btn-add-product">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            Thêm sản phẩm mới
+                        </button>
+                    <?php endif; ?>
+                </div>
+
+                <div class="management-content">
+                    <!-- Products Accordion -->
+                    <div id="products-accordion" class="products-accordion">
+                        <div class="loading-spinner">Đang tải...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toppings Section -->
+            <div id="toppings-section" class="management-section-content">
+                <div class="management-header">
+                    <h1 class="page-title">Quản lý Topping</h1>
+                    <?php if ($isAdmin): ?>
+                        <button type="button" class="btn btn-primary" id="btn-add-topping">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 5v14M5 12h14"/>
+                            </svg>
+                            Thêm topping mới
+                        </button>
+                    <?php endif; ?>
+                </div>
+
+                <div class="management-content">
+                    <!-- Toppings Table -->
+                    <div id="toppings-table-wrapper" class="toppings-table-wrapper">
+                        <div class="loading-spinner">Đang tải...</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -135,6 +166,81 @@ $basePath = '../../';
                     </div>
                     <div class="form-actions">
                         <button type="button" class="btn btn-secondary" id="cancel-edit-price">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Cập nhật giá</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Add Topping Modal (Admin only) -->
+    <?php if ($isAdmin): ?>
+    <div id="add-topping-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Thêm topping mới</h2>
+                <button type="button" class="modal-close" id="close-add-topping-modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="add-topping-form" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="topping-name">Tên topping <span class="required">*</span></label>
+                        <input type="text" id="topping-name" name="ten_topping" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="topping-price">Giá thêm (₫) <span class="required">*</span></label>
+                        <input type="number" id="topping-price" name="gia_them" class="form-input" min="0" step="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="topping-image">Hình ảnh</label>
+                        <input type="file" id="topping-image" name="hinh_anh" class="form-input" accept="image/*">
+                        <small class="form-help">Để trống để sử dụng hình ảnh mặc định. Chỉ chấp nhận file ảnh (JPG, PNG, GIF, etc.)</small>
+                        <div id="topping-image-preview" style="margin-top: 10px; display: none;">
+                            <img id="topping-preview-img" src="" alt="Preview" style="max-width: 200px; max-height: 200px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-add-topping">Hủy</button>
+                        <button type="submit" class="btn btn-primary">Thêm topping</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <!-- Edit Topping Price Modal (Admin only) -->
+    <?php if ($isAdmin): ?>
+    <div id="edit-topping-price-modal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Điều chỉnh giá topping</h2>
+                <button type="button" class="modal-close" id="close-edit-topping-modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-topping-price-form">
+                    <input type="hidden" id="edit-topping-id" name="topping_id">
+                    <div class="form-group">
+                        <label for="edit-topping-name">Tên topping</label>
+                        <input type="text" id="edit-topping-name" class="form-input" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-topping-price">Giá thêm mới (₫) <span class="required">*</span></label>
+                        <input type="number" id="edit-topping-price" name="price" class="form-input" min="0" step="1" required>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" id="cancel-edit-topping-price">Hủy</button>
                         <button type="submit" class="btn btn-primary">Cập nhật giá</button>
                     </div>
                 </form>

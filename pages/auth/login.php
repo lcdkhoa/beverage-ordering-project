@@ -35,7 +35,7 @@ $basePath = '../../';
             <div class="login-layout">
                 <!-- Left: Image -->
                 <div class="login-image-wrapper">
-                    <img src="<?php echo $basePath; ?>assets/img/stores/home-page.png" alt="MeowTea Fresh Cafe" class="login-image">
+                    <img src="<?php echo $basePath; ?>assets/img/stores/stores_banner.png" alt="MeowTea Fresh Cafe" class="login-image">
                 </div>
 
                 <!-- Right: Login Form -->

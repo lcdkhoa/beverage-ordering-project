@@ -84,6 +84,7 @@ CREATE TABLE `Option_Value` (
     `MaOptionValue` INT AUTO_INCREMENT PRIMARY KEY, -- PK: Mã giá trị tùy chọn
     `TenGiaTri` VARCHAR(100) NOT NULL, -- Tên giá trị
     `GiaThem` DECIMAL(15, 0) DEFAULT 0, -- Giá cộng thêm
+    `HinhAnh` VARCHAR(255) DEFAULT NULL, -- URL hình ảnh (chủ yếu cho topping)
     `MaOptionGroup` INT NOT NULL, -- FK: Nhóm tùy chọn
     CONSTRAINT `FK_OV_Group` FOREIGN KEY (`MaOptionGroup`) REFERENCES `Option_Group` (`MaOptionGroup`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

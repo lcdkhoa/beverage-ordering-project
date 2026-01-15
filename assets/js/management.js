@@ -24,6 +24,35 @@ $(document).ready(function () {
   const apiBasePath = getApiBasePath();
   const isAdmin = $("#btn-add-product").length > 0; // Check if add button exists
 
+  // ===== TAB HANDLERS =====
+  $(".tab-btn").on("click", function () {
+    const tab = $(this).data("tab");
+
+    // Update tab buttons
+    $(".tab-btn").removeClass("active");
+    $(this).addClass("active");
+
+    // Update sections
+    $(".management-section-content").removeClass("active");
+    if (tab === "products") {
+      $("#products-section").addClass("active");
+      if (
+        $("#products-accordion").html().trim() === "" ||
+        $("#products-accordion").html().includes("loading-spinner")
+      ) {
+        loadProducts();
+      }
+    } else if (tab === "toppings") {
+      $("#toppings-section").addClass("active");
+      if (
+        $("#toppings-table-wrapper").html().trim() === "" ||
+        $("#toppings-table-wrapper").html().includes("loading-spinner")
+      ) {
+        loadToppings();
+      }
+    }
+  });
+
   // Load products on page load
   loadProducts();
 
@@ -90,6 +119,108 @@ $(document).ready(function () {
   $(document).on("keydown", function (e) {
     if (e.key === "Escape") {
       $(".modal").removeClass("active");
+    }
+  });
+
+  // ===== TOPPING MODAL HANDLERS =====
+  // Add Topping Modal
+  $("#btn-add-topping").on("click", function () {
+    $("#add-topping-modal").addClass("active");
+    setTimeout(function () {
+      $("#add-topping-form")[0].reset();
+      $("#topping-image-preview").hide();
+    }, 100);
+  });
+
+  $("#close-add-topping-modal, #cancel-add-topping, .modal-overlay").on(
+    "click",
+    function (e) {
+      if (
+        $(e.target).hasClass("modal-overlay") ||
+        $(e.target).closest(".modal-close").length ||
+        $(e.target).attr("id") === "cancel-add-topping"
+      ) {
+        $("#add-topping-modal").removeClass("active");
+      }
+    }
+  );
+
+  // Edit Topping Price Modal
+  $(document).on("click", ".btn-edit-topping-price", function () {
+    const toppingId = $(this).data("topping-id");
+    const toppingName = $(this).data("topping-name");
+    const currentPrice = $(this).data("topping-price");
+
+    $("#edit-topping-id").val(toppingId);
+    $("#edit-topping-name").val(toppingName);
+    $("#edit-topping-price").val(currentPrice);
+    $("#edit-topping-price-modal").addClass("active");
+  });
+
+  $("#close-edit-topping-modal, #cancel-edit-topping-price, .modal-overlay").on(
+    "click",
+    function (e) {
+      if (
+        $(e.target).hasClass("modal-overlay") ||
+        $(e.target).closest(".modal-close").length ||
+        $(e.target).attr("id") === "cancel-edit-topping-price"
+      ) {
+        $("#edit-topping-price-modal").removeClass("active");
+      }
+    }
+  );
+
+  // Delete Topping Handler
+  $(document).on("click", ".btn-delete-topping", function () {
+    const toppingId = $(this).data("topping-id");
+    const toppingName = $(this).data("topping-name");
+
+    // Confirm before deleting
+    if (
+      !confirm(
+        "Bạn có chắc chắn muốn xóa topping '" +
+          toppingName +
+          "'?\n\nHành động này không thể hoàn tác."
+      )
+    ) {
+      return;
+    }
+
+    // Submit via AJAX
+    $.ajax({
+      url: apiBasePath + "delete-topping.php",
+      method: "POST",
+      data: {
+        topping_id: toppingId,
+      },
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          showAlert(response.message, "success");
+          loadToppings(); // Reload toppings list
+        } else {
+          showAlert(response.message || "Có lỗi xảy ra", "error");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error:", error);
+        showAlert("Có lỗi xảy ra khi xóa topping. Vui lòng thử lại.", "error");
+      },
+    });
+  });
+
+  // Topping image preview handler
+  $("#topping-image").on("change", function (e) {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        $("#topping-preview-img").attr("src", e.target.result);
+        $("#topping-image-preview").show();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      $("#topping-image-preview").hide();
     }
   });
 
@@ -255,6 +386,113 @@ $(document).ready(function () {
       error: function (xhr, status, error) {
         console.error("Error:", error);
         showAlert("Có lỗi xảy ra khi cập nhật giá. Vui lòng thử lại.", "error");
+      },
+    });
+  });
+
+  // Add Topping Form
+  $("#add-topping-form").on("submit", function (e) {
+    e.preventDefault();
+
+    // Validation
+    const tenTopping = $("#topping-name").val().trim();
+    const giaThem = $("#topping-price").val();
+    const imageFile = $("#topping-image")[0].files[0];
+
+    if (!tenTopping) {
+      showAlert("Vui lòng nhập tên topping", "error");
+      return;
+    }
+
+    if (!giaThem || giaThem < 0) {
+      showAlert("Vui lòng nhập giá thêm hợp lệ", "error");
+      return;
+    }
+
+    // Create FormData for file upload
+    const formData = new FormData();
+    formData.append("ten_topping", tenTopping);
+    formData.append("gia_them", giaThem);
+    formData.append("hinh_anh", imageFile);
+
+    // Submit via AJAX
+    $.ajax({
+      url: apiBasePath + "create-topping.php",
+      method: "POST",
+      data: formData,
+      processData: false,
+      contentType: false,
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          showAlert(response.message, "success");
+          $("#add-topping-modal").removeClass("active");
+          $("#add-topping-form")[0].reset();
+          $("#topping-image-preview").hide();
+          loadToppings(); // Reload toppings list
+        } else {
+          showAlert(response.message || "Có lỗi xảy ra", "error");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error:", error);
+        console.error("Status:", status);
+        console.error("Response:", xhr.responseText);
+        let errorMessage = "Có lỗi xảy ra khi thêm topping. Vui lòng thử lại.";
+
+        // Try to parse error response
+        if (xhr.responseText) {
+          try {
+            const errorResponse = JSON.parse(xhr.responseText);
+            if (errorResponse.message) {
+              errorMessage = errorResponse.message;
+            }
+          } catch (e) {
+            // Use default error message
+          }
+        }
+
+        showAlert(errorMessage, "error");
+      },
+    });
+  });
+
+  // Edit Topping Price Form
+  $("#edit-topping-price-form").on("submit", function (e) {
+    e.preventDefault();
+
+    const formData = {
+      topping_id: $("#edit-topping-id").val(),
+      price: $("#edit-topping-price").val(),
+    };
+
+    // Validation
+    if (!formData.price || formData.price < 0) {
+      showAlert("Vui lòng nhập giá thêm hợp lệ", "error");
+      return;
+    }
+
+    // Submit via AJAX
+    $.ajax({
+      url: apiBasePath + "update-topping-price.php",
+      method: "POST",
+      data: formData,
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          showAlert(response.message, "success");
+          $("#edit-topping-price-modal").removeClass("active");
+          loadToppings(); // Reload toppings list
+        } else {
+          showAlert(response.message || "Có lỗi xảy ra", "error");
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error:", error);
+        showAlert(
+          "Có lỗi xảy ra khi cập nhật giá topping. Vui lòng thử lại.",
+          "error"
+        );
       },
     });
   });
@@ -499,6 +737,132 @@ $(document).ready(function () {
           $content.slideDown(300);
         }
       });
+  }
+
+  // ===== TOPPING FUNCTIONS =====
+  function loadToppings() {
+    $.ajax({
+      url: apiBasePath + "toppings.php",
+      method: "GET",
+      dataType: "json",
+      success: function (response) {
+        if (response.success) {
+          renderToppings(response.data);
+        } else {
+          $("#toppings-table-wrapper").html(
+            '<div class="alert alert-error">' +
+              (response.message || "Không thể tải danh sách topping") +
+              "</div>"
+          );
+        }
+      },
+      error: function (xhr, status, error) {
+        console.error("Error loading toppings:", error);
+        $("#toppings-table-wrapper").html(
+          '<div class="alert alert-error">Có lỗi xảy ra khi tải danh sách topping</div>'
+        );
+      },
+    });
+  }
+
+  function renderToppings(toppings) {
+    const $wrapper = $("#toppings-table-wrapper");
+
+    if (toppings.length === 0) {
+      $wrapper.html('<div class="empty-state">Chưa có topping nào</div>');
+      return;
+    }
+
+    // Default image if no image is set
+    const defaultToppingImage =
+      "assets/img/products/topping/topping-tranchau.png";
+
+    // Build table HTML
+    let html = '<div class="products-table-wrapper">';
+    html += '<table class="products-table">';
+    html += "<thead>";
+    html += "<tr>";
+    html += "<th>Mã TP</th>";
+    html += "<th>Hình ảnh</th>";
+    html += "<th>Tên topping</th>";
+    html += "<th>Giá thêm</th>";
+    if (isAdmin) {
+      html += "<th>Thao tác</th>";
+    }
+    html += "</tr>";
+    html += "</thead>";
+    html += "<tbody>";
+
+    toppings.forEach(function (topping) {
+      // Use image from database, fallback to default if not set
+      const imagePath = topping.HinhAnh || defaultToppingImage;
+      const price = formatCurrency(topping.GiaThem);
+
+      html += "<tr>";
+      html += "<td>" + topping.MaOptionValue + "</td>";
+      html +=
+        '<td><img src="../../' +
+        imagePath +
+        '" alt="' +
+        escapeHtml(topping.TenGiaTri) +
+        '" class="product-image"></td>';
+      html +=
+        '<td><div class="product-name">' +
+        escapeHtml(topping.TenGiaTri) +
+        "</div></td>";
+      html += '<td><div class="product-price">' + price + "</div></td>";
+
+      if (isAdmin) {
+        html += "<td>";
+        html += '<div class="action-buttons">';
+        html +=
+          '<button type="button" class="btn btn-edit btn-edit-topping-price" ' +
+          'data-topping-id="' +
+          topping.MaOptionValue +
+          '" ' +
+          'data-topping-name="' +
+          escapeHtml(topping.TenGiaTri) +
+          '" ' +
+          'data-topping-price="' +
+          topping.GiaThem +
+          '">';
+        html +=
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
+        html +=
+          '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>';
+        html +=
+          '<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>';
+        html += "</svg>";
+        html += " Sửa giá";
+        html += "</button>";
+        html +=
+          '<button type="button" class="btn btn-delete btn-delete-topping" ' +
+          'data-topping-id="' +
+          topping.MaOptionValue +
+          '" ' +
+          'data-topping-name="' +
+          escapeHtml(topping.TenGiaTri) +
+          '">';
+        html +=
+          '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';
+        html += '<polyline points="3 6 5 6 21 6"/>';
+        html +=
+          '<path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>';
+        html += "</svg>";
+        html += " Xóa";
+        html += "</button>";
+        html += "</div>";
+        html += "</td>";
+      }
+
+      html += "</tr>";
+    });
+
+    html += "</tbody>";
+    html += "</table>";
+    html += "</div>";
+
+    $wrapper.html(html);
   }
 
   // ===== HELPER FUNCTIONS =====
