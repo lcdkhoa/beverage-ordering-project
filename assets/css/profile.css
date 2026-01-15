@@ -350,21 +350,6 @@ select.form-input:disabled {
   transform: translateY(-2px);
 }
 
-.login-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.btn-loading {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.btn-loading svg {
-  animation: spin 1s linear infinite;
-}
-
 .password-guideline {
   display: flex;
   align-items: center;
@@ -391,16 +376,6 @@ select.form-input:disabled {
   animation: spin 1s linear infinite;
   margin-bottom: 20px;
   color: var(--primary-green);
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
 }
 
 .orders-loading p {

@@ -111,3 +111,24 @@
   background-color: #0f3a1f;
   border-color: #0f3a1f;
 }
+
+/* ===== BUTTON LOADING STATE (shared) ===== */
+.btn-loading {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-loading svg {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
