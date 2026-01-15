@@ -38,11 +38,7 @@ $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include '../../components/header.php'; ?>
 
     <!-- News Banner Section -->
-    <section class="news-banner-section" style="background-image: url('../../assets/img/news/news_banner.jpg'); background-size: cover; background-position: center; padding: 80px 0; margin-bottom: 40px;">
-        <div class="container">
-            <h1 class="section-title" style="color: white; text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);">Tin Tức & Sự Kiện</h1>
-            <p class="section-subtitle" style="color: white; text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);">Cập nhật những thông tin mới nhất từ MeowTea Fresh</p>
-        </div>
+    <section class="news-banner-section" id="news-banner-section" style="background-image: url('../../assets/img/news/news_banner.jpg'); background-size: cover; background-position: center; margin-bottom: 40px;">
     </section>
 
     <!-- News Content Section -->
@@ -131,5 +127,6 @@ $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php include '../../components/footer.php'; ?>
 
     <script src="../../assets/js/main.js"></script>
+    <script src="../../assets/js/news.js"></script>
 </body>
 </html>
