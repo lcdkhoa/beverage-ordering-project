@@ -100,7 +100,7 @@ $stores = getStores(1);
         <div class="container">
             <div class="store-system-content">
                 <div>
-                    <img src="assets/img/stores/home-page.png" alt="Cửa hàng MeowTea Fresh" class="store-image" style="height: 320px; max-width: 100%;">
+                    <img src="assets/img/stores/stores_banner.png" alt="Cửa hàng MeowTea Fresh" class="store-image" style="height: 320px; max-width: 100%;">
                 </div>
                 <div class="store-info">
                     <h3 style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2); font-size: 28px;">Hệ Thống Cửa Hàng</h3>

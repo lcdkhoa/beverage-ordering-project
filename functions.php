@@ -360,7 +360,7 @@ function getCategoryIcon($categoryName) {
         'Trà sữa' => 'milk-tea',
         'Trà trái cây' => 'fruit-tea',
         'Đá xay' => 'blended',
-        'Sữa chua' => 'yogurt',
+        'Yogurt' => 'yogurt',
         'Topping' => 'topping'
     ];
     return $icons[$categoryName] ?? 'default';
@@ -617,6 +617,52 @@ function renderStars($rating) {
     $stars .= str_repeat('☆', $emptyStars); // Sao rỗng
     
     return $stars;
+}
+
+/**
+ * Get toppings from Option_Value where MaOptionGroup = 3
+ * @return array - Array of topping data formatted like products
+ */
+function getToppings() {
+    $pdo = getDBConnection();
+    $stmt = $pdo->query("SELECT ov.MaOptionValue, ov.TenGiaTri, ov.GiaThem
+                        FROM Option_Value ov
+                        INNER JOIN Option_Group og ON ov.MaOptionGroup = og.MaOptionGroup
+                        WHERE og.MaOptionGroup = 3
+                        ORDER BY ov.MaOptionValue");
+    $toppings = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    // Map topping names to image files
+    $toppingImageMap = [
+        'Trân châu đen' => 'assets/img/products/topping/topping-tranchau.png',
+        'Thạch dừa' => 'assets/img/products/topping/topping-thachdua.png',
+        'Pudding trứng' => 'assets/img/products/topping/topping-pudding.png',
+        'Sương sáo' => 'assets/img/products/topping/topping-suongsao.png',
+        'Củ năng' => 'assets/img/products/topping/toppingcunang.png'
+    ];
+    
+    // Fallback image if topping name doesn't match
+    $defaultToppingImage = 'assets/img/products/topping/topping-tranchau.png';
+    
+    // Format toppings to match product structure for display
+    $formattedToppings = [];
+    foreach ($toppings as $topping) {
+        $imagePath = $toppingImageMap[$topping['TenGiaTri']] ?? $defaultToppingImage;
+        
+        $formattedToppings[] = [
+            'MaSP' => 'topping_' . $topping['MaOptionValue'], // Prefix để phân biệt với sản phẩm thật
+            'TenSP' => $topping['TenGiaTri'],
+            'GiaCoBan' => $topping['GiaThem'],
+            'HinhAnh' => $imagePath,
+            'Rating' => 4.5, // Default rating
+            'SoLuotRating' => 0,
+            'MaCategory' => 0, // Special category for topping
+            'TenCategory' => 'Topping',
+            'IsTopping' => true // Flag to identify as topping
+        ];
+    }
+    
+    return $formattedToppings;
 }
 
 ?>

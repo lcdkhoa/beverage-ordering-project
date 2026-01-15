@@ -30,7 +30,7 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
 
     <!-- Hero Section -->
     <section class="stores-hero">
-        <img src="../../assets/img/stores/store_hero.jpg" alt="MeowTea Fresh Store" onerror="this.src='../../assets/img/products/product_banner.png'">
+        <img src="../../assets/img/stores/stores_banner.png" alt="MeowTea Fresh Store">
     </section>
 
     <!-- Stores Content -->

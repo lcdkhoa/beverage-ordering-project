@@ -10,20 +10,24 @@ require_once '../../functions.php';
 $categoryId = isset($_GET['category']) ? (int)$_GET['category'] : null;
 $keyword = isset($_GET['search']) ? trim($_GET['search']) : '';
 $showBestSeller = isset($_GET['bestseller']) && $_GET['bestseller'] == '1';
+$showTopping = isset($_GET['topping']) && $_GET['topping'] == '1';
 $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $perPage = 12;
 
 
 $categories = getCategories();
 $bestSellers = getBestSellerProducts(2);
-$products = searchProducts($keyword, $categoryId, $page, $perPage);
-$totalProducts = countProducts($keyword, $categoryId);
-$totalPages = ceil($totalProducts / $perPage);
+$toppings = $showTopping ? getToppings() : [];
+$products = !$showTopping ? searchProducts($keyword, $categoryId, $page, $perPage) : [];
+$totalProducts = !$showTopping ? countProducts($keyword, $categoryId) : count($toppings);
+$totalPages = !$showTopping ? ceil($totalProducts / $perPage) : 1;
 
 
 $selectedCategoryName = 'Tất cả';
 if ($showBestSeller) {
     $selectedCategoryName = 'Best Seller';
+} elseif ($showTopping) {
+    $selectedCategoryName = 'Topping';
 } elseif ($categoryId) {
     foreach ($categories as $cat) {
         if ($cat['MaCategory'] == $categoryId) {
@@ -61,12 +65,15 @@ if ($showBestSeller) {
             <div class="menu-header">
                 <h1 class="sidebar-title">Menu</h1>
                 <div class="menu-search">
-                    <form method="GET" action="" class="search-form">
+                        <form method="GET" action="" class="search-form">
                         <?php if ($categoryId): ?>
                             <input type="hidden" name="category" value="<?php echo $categoryId; ?>">
                         <?php endif; ?>
                         <?php if ($showBestSeller): ?>
                             <input type="hidden" name="bestseller" value="1">
+                        <?php endif; ?>
+                        <?php if ($showTopping): ?>
+                            <input type="hidden" name="topping" value="1">
                         <?php endif; ?>
                         <div class="search-input-wrapper">
                             <input 
@@ -112,7 +119,7 @@ if ($showBestSeller) {
                                             'milk-tea' => 'milk_tea.svg',
                                             'fruit-tea' => 'fruit_tea.svg',
                                             'blended' => 'grinded_ice.svg',
-                                            'yogurt' => 'yoghurt.svg',
+                                            'yogurt' => 'yogurt.svg',
                                             'topping' => 'topping.svg',
                                             'default' => 'coffee.svg'
                                         ];
@@ -126,6 +133,15 @@ if ($showBestSeller) {
                                 </a>
                             </li>
                         <?php endforeach; ?>
+                        <li class="category-item <?php echo $showTopping ? 'active' : ''; ?>">
+                            <a href="?topping=1&search=<?php echo urlencode($keyword); ?>" class="category-link">
+                                <span class="category-icon">
+                                    <img src="../../assets/img/products/menu/topping.svg" 
+                                         alt="Topping" 
+                                         class="category-icon-img">
+                                </span>
+                            </a>
+                        </li>
                     </ul>
                 </aside>
 
@@ -138,7 +154,9 @@ if ($showBestSeller) {
                             <?php echo e($selectedCategoryName); ?>
                             <?php if ($showBestSeller && !empty($bestSellers)): ?>
                                 <span class="product-count">(<?php echo count($bestSellers); ?> sản phẩm)</span>
-                            <?php elseif (!$showBestSeller && $totalProducts > 0): ?>
+                            <?php elseif ($showTopping && !empty($toppings)): ?>
+                                <span class="product-count">(<?php echo count($toppings); ?> topping)</span>
+                            <?php elseif (!$showBestSeller && !$showTopping && $totalProducts > 0): ?>
                                 <span class="product-count">(<?php echo $totalProducts; ?> sản phẩm)</span>
                             <?php endif; ?>
                         </h2>
@@ -154,7 +172,18 @@ if ($showBestSeller) {
                                     ?>
                                 <?php endforeach; ?>
                             </div>
-                        <?php elseif (!$showBestSeller && !empty($products)): ?>
+                        <?php elseif ($showTopping && !empty($toppings)): ?>
+                            <!-- Render Toppings -->
+                            <div class="products-grid">
+                                <?php foreach ($toppings as $topping): ?>
+                                    <?php 
+                                        $product = $topping;
+                                        $basePath = '../../'; // Từ pages/menu/ về root
+                                        include '../../components/product-card.php'; 
+                                    ?>
+                                <?php endforeach; ?>
+                            </div>
+                        <?php elseif (!$showBestSeller && !$showTopping && !empty($products)): ?>
                             <!-- Render Regular Products -->
                             <div class="products-grid">
                                 <?php foreach ($products as $product): ?>
@@ -173,7 +202,7 @@ if ($showBestSeller) {
                         <?php endif; ?>
 
                         <!-- Pagination -->
-                        <?php if (!$showBestSeller && $totalPages > 0): ?>
+                        <?php if (!$showBestSeller && !$showTopping && $totalPages > 0): ?>
                             <div class="pagination">
                                 <?php if ($page > 1): ?>
                                     <a href="?page=<?php echo $page - 1; ?>&category=<?php echo $categoryId ?? ''; ?>&search=<?php echo urlencode($keyword); ?>" class="pagination-btn">

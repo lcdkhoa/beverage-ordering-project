@@ -12,6 +12,9 @@ $productName = e($product['TenSP']);
 $productPrice = formatCurrency($product['GiaCoBan']);
 $productId = $product['MaSP'];
 
+// Check if this is a topping
+$isTopping = isset($product['IsTopping']) && $product['IsTopping'] === true;
+
 // Get rating data from database
 $rating = isset($product['Rating']) && $product['Rating'] !== null ? (float)$product['Rating'] : 0;
 $ratingCount = isset($product['SoLuotRating']) ? (int)$product['SoLuotRating'] : 0;
@@ -83,13 +86,17 @@ $fallbackImage = $basePath . 'assets/img/products/product_one.png';
         <div class="product-price">
             <div class="price-info">
                 <span class="current-price"><?php echo $productPrice; ?></span>
-                <span class="old-price"><?php echo formatCurrency($product['GiaCoBan'] * 1.3); ?></span>
+                <?php if (!$isTopping): ?>
+                    <span class="old-price"><?php echo formatCurrency($product['GiaCoBan'] * 1.3); ?></span>
+                <?php endif; ?>
             </div>
-            <button class="add-to-cart-btn" data-product-id="<?php echo $productId; ?>" title="Thêm vào giỏ hàng">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M12 5v14M5 12h14"/>
-                </svg>
-            </button>
+            <?php if (!$isTopping): ?>
+                <button class="add-to-cart-btn" data-product-id="<?php echo $productId; ?>" title="Thêm vào giỏ hàng">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                </button>
+            <?php endif; ?>
         </div>
     </div>
 </div>
