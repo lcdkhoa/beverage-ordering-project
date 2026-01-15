@@ -5,7 +5,6 @@
  */
 
 $(document).ready(function () {
-
   // Update note counter
   $("#order-note").on("input", function () {
     const length = $(this).val().length;
@@ -25,6 +24,41 @@ $(document).ready(function () {
       // Remove required
       $("#vat-fields input").prop("required", false);
     }
+  });
+
+  // Province selection
+  $("#province-select").on("change", function () {
+    const selectedProvince = $(this).val();
+    const $storeSelect = $("#store-select");
+
+    // Reset store select and store info
+    $storeSelect.val("");
+    $("#store-info").slideUp(200);
+
+    if (!selectedProvince) {
+      $storeSelect.prop("disabled", true);
+      // Show all options when disabled (only placeholder visible to user)
+      $storeSelect.find("option").show();
+      return;
+    }
+
+    // Enable store select and filter options by province
+    $storeSelect.prop("disabled", false);
+    $storeSelect.find("option").each(function () {
+      const value = $(this).attr("value");
+      if (!value) {
+        // Always show placeholder
+        $(this).show();
+        return;
+      }
+
+      const province = $(this).data("province") || "";
+      if (province === selectedProvince) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
   });
 
   // Store selection
@@ -174,6 +208,12 @@ $(document).ready(function () {
     // Validate form
     if (!$("#agree-terms").is(":checked")) {
       alert("Vui lòng đồng ý với điều khoản mua hàng");
+      return;
+    }
+
+    const province = $("#province-select").val();
+    if (!province) {
+      alert("Vui lòng chọn Tỉnh/Thành phố");
       return;
     }
 

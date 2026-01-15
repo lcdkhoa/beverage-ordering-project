@@ -93,16 +93,38 @@ $basePath = '../../';
                     <!-- Store Selection -->
                     <section class="checkout-section">
                         <h2 class="section-title">Giao từ cửa hàng</h2>
-                        <select class="store-select" id="store-select" name="store_id" required>
-                            <option value="">Chọn cửa hàng</option>
-                            <?php foreach ($stores as $store): ?>
-                                <option value="<?php echo $store['MaStore']; ?>" 
-                                        data-phone="<?php echo e($store['DienThoai'] ?? ''); ?>"
-                                        data-address="<?php echo e($store['DiaChi']); ?>">
-                                    <?php echo e($store['TenStore']); ?>
-                                </option>
-                            <?php endforeach; ?>
-                        </select>
+                        <div class="store-selection-group">
+                            <select class="store-select" id="province-select" name="province">
+                                <option value="">Tỉnh/Thành phố</option>
+                                <option value="Hồ Chí Minh">Hồ Chí Minh</option>
+                                <option value="Hà Nội">Hà Nội</option>
+                                <option value="Đà Nẵng">Đà Nẵng</option>
+                                <option value="Cần Thơ">Cần Thơ</option>
+                            </select>
+                            <select class="store-select" id="store-select" name="store_id" required disabled>
+                                <option value="">Chọn cửa hàng</option>
+                                <?php 
+                                // Map stores to provinces based on address
+                                $provinceOptions = ['Hồ Chí Minh', 'Hà Nội', 'Đà Nẵng', 'Cần Thơ'];
+                                foreach ($stores as $store): 
+                                    $address = $store['DiaChi'] ?? '';
+                                    $matchedProvince = '';
+                                    foreach ($provinceOptions as $provinceName) {
+                                        if (mb_stripos($address, $provinceName) !== false) {
+                                            $matchedProvince = $provinceName;
+                                            break;
+                                        }
+                                    }
+                                ?>
+                                    <option value="<?php echo $store['MaStore']; ?>" 
+                                            data-phone="<?php echo e($store['DienThoai'] ?? ''); ?>"
+                                            data-address="<?php echo e($store['DiaChi']); ?>"
+                                            data-province="<?php echo e($matchedProvince); ?>">
+                                        <?php echo e($store['TenStore']); ?>
+                                    </option>
+                                <?php endforeach; ?>
+                            </select>
+                        </div>
                         <div class="store-info" id="store-info" style="display: none;">
                             <p class="store-phone" id="store-phone"></p>
                             <p class="store-address" id="store-address"></p>

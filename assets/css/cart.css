@@ -507,6 +507,18 @@
     color: #0f3d1f;
 }
 
+.store-selection-group {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.store-selection-group .store-select {
+    flex: 1;
+    min-width: 0;
+}
+
 .store-select {
     width: 100%;
     padding: 12px 15px;
@@ -1009,6 +1021,15 @@
 
     .checkout-right {
         position: static;
+    }
+
+    .store-selection-group {
+        flex-direction: column;
+    }
+
+    .store-selection-group .store-select {
+        flex: none;
+        width: 100%;
     }
 }
 
