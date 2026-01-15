@@ -1,30 +1,10 @@
 /**
  * Checkout Page JavaScript
  * Xử lý các tương tác trên trang checkout
+ * Requires: common.js
  */
 
 $(document).ready(function () {
-  // Get API path helper
-  function getApiPath(endpoint) {
-    const currentPath = window.location.pathname;
-    let apiPath = "api/" + endpoint;
-
-    if (currentPath.includes("/pages/")) {
-      const pathParts = currentPath.split("/").filter((p) => p);
-      const pagesIndex = pathParts.indexOf("pages");
-      if (pagesIndex >= 0) {
-        const levels = pathParts.length - pagesIndex - 1;
-        apiPath = "../".repeat(levels) + apiPath;
-      }
-    }
-
-    return apiPath;
-  }
-
-  // Format currency
-  function formatCurrency(amount) {
-    return new Intl.NumberFormat("vi-VN").format(amount) + "₫";
-  }
 
   // Update note counter
   $("#order-note").on("input", function () {

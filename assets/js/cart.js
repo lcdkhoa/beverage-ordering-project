@@ -1,42 +1,12 @@
 /**
  * Cart Page JavaScript
  * Xử lý các tương tác trên trang giỏ hàng
+ * Requires: common.js
  */
 
 $(document).ready(function () {
   // Flag to prevent multiple simultaneous delete operations
   let isDeleting = false;
-
-  // Get API path helper
-  function getApiPath(endpoint) {
-    const currentPath = window.location.pathname;
-    let apiPath = "api/" + endpoint;
-
-    if (currentPath.includes("/pages/")) {
-      const pathParts = currentPath.split("/").filter((p) => p);
-      const pagesIndex = pathParts.indexOf("pages");
-      if (pagesIndex >= 0) {
-        const levels = pathParts.length - pagesIndex - 1;
-        apiPath = "../".repeat(levels) + apiPath;
-      }
-    }
-
-    return apiPath;
-  }
-
-  // Update cart count in header
-  function updateCartCount() {
-    $.ajax({
-      url: getApiPath("cart/count.php"),
-      method: "GET",
-      dataType: "json",
-      success: function (response) {
-        if (response.success) {
-          $(".cart-count").text(response.count || 0);
-        }
-      },
-    });
-  }
 
   // Calculate and update total amount
   function updateTotalAmount() {
@@ -54,11 +24,6 @@ $(document).ready(function () {
     });
 
     $("#cart-total-amount").text(formatCurrency(total));
-  }
-
-  // Format currency
-  function formatCurrency(amount) {
-    return new Intl.NumberFormat("vi-VN").format(amount) + "₫";
   }
 
   // Update quantity

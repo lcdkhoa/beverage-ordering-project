@@ -1,26 +1,10 @@
 /**
  * Management Page JavaScript
  * AJAX CRUD operations for product management
+ * Requires: common.js
  */
 
 $(document).ready(function () {
-  // Calculate API base path
-  function getApiBasePath() {
-    const currentPath = window.location.pathname;
-    let apiPath = "api/management/";
-
-    if (currentPath.includes("/pages/")) {
-      const pathParts = currentPath.split("/").filter((p) => p);
-      const pagesIndex = pathParts.indexOf("pages");
-      if (pagesIndex >= 0) {
-        const levels = pathParts.length - pagesIndex - 1;
-        apiPath = "../".repeat(levels) + apiPath;
-      }
-    }
-
-    return apiPath;
-  }
-
   const apiBasePath = getApiBasePath();
   const isAdmin = $("#btn-add-product").length > 0; // Check if add button exists
 
@@ -196,15 +180,15 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           loadToppings(); // Reload toppings list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
-        showAlert("Có lỗi xảy ra khi xóa topping. Vui lòng thử lại.", "error");
+        showAlert("Có lỗi xảy ra khi xóa topping. Vui lòng thử lại.", "error", ".management-content");
       },
     });
   });
@@ -250,15 +234,15 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           loadProducts(); // Reload products list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
-        showAlert("Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.", "error");
+        showAlert("Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.", "error", ".management-content");
       },
     });
   });
@@ -290,17 +274,17 @@ $(document).ready(function () {
     const imageFile = $("#product-image")[0].files[0];
 
     if (!tenSP) {
-      showAlert("Vui lòng nhập tên sản phẩm", "error");
+      showAlert("Vui lòng nhập tên sản phẩm", "error", ".management-content");
       return;
     }
 
     if (!maCategory) {
-      showAlert("Vui lòng chọn danh mục", "error");
+      showAlert("Vui lòng chọn danh mục", "error", ".management-content");
       return;
     }
 
     if (!giaCoBan || giaCoBan < 0) {
-      showAlert("Vui lòng nhập giá bán hợp lệ", "error");
+      showAlert("Vui lòng nhập giá bán hợp lệ", "error", ".management-content");
       return;
     }
 
@@ -321,13 +305,13 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           $("#add-product-modal").removeClass("active");
           $("#add-product-form")[0].reset();
           $("#image-preview").hide();
           loadProducts(); // Reload products list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
@@ -348,7 +332,7 @@ $(document).ready(function () {
           }
         }
 
-        showAlert(errorMessage, "error");
+        showAlert(errorMessage, "error", ".management-content");
       },
     });
   });
@@ -364,7 +348,7 @@ $(document).ready(function () {
 
     // Validation
     if (!formData.price || formData.price < 0) {
-      showAlert("Vui lòng nhập giá bán hợp lệ", "error");
+      showAlert("Vui lòng nhập giá bán hợp lệ", "error", ".management-content");
       return;
     }
 
@@ -376,16 +360,16 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           $("#edit-price-modal").removeClass("active");
           loadProducts(); // Reload products list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
-        showAlert("Có lỗi xảy ra khi cập nhật giá. Vui lòng thử lại.", "error");
+        showAlert("Có lỗi xảy ra khi cập nhật giá. Vui lòng thử lại.", "error", ".management-content");
       },
     });
   });
@@ -400,12 +384,12 @@ $(document).ready(function () {
     const imageFile = $("#topping-image")[0].files[0];
 
     if (!tenTopping) {
-      showAlert("Vui lòng nhập tên topping", "error");
+      showAlert("Vui lòng nhập tên topping", "error", ".management-content");
       return;
     }
 
     if (!giaThem || giaThem < 0) {
-      showAlert("Vui lòng nhập giá thêm hợp lệ", "error");
+      showAlert("Vui lòng nhập giá thêm hợp lệ", "error", ".management-content");
       return;
     }
 
@@ -425,13 +409,13 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           $("#add-topping-modal").removeClass("active");
           $("#add-topping-form")[0].reset();
           $("#topping-image-preview").hide();
           loadToppings(); // Reload toppings list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
@@ -452,7 +436,7 @@ $(document).ready(function () {
           }
         }
 
-        showAlert(errorMessage, "error");
+        showAlert(errorMessage, "error", ".management-content");
       },
     });
   });
@@ -468,7 +452,7 @@ $(document).ready(function () {
 
     // Validation
     if (!formData.price || formData.price < 0) {
-      showAlert("Vui lòng nhập giá thêm hợp lệ", "error");
+      showAlert("Vui lòng nhập giá thêm hợp lệ", "error", ".management-content");
       return;
     }
 
@@ -480,18 +464,19 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           $("#edit-topping-price-modal").removeClass("active");
           loadToppings(); // Reload toppings list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
         showAlert(
           "Có lỗi xảy ra khi cập nhật giá topping. Vui lòng thử lại.",
-          "error"
+          "error",
+          ".management-content"
         );
       },
     });
@@ -866,44 +851,8 @@ $(document).ready(function () {
   }
 
   // ===== HELPER FUNCTIONS =====
+  // Use formatCurrencyWithStyle from common.js for management pages
   function formatCurrency(amount) {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0,
-    }).format(amount);
-  }
-
-  function escapeHtml(text) {
-    const map = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    };
-    return String(text).replace(/[&<>"']/g, function (m) {
-      return map[m];
-    });
-  }
-
-  function showAlert(message, type) {
-    // Remove existing alerts
-    $(".alert").remove();
-
-    const alertClass = type === "success" ? "alert-success" : "alert-error";
-    const $alert = $(
-      '<div class="alert ' + alertClass + '">' + escapeHtml(message) + "</div>"
-    );
-
-    // Insert at the top of management content
-    $(".management-content").prepend($alert);
-
-    // Auto remove after 5 seconds
-    setTimeout(function () {
-      $alert.fadeOut(function () {
-        $(this).remove();
-      });
-    }, 5000);
+    return formatCurrencyWithStyle(amount);
   }
 });

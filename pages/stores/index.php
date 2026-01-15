@@ -132,6 +132,7 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
 
     <?php include '../../components/footer.php'; ?>
 
+    <script src="../../assets/js/common.js"></script>
     <script src="../../assets/js/main.js"></script>
     <script src="../../assets/js/stores.js"></script>
 </body>

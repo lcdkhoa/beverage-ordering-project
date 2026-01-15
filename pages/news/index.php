@@ -126,6 +126,7 @@ $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <?php include '../../components/footer.php'; ?>
 
+    <script src="../../assets/js/common.js"></script>
     <script src="../../assets/js/main.js"></script>
     <script src="../../assets/js/news.js"></script>
 </body>

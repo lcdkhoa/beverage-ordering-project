@@ -1,28 +1,11 @@
 /**
  * Register Page JavaScript
  * Handles password toggle, validation, and form submission
+ * Requires: common.js
  */
 
 $(document).ready(function () {
   // Password toggle visibility
-  function setupPasswordToggle(toggleId, inputId) {
-    $(toggleId).on("click", function () {
-      const passwordInput = $(inputId);
-      const hiddenIcon = $(this).find(".eye-icon-hidden");
-      const visibleIcon = $(this).find(".eye-icon-visible");
-
-      if (passwordInput.attr("type") === "password") {
-        passwordInput.attr("type", "text");
-        hiddenIcon.hide();
-        visibleIcon.show();
-      } else {
-        passwordInput.attr("type", "password");
-        hiddenIcon.show();
-        visibleIcon.hide();
-      }
-    });
-  }
-
   setupPasswordToggle("#passwordToggle", "#password");
 
   // Register form submit

@@ -1,6 +1,7 @@
 /**
  * News Page JavaScript
  * Xử lý banner height và các tính năng trang tin tức
+ * Requires: common.js
  */
 
 $(document).ready(function () {
@@ -17,14 +18,6 @@ $(document).ready(function () {
   // Set height on load
   setNewsBannerHeight();
 
-  // Update height on window resize
-  let resizeTimeout;
-  $(window).on("resize", function () {
-    if (resizeTimeout) {
-      clearTimeout(resizeTimeout);
-    }
-    resizeTimeout = setTimeout(function () {
-      setNewsBannerHeight();
-    }, 250);
-  });
+  // Update height on window resize using common helper
+  $(window).on("resize", handleResize(setNewsBannerHeight, 250));
 });

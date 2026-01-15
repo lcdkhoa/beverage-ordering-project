@@ -1,6 +1,7 @@
 /**
  * Stores Page JavaScript
  * Xử lý tìm kiếm cửa hàng
+ * Requires: common.js
  */
 
 $(document).ready(function () {
@@ -17,46 +18,27 @@ $(document).ready(function () {
   // Set height on load
   setStoresHeroHeight();
 
-  // Update height on window resize
-  let resizeTimeout;
-  $(window).on("resize", function () {
-    if (resizeTimeout) {
-      clearTimeout(resizeTimeout);
-    }
-    resizeTimeout = setTimeout(function () {
-      setStoresHeroHeight();
-    }, 250);
-  });
+  // Update height on window resize using common helper
+  $(window).on("resize", handleResize(setStoresHeroHeight, 250));
 
-  // Get API path helper
-  function getApiPath(endpoint) {
-    const currentPath = window.location.pathname;
-    let apiPath = `../../api/${endpoint}`;
-    return apiPath;
-  }
+  // Search functionality with debounce
+  const performSearch = debounce(function () {
+    const keyword = $("#search-keyword").val().trim();
+    const province = $("#search-province").val();
+    const ward = $("#search-ward").val();
 
-  // Search functionality
-  let searchTimeout;
-  function performSearch() {
-    clearTimeout(searchTimeout);
-    searchTimeout = setTimeout(function () {
-      const keyword = $("#search-keyword").val().trim();
-      const province = $("#search-province").val();
-      const ward = $("#search-ward").val();
+    // Build URL with parameters
+    const params = new URLSearchParams();
+    if (keyword) params.append("keyword", keyword);
+    if (province) params.append("province", province);
+    if (ward) params.append("ward", ward);
 
-      // Build URL with parameters
-      const params = new URLSearchParams();
-      if (keyword) params.append("keyword", keyword);
-      if (province) params.append("province", province);
-      if (ward) params.append("ward", ward);
-
-      // Reload page with search parameters
-      const newUrl =
-        window.location.pathname +
-        (params.toString() ? "?" + params.toString() : "");
-      window.location.href = newUrl;
-    }, 500);
-  }
+    // Reload page with search parameters
+    const newUrl =
+      window.location.pathname +
+      (params.toString() ? "?" + params.toString() : "");
+    window.location.href = newUrl;
+  }, 500);
 
   // Search on input change
   $("#search-keyword").on("input", performSearch);

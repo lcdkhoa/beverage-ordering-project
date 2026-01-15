@@ -1,6 +1,7 @@
 /**
  * Main JavaScript for MeowTea Fresh
  * jQuery và AJAX functions
+ * Requires: common.js
  */
 
 $(document).ready(function () {
@@ -24,23 +25,6 @@ $(document).ready(function () {
     }
   });
 
-  // Helper function to get product detail page URL
-  function getProductDetailUrl(productId) {
-    const currentPath = window.location.pathname;
-    let productUrl = "pages/menu/product.php";
-
-    // Nếu đang ở trong pages/menu/, chỉ cần product.php (cùng thư mục)
-    if (currentPath.includes("/pages/menu/")) {
-      productUrl = "product.php";
-    } else if (currentPath.includes("/pages/")) {
-      // Nếu đang ở trong pages/ nhưng không phải menu/, cần ../menu/product.php
-      productUrl = "../menu/product.php";
-    }
-    // Nếu ở root, giữ nguyên pages/menu/product.php
-
-    return `${productUrl}?id=${productId}`;
-  }
-
   // Add to cart functionality - Open modal
   $(document).on("click", ".add-to-cart-btn", function (e) {
     e.preventDefault();
@@ -49,43 +33,6 @@ $(document).ready(function () {
     const productId = $(this).data("product-id");
     openProductCustomizeModal(productId);
   });
-
-  // Product card click - Disabled (no action)
-  // Removed click handler for product-card
-
-  // Update cart count
-  function updateCartCount() {
-    // Tính đường dẫn API dựa trên vị trí hiện tại
-    const currentPath = window.location.pathname;
-    let apiPath = "api/cart/count.php";
-
-    // Nếu đang ở trong thư mục con (pages/...), cần thêm ../../
-    // Ví dụ: /projects_web_php/pages/menu/index.php -> cần ../../api/...
-    if (currentPath.includes("/pages/")) {
-      // Đếm số level từ pages/ về root
-      const pathParts = currentPath.split("/").filter((p) => p);
-      const pagesIndex = pathParts.indexOf("pages");
-      if (pagesIndex >= 0) {
-        // Số level = số phần tử sau 'pages' + 1 (cho pages)
-        const levels = pathParts.length - pagesIndex - 1;
-        apiPath = "../".repeat(levels) + apiPath;
-      }
-    }
-
-    $.ajax({
-      url: apiPath,
-      method: "GET",
-      dataType: "json",
-      success: function (response) {
-        if (response.success) {
-          $(".cart-count").text(response.count || 0);
-        }
-      },
-      error: function () {
-        // Silent fail
-      },
-    });
-  }
 
   // Load cart count on page load
   updateCartCount();
@@ -111,26 +58,6 @@ $(document).ready(function () {
   });
 
   // ===== PRODUCT CUSTOMIZE MODAL =====
-  // Helper function to get API path
-  function getApiPath(endpoint) {
-    const currentPath = window.location.pathname;
-    let apiPath = `api/${endpoint}`;
-
-    if (currentPath.includes("/pages/")) {
-      const pathParts = currentPath.split("/").filter((p) => p);
-      const pagesIndex = pathParts.indexOf("pages");
-      if (pagesIndex >= 0) {
-        const levels = pathParts.length - pagesIndex - 1;
-        apiPath = "../".repeat(levels) + apiPath;
-      }
-    }
-    return apiPath;
-  }
-
-  // Format currency helper
-  function formatCurrency(amount) {
-    return new Intl.NumberFormat("vi-VN").format(amount) + "₫";
-  }
 
   // Open product customize modal
   function openProductCustomizeModal(productId) {

@@ -151,6 +151,7 @@ require_once '../../functions.php';
 
     <?php include '../../components/footer.php'; ?>
 
+    <script src="../../assets/js/common.js"></script>
     <script src="../../assets/js/main.js"></script>
 </body>
 </html>

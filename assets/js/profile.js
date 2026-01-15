@@ -1,6 +1,7 @@
 /**
  * Profile Page JavaScript
  * Handles tab switching, password change, and order loading
+ * Requires: common.js
  */
 
 $(document).ready(function() {
@@ -26,24 +27,6 @@ $(document).ready(function() {
     });
 
     // Password toggle visibility
-    function setupPasswordToggle(toggleId, inputId) {
-        $(toggleId).on('click', function() {
-            const passwordInput = $(inputId);
-            const hiddenIcon = $(this).find('.eye-icon-hidden');
-            const visibleIcon = $(this).find('.eye-icon-visible');
-            
-            if (passwordInput.attr('type') === 'password') {
-                passwordInput.attr('type', 'text');
-                hiddenIcon.hide();
-                visibleIcon.show();
-            } else {
-                passwordInput.attr('type', 'password');
-                hiddenIcon.show();
-                visibleIcon.hide();
-            }
-        });
-    }
-
     setupPasswordToggle('#currentPasswordToggle', '#current_password');
     setupPasswordToggle('#newPasswordToggle', '#new_password');
     setupPasswordToggle('#confirmPasswordToggle', '#confirm_password');
@@ -383,20 +366,5 @@ $(document).ready(function() {
         return statusMap[statusLower] || status || 'Chờ xử lý';
     }
 
-    // Format currency (consistent with PHP formatCurrency)
-    function formatCurrency(amount) {
-        return new Intl.NumberFormat('vi-VN').format(amount) + '₫';
-    }
-
-    // Escape HTML
-    function escapeHtml(text) {
-        const map = {
-            '&': '&amp;',
-            '<': '&lt;',
-            '>': '&gt;',
-            '"': '&quot;',
-            "'": '&#039;'
-        };
-        return (text || '').replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
+    // Use formatCurrency and escapeHtml from common.js
 });

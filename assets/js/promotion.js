@@ -1,26 +1,10 @@
 /**
  * Promotion Management Page JavaScript
  * AJAX CRUD operations for promotion management
+ * Requires: common.js
  */
 
 $(document).ready(function () {
-  // Calculate API base path
-  function getApiBasePath() {
-    const currentPath = window.location.pathname;
-    let apiPath = "api/management/";
-
-    if (currentPath.includes("/pages/")) {
-      const pathParts = currentPath.split("/").filter((p) => p);
-      const pagesIndex = pathParts.indexOf("pages");
-      if (pagesIndex >= 0) {
-        const levels = pathParts.length - pagesIndex - 1;
-        apiPath = "../".repeat(levels) + apiPath;
-      }
-    }
-
-    return apiPath;
-  }
-
   const apiBasePath = getApiBasePath();
 
   // Load promotions on page load
@@ -172,17 +156,18 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           loadPromotions(); // Reload promotions list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
         showAlert(
           "Có lỗi xảy ra khi xóa khuyến mãi. Vui lòng thử lại.",
-          "error"
+          "error",
+          ".management-content"
         );
       },
     });
@@ -205,12 +190,12 @@ $(document).ready(function () {
 
     // Validation
     if (!formData.code) {
-      showAlert("Vui lòng nhập mã khuyến mãi", "error");
+      showAlert("Vui lòng nhập mã khuyến mãi", "error", ".management-content");
       return;
     }
 
     if (!formData.gia_tri || formData.gia_tri < 0) {
-      showAlert("Vui lòng nhập giá trị giảm giá hợp lệ", "error");
+      showAlert("Vui lòng nhập giá trị giảm giá hợp lệ", "error", ".management-content");
       return;
     }
 
@@ -218,7 +203,7 @@ $(document).ready(function () {
       formData.loai_giam_gia === "Percentage" &&
       (formData.gia_tri > 100 || formData.gia_tri < 0)
     ) {
-      showAlert("Phần trăm giảm giá phải từ 0 đến 100", "error");
+      showAlert("Phần trăm giảm giá phải từ 0 đến 100", "error", ".management-content");
       return;
     }
 
@@ -230,19 +215,20 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           $("#add-promotion-modal").removeClass("active");
           $("#add-promotion-form")[0].reset();
           loadPromotions(); // Reload promotions list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
         showAlert(
           "Có lỗi xảy ra khi thêm khuyến mãi. Vui lòng thử lại.",
-          "error"
+          "error",
+          ".management-content"
         );
       },
     });
@@ -265,12 +251,12 @@ $(document).ready(function () {
 
     // Validation
     if (!formData.code) {
-      showAlert("Vui lòng nhập mã khuyến mãi", "error");
+      showAlert("Vui lòng nhập mã khuyến mãi", "error", ".management-content");
       return;
     }
 
     if (!formData.gia_tri || formData.gia_tri < 0) {
-      showAlert("Vui lòng nhập giá trị giảm giá hợp lệ", "error");
+      showAlert("Vui lòng nhập giá trị giảm giá hợp lệ", "error", ".management-content");
       return;
     }
 
@@ -278,7 +264,7 @@ $(document).ready(function () {
       formData.loai_giam_gia === "Percentage" &&
       (formData.gia_tri > 100 || formData.gia_tri < 0)
     ) {
-      showAlert("Phần trăm giảm giá phải từ 0 đến 100", "error");
+      showAlert("Phần trăm giảm giá phải từ 0 đến 100", "error", ".management-content");
       return;
     }
 
@@ -290,18 +276,19 @@ $(document).ready(function () {
       dataType: "json",
       success: function (response) {
         if (response.success) {
-          showAlert(response.message, "success");
+          showAlert(response.message, "success", ".management-content");
           $("#edit-promotion-modal").removeClass("active");
           loadPromotions(); // Reload promotions list
         } else {
-          showAlert(response.message || "Có lỗi xảy ra", "error");
+          showAlert(response.message || "Có lỗi xảy ra", "error", ".management-content");
         }
       },
       error: function (xhr, status, error) {
         console.error("Error:", error);
         showAlert(
           "Có lỗi xảy ra khi cập nhật khuyến mãi. Vui lòng thử lại.",
-          "error"
+          "error",
+          ".management-content"
         );
       },
     });
@@ -456,12 +443,9 @@ $(document).ready(function () {
   }
 
   // ===== HELPER FUNCTIONS =====
+  // Use formatCurrencyWithStyle from common.js for management pages
   function formatCurrency(amount) {
-    return new Intl.NumberFormat("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      minimumFractionDigits: 0,
-    }).format(amount);
+    return formatCurrencyWithStyle(amount);
   }
 
   function formatDateTime(dateTimeString) {
@@ -474,38 +458,5 @@ $(document).ready(function () {
       hour: "2-digit",
       minute: "2-digit",
     });
-  }
-
-  function escapeHtml(text) {
-    const map = {
-      "&": "&amp;",
-      "<": "&lt;",
-      ">": "&gt;",
-      '"': "&quot;",
-      "'": "&#039;",
-    };
-    return String(text).replace(/[&<>"']/g, function (m) {
-      return map[m];
-    });
-  }
-
-  function showAlert(message, type) {
-    // Remove existing alerts
-    $(".alert").remove();
-
-    const alertClass = type === "success" ? "alert-success" : "alert-error";
-    const $alert = $(
-      '<div class="alert ' + alertClass + '">' + escapeHtml(message) + "</div>"
-    );
-
-    // Insert at the top of management content
-    $(".management-content").prepend($alert);
-
-    // Auto remove after 5 seconds
-    setTimeout(function () {
-      $alert.fadeOut(function () {
-        $(this).remove();
-      });
-    }, 5000);
   }
 });
