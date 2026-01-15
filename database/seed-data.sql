@@ -66,7 +66,9 @@ INSERT INTO `Option_Value` (TenGiaTri, GiaThem, MaOptionGroup) VALUES
 INSERT INTO `Option_Value` (TenGiaTri, GiaThem, MaOptionGroup) VALUES
 ('Trân châu đen', 5000, 3),
 ('Thạch dừa', 5000, 3),
-('Pudding trứng', 10000, 3);
+('Pudding trứng', 10000, 3),
+('Sương sáo', 5000, 3),
+('Cù năng', 5000, 3);
 
 -- 7. Insert SanPham
 -- Cà phê truyền thống (MaCategory = 1)
@@ -94,7 +96,8 @@ INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategor
 
 -- Yogurt (MaCategory = 4)
 INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
-('Yogurt truyền thống', 38000, 'assets/img/products/yogurt/truyenthong.png', 4.75, 312, 4);
+('Yogurt truyền thống', 38000, 'assets/img/products/yogurt/truyenthong.png', 4.75, 312, 4),
+('Yogurt dâu tây', 40000, 'assets/img/products/yogurt/dautay.png', 4.80, 278, 4);
 
 -- 8. Link SanPham với Option Group (Product_Option_Group)
 -- Cà phê (SP 1-4): Đường (1) và Đá (2)
@@ -120,9 +123,10 @@ INSERT INTO `Product_Option_Group` (MaSP, MaOptionGroup) VALUES
 (13, 1), (13, 2),  -- Trà trái cây sen vàng
 (14, 1), (14, 2);  -- Trà trái cây vải
 
--- Yogurt (SP 15): Đường (1), Đá (2), Topping (3)
+-- Yogurt (SP 15-16): Đường (1), Đá (2), Topping (3)
 INSERT INTO `Product_Option_Group` (MaSP, MaOptionGroup) VALUES 
-(15, 1), (15, 2), (15, 3);  -- Yogurt truyền thống
+(15, 1), (15, 2), (15, 3),  -- Yogurt truyền thống
+(16, 1), (16, 2), (16, 3);  -- Yogurt dâu tây
 
 -- 9. Insert Payment Method
 INSERT INTO `Payment_Method` (TenPayment) VALUES ('Tiền mặt'), ('Chuyển khoản'), ('Momo');
