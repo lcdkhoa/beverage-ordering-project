@@ -83,7 +83,7 @@ $basePath = '../../';
                     </div>
                     <div class="form-group">
                         <label for="promotion-loai-giam-gia">Loại giảm giá <span class="required">*</span></label>
-                        <select id="promotion-loai-giam-gia" name="loai_giam_gia" class="form-input" required>
+                        <select id="promotion-loai-giam-gia" name="loai_giam_gia" class="form-input dropdown-select" required>
                             <option value="Percentage">Phần trăm (%)</option>
                             <option value="Fixed">Số tiền cố định (₫)</option>
                         </select>
@@ -108,7 +108,7 @@ $basePath = '../../';
                     </div>
                     <div class="form-group">
                         <label for="promotion-trang-thai">Trạng thái</label>
-                        <select id="promotion-trang-thai" name="trang_thai" class="form-input">
+                        <select id="promotion-trang-thai" name="trang_thai" class="form-input dropdown-select">
                             <option value="1">Kích hoạt</option>
                             <option value="0">Vô hiệu hóa</option>
                         </select>
@@ -155,7 +155,7 @@ $basePath = '../../';
                     </div>
                     <div class="form-group">
                         <label for="edit-promotion-loai-giam-gia">Loại giảm giá <span class="required">*</span></label>
-                        <select id="edit-promotion-loai-giam-gia" name="loai_giam_gia" class="form-input" required>
+                        <select id="edit-promotion-loai-giam-gia" name="loai_giam_gia" class="form-input dropdown-select" required>
                             <option value="Percentage">Phần trăm (%)</option>
                             <option value="Fixed">Số tiền cố định (₫)</option>
                         </select>
@@ -180,7 +180,7 @@ $basePath = '../../';
                     </div>
                     <div class="form-group">
                         <label for="edit-promotion-trang-thai">Trạng thái</label>
-                        <select id="edit-promotion-trang-thai" name="trang_thai" class="form-input">
+                        <select id="edit-promotion-trang-thai" name="trang_thai" class="form-input dropdown-select">
                             <option value="1">Kích hoạt</option>
                             <option value="0">Vô hiệu hóa</option>
                         </select>

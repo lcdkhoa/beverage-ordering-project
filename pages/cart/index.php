@@ -129,12 +129,11 @@ $basePath = '../../';
                             </div>
                             <div class="cart-item-note">
                                 <label class="note-label">Thêm ghi chú</label>
-                                <input type="text" 
+                                <textarea 
                                        class="note-input" 
                                        placeholder="Nhập nội dung ghi chú cho quán (nếu có)" 
-                                       value="<?php echo e($note); ?>"
                                        data-item-index="<?php echo $index; ?>"
-                                       maxlength="52">
+                                       maxlength="52"><?php echo e($note); ?></textarea>
                                 <span class="note-counter"><?php echo mb_strlen($note); ?>/52 ký tự</span>
                             </div>
                         </div>

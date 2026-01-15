@@ -110,6 +110,26 @@ img {
   flex-shrink: 0;
 }
 
+/* ===== COMMON FORM CONTROLS ===== */
+.dropdown-select {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid var(--border-color);
+  border-radius: 30px;
+  font-size: 14px;
+  font-family: inherit;
+  background-color: var(--white);
+  color: var(--text-dark);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.dropdown-select:focus {
+  outline: none;
+  border-color: var(--primary-green);
+  box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.1);
+}
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .container {

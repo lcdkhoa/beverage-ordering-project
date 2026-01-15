@@ -120,7 +120,7 @@ $basePath = '../../';
                     </div>
                     <div class="form-group">
                         <label for="product-category">Danh mục <span class="required">*</span></label>
-                        <select id="product-category" name="ma_category" class="form-input" required>
+                        <select id="product-category" name="ma_category" class="form-input dropdown-select" required>
                             <option value="">-- Chọn danh mục --</option>
                         </select>
                     </div>

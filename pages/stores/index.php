@@ -62,7 +62,7 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
                 <div class="search-group">
                     <label class="search-group-label">Tìm kiếm theo vị trí</label>
                     <div class="location-selects">
-                        <select id="search-province" class="location-select">
+                        <select id="search-province" class="location-select dropdown-select">
                             <option value="">Tỉnh/Thành phố</option>
                             <option value="Hồ Chí Minh" <?php echo $searchProvince === 'Hồ Chí Minh' ? 'selected' : ''; ?>>Hồ Chí Minh</option>
                             <option value="Hà Nội" <?php echo $searchProvince === 'Hà Nội' ? 'selected' : ''; ?>>Hà Nội</option>

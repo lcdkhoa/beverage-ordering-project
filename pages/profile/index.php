@@ -146,7 +146,7 @@ $basePath = '../../';
                                     <select 
                                         id="gioi_tinh" 
                                         name="gioi_tinh" 
-                                        class="form-input"
+                                        class="form-input dropdown-select"
                                     >
                                         <option value="">-- Chọn giới tính --</option>
                                         <option value="M" <?php echo ($userGioiTinh === 'M') ? 'selected' : ''; ?>>Nam</option>

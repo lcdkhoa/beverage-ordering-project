@@ -20,7 +20,7 @@
 }
 
 .login-image-wrapper {
-    border-radius: 15px;
+    border-radius: 30px;
     overflow: hidden;
     box-shadow: var(--shadow);
     height: 500px;
@@ -110,7 +110,7 @@
     padding: 12px 16px;
     font-size: 16px;
     border: 2px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 30px;
     background-color: var(--white);
     color: var(--text-dark);
     transition: all 0.3s ease;
@@ -170,7 +170,7 @@
 
 .login-message {
     padding: 12px 16px;
-    border-radius: 8px;
+    border-radius: 30px;
     margin-bottom: 20px;
     font-size: 14px;
     text-align: center;

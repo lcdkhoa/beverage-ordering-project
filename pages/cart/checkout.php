@@ -94,14 +94,14 @@ $basePath = '../../';
                     <section class="checkout-section">
                         <h2 class="section-title">Giao từ cửa hàng</h2>
                         <div class="store-selection-group">
-                            <select class="store-select" id="province-select" name="province">
+                            <select class="store-select dropdown-select" id="province-select" name="province">
                                 <option value="">Tỉnh/Thành phố</option>
                                 <option value="Hồ Chí Minh">Hồ Chí Minh</option>
                                 <option value="Hà Nội">Hà Nội</option>
                                 <option value="Đà Nẵng">Đà Nẵng</option>
                                 <option value="Cần Thơ">Cần Thơ</option>
                             </select>
-                            <select class="store-select" id="store-select" name="store_id" required disabled>
+                            <select class="store-select dropdown-select" id="store-select" name="store_id" required disabled>
                                 <option value="">Chọn cửa hàng</option>
                                 <?php 
                                 // Map stores to provinces based on address
