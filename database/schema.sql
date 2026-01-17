@@ -24,6 +24,7 @@ CREATE TABLE `User` (
     `Email` VARCHAR(100), -- Email
     `TrangThai` TINYINT(1) DEFAULT 1, -- 1: Active, 0: Inactive
     `MaRole` INT NOT NULL, -- FK: Vai trò
+    `DiaChi` TEXT DEFAULT NULL -- Địa chỉ người dùng
     CONSTRAINT `FK_User_Role` FOREIGN KEY (`MaRole`) REFERENCES `Role` (`MaRole`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

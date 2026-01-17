@@ -5,6 +5,21 @@
  */
 
 $(document).ready(function() {
+    // Collapsible sections
+    $('.collapsible-header').on('click', function() {
+        const $header = $(this);
+        const targetId = $header.data('target');
+        const $content = $('#' + targetId);
+        
+        // Toggle collapsed class
+        $header.toggleClass('collapsed');
+        $content.toggleClass('collapsed');
+        
+        // Update aria-expanded for accessibility
+        const isExpanded = !$header.hasClass('collapsed');
+        $header.attr('aria-expanded', isExpanded);
+    });
+
     // Tab switching
     $('.profile-nav-item').on('click', function(e) {
         e.preventDefault();
@@ -160,7 +175,8 @@ $(document).ready(function() {
         const formData = {
             gioi_tinh: $('#gioi_tinh').val() || null,
             email: $('#email').val().trim() || null,
-            dien_thoai: $('#dien_thoai').val().trim() || null
+            dien_thoai: $('#dien_thoai').val().trim() || null,
+            dia_chi: $('#dia_chi').val().trim() || null
         };
         
         // AJAX request

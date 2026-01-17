@@ -32,6 +32,7 @@ try {
     $gioiTinh = isset($_POST['gioi_tinh']) ? trim($_POST['gioi_tinh']) : null;
     $email = isset($_POST['email']) ? trim($_POST['email']) : null;
     $dienThoai = isset($_POST['dien_thoai']) ? trim($_POST['dien_thoai']) : null;
+    $diaChi = isset($_POST['dia_chi']) ? trim($_POST['dia_chi']) : null;
 
     // Validate gender if provided
     if ($gioiTinh !== null && $gioiTinh !== '' && !in_array($gioiTinh, ['M', 'F', 'O'])) {
@@ -59,11 +60,21 @@ try {
         }
     }
 
+    // Validate address if provided
+    if ($diaChi !== null && $diaChi !== '') {
+        if (strlen($diaChi) > 500) {
+            throw new Exception('Địa chỉ không được vượt quá 500 ký tự');
+        }
+    }
+
     // Get database connection
     $pdo = getDBConnection();
 
-    // Get current user data
-    $stmt = $pdo->prepare("SELECT Email, DienThoai FROM User WHERE MaUser = ? AND TrangThai = 1");
+    // Get current user data with role
+    $stmt = $pdo->prepare("SELECT u.Email, u.DienThoai, u.DiaChi, r.TenRole 
+                          FROM User u 
+                          INNER JOIN Role r ON u.MaRole = r.MaRole 
+                          WHERE u.MaUser = ? AND u.TrangThai = 1");
     $stmt->execute([$userId]);
     $currentUser = $stmt->fetch();
 
@@ -108,6 +119,16 @@ try {
         $updateValues[] = ($dienThoai === '') ? null : $dienThoai;
     }
 
+    // Only allow customer role to update address
+    if ($diaChi !== null) {
+        $userRole = strtolower($currentUser['TenRole'] ?? '');
+        if ($userRole === 'customer') {
+            $updateFields[] = "DiaChi = ?";
+            $updateValues[] = ($diaChi === '') ? null : $diaChi;
+        }
+        // Silently ignore address update for non-customer roles
+    }
+
     if (empty($updateFields)) {
         throw new Exception('Không có thông tin nào để cập nhật');
     }
@@ -136,6 +157,7 @@ try {
     $_SESSION['user_gioi_tinh'] = $updatedUser['GioiTinh'] ?? null;
     $_SESSION['user_email'] = $updatedUser['Email'] ?? '';
     $_SESSION['user_phone'] = $updatedUser['DienThoai'] ?? '';
+    $_SESSION['user_dia_chi'] = $updatedUser['DiaChi'] ?? '';
 
     $response = [
         'success' => true,
@@ -143,7 +165,8 @@ try {
         'user' => [
             'gioi_tinh' => $updatedUser['GioiTinh'] ?? null,
             'email' => $updatedUser['Email'] ?? '',
-            'phone' => $updatedUser['DienThoai'] ?? ''
+            'phone' => $updatedUser['DienThoai'] ?? '',
+            'dia_chi' => $updatedUser['DiaChi'] ?? ''
         ]
     ];
 

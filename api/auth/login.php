@@ -72,6 +72,7 @@ try {
     $_SESSION['user_gioi_tinh'] = $user['GioiTinh'] ?? null;
     $_SESSION['user_email'] = $user['Email'];
     $_SESSION['user_phone'] = $user['DienThoai'];
+    $_SESSION['user_dia_chi'] = $user['DiaChi'] ?? '';
     $_SESSION['user_role'] = $user['MaRole'];
     $_SESSION['user_role_name'] = $user['TenRole'];
     $_SESSION['logged_in'] = true;
@@ -88,6 +89,7 @@ try {
             'gioi_tinh' => $user['GioiTinh'] ?? null,
             'email' => $user['Email'],
             'phone' => $user['DienThoai'],
+            'dia_chi' => $user['DiaChi'] ?? '',
             'role' => $user['TenRole']
         ]
     ];

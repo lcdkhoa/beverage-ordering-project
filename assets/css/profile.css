@@ -5,7 +5,7 @@
 
 /* ===== PROFILE PAGE ===== */
 .profile-section {
-  padding: 60px 0;
+  padding: 30px;
   background-color: var(--light-green);
   min-height: calc(100vh - 200px);
 }
@@ -76,14 +76,14 @@
   padding: 4px 12px;
   background: var(--primary-green);
   color: var(--white);
-  border-radius: 20px;
+  border-radius: 30px;
   font-size: 12px;
   font-weight: 600;
 }
 
 .profile-nav {
   background: var(--white);
-  border-radius: 15px;
+  border-radius: 30px;
   padding: 10px;
   box-shadow: var(--shadow);
 }
@@ -93,7 +93,7 @@
   align-items: center;
   gap: 12px;
   padding: 12px 16px;
-  border-radius: 10px;
+  border-radius: 30px;
   color: var(--text-dark);
   text-decoration: none;
   transition: all 0.3s ease;
@@ -121,7 +121,7 @@
 /* Profile Content */
 .profile-content {
   background: var(--white);
-  border-radius: 15px;
+  border-radius: 30px;
   padding: 40px;
   box-shadow: var(--shadow);
 }
@@ -184,29 +184,117 @@
 
 /* Profile Form Card */
 .profile-form-card {
-  max-width: 600px;
+  max-width: 900px;
   padding: 30px;
   background: var(--white);
-  border-radius: 16px;
+  border-radius: 30px;
   border: 1px solid var(--border-color);
   box-shadow: var(--shadow);
 }
 
 .profile-form {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 32px;
+}
+
+/* Form Sections */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--primary-green);
+  margin-bottom: 8px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-section-title::before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: var(--primary-green);
+  border-radius: 2px;
+}
+
+/* Collapsible Sections */
+.form-section.collapsible .form-section-title {
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.3s ease;
+  justify-content: space-between;
+  padding: 12px 0;
+  margin-bottom: 0;
+}
+
+.form-section.collapsible .form-section-title:hover {
+  color: #153d25;
+  background: rgba(26, 77, 46, 0.03);
+  padding-left: 8px;
+  padding-right: 8px;
+  margin-left: -8px;
+  margin-right: -8px;
+  border-radius: 30px;
+}
+
+.section-title-text {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+/* Remove duplicate ::before for collapsible sections */
+.form-section.collapsible .form-section-title::before {
+  display: none;
+}
+
+.collapse-icon {
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+  color: var(--primary-green);
+}
+
+.form-section.collapsible .collapsible-header.collapsed .collapse-icon {
+  transform: rotate(-90deg);
+}
+
+.collapsible-content {
+  max-height: 2000px;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  opacity: 1;
+  margin-top: 20px;
+}
+
+.collapsible-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  margin-top: 0;
+}
+
+/* Form Row - 2 columns layout */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
 }
 
 .form-label {
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--text-dark);
   display: inline-flex;
@@ -220,9 +308,44 @@
   line-height: 1;
 }
 
+/* Label Badge for read-only fields */
+.label-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  background: #e9ecef;
+  color: #6c757d;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-left: 4px;
+}
+
+/* Label Icon for editable fields */
+.label-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--primary-green);
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+.label-icon:hover {
+  opacity: 1;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 20px;
+}
+
 .form-input {
   width: 100%;
-  padding: 12px 50px 12px 16px;
+  padding: 12px 16px;
   border: 2px solid var(--border-color);
   border-radius: 30px;
   background: var(--white);
@@ -232,11 +355,25 @@
   font-family: inherit;
 }
 
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+  line-height: 1.5;
+}
+
 .form-input:disabled,
 .form-input[readonly] {
-  background: var(--bg-light);
-  color: var(--text-light);
+  background: #f8f9fa;
+  color: #6c757d;
   cursor: not-allowed;
+  border-color: #e9ecef;
+}
+
+.form-input-readonly {
+  background: #f8f9fa !important;
+  color: #6c757d !important;
+  cursor: not-allowed !important;
+  border-color: #e9ecef !important;
 }
 
 .form-input:focus {
@@ -248,28 +385,30 @@
 
 .form-input:focus:disabled,
 .form-input:focus[readonly] {
-  background: var(--bg-light);
+  background: #f8f9fa;
   box-shadow: none;
-  border-color: var(--border-color);
+  border-color: #e9ecef;
 }
 
 .form-input::placeholder {
-  color: var(--text-light);
+  color: #adb5bd;
+  font-style: italic;
 }
 
 /* Select dropdown styling */
 select.form-input {
   cursor: pointer;
   appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23333' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a4d2e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
-  background-position: right 16px center;
+  background-position: right 12px center;
+  background-size: 16px;
   padding-right: 40px;
 }
 
 select.form-input:disabled {
   cursor: not-allowed;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
 }
 
 .password-input-wrapper {
@@ -308,7 +447,7 @@ select.form-input:disabled {
 
 .login-message {
   padding: 14px 16px;
-  border-radius: 10px;
+  border-radius: 30px;
   font-size: 14px;
   font-weight: 500;
 }
@@ -326,28 +465,40 @@ select.form-input:disabled {
 }
 
 .login-btn {
-  width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 0px 20px;
-  border: 2px solid var(--primary-green);
+  gap: 8px;
+  padding: 12px 32px;
+  border: none;
   border-radius: 30px;
-  height: 40px;
-  width: auto;
   background: var(--primary-green);
   color: var(--white);
   font-weight: 600;
   font-size: 15px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(26, 77, 46, 0.2);
 }
 
 .login-btn:hover:not(:disabled) {
-  background: #0f3a1f;
-  box-shadow: var(--shadow-hover);
+  background: #153d25;
+  box-shadow: 0 4px 12px rgba(26, 77, 46, 0.3);
   transform: translateY(-2px);
+}
+
+.login-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.login-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.login-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .password-guideline {
@@ -577,7 +728,7 @@ select.form-input:disabled {
 
 .order-summary {
   background: var(--bg-light);
-  border-radius: 8px;
+  border-radius: 30px;
   padding: 15px;
   margin-bottom: 20px;
 }
@@ -632,6 +783,13 @@ select.form-input:disabled {
 }
 
 /* Responsive */
+@media (max-width: 992px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
 @media (max-width: 768px) {
   .profile-layout {
     grid-template-columns: 1fr;
@@ -707,5 +865,22 @@ select.form-input:disabled {
 
   .form-input {
     font-size: 14px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .form-section-title {
+    font-size: 16px;
+  }
+
+  .form-actions {
+    justify-content: stretch;
+  }
+
+  .login-btn {
+    width: 100%;
   }
 }
