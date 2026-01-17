@@ -261,11 +261,14 @@ $basePath = '../../';
                         <div class="promotion-section">
                             <label class="promotion-label">Khuyến mãi</label>
                             <div class="promotion-input-wrapper">
-                                <input type="text" 
-                                       class="promotion-input" 
-                                       id="promotion-code" 
-                                       placeholder="Nhập mã khuyến mãi"
-                                       autocomplete="off">
+                                <div class="promotion-input-container">
+                                    <input type="text" 
+                                           class="promotion-input" 
+                                           id="promotion-code" 
+                                           placeholder="Nhập mã khuyến mãi"
+                                           autocomplete="off">
+                                    <span class="promotion-clear-btn" id="promotion-clear-btn" style="display: none;">×</span>
+                                </div>
                                 <?php 
                                     $text = 'Áp dụng';
                                     $type = 'primary';
@@ -276,14 +279,6 @@ $basePath = '../../';
                                 ?>
                             </div>
                             <div class="promotion-message" id="promotion-message"></div>
-                            <?php 
-                                $text = 'Xóa mã';
-                                $type = 'secondary';
-                                $id = 'btn-remove-promotion';
-                                $class = 'btn-remove-promotion';
-                                $width = 'auto';
-                                include '../../components/button.php';
-                            ?>
                         </div>
 
                         <!-- Payment Summary -->

@@ -79,6 +79,37 @@ $(document).ready(function () {
   // Promotion code variables
   let appliedPromotion = null;
 
+  // Toggle clear button visibility based on input value
+  function toggleClearButton() {
+    const value = $("#promotion-code").val().trim();
+    const $clearBtn = $("#promotion-clear-btn");
+    
+    // Show clear button if input has value (even when disabled after applying)
+    if (value) {
+      $clearBtn.show();
+    } else {
+      $clearBtn.hide();
+    }
+  }
+
+  // Show/hide clear button on input change
+  $("#promotion-code").on("input", function () {
+    toggleClearButton();
+  });
+
+  // Clear promotion code when clicking X button
+  $("#promotion-clear-btn").on("click", function () {
+    // If promotion is applied, remove it
+    if (appliedPromotion) {
+      removePromotionCode();
+    } else {
+      // Just clear the input
+      $("#promotion-code").val("").focus();
+      toggleClearButton();
+      $("#promotion-message").removeClass("promotion-success promotion-error").text("");
+    }
+  });
+
   // Apply promotion code
   $("#btn-apply-promotion").on("click", function () {
     applyPromotionCode();
@@ -92,22 +123,17 @@ $(document).ready(function () {
     }
   });
 
-  // Remove promotion code
-  $("#btn-remove-promotion").on("click", function () {
-    removePromotionCode();
-  });
-
   function applyPromotionCode() {
     const code = $("#promotion-code").val().trim();
     const $message = $("#promotion-message");
     const $btnApply = $("#btn-apply-promotion");
-    const $btnRemove = $("#btn-remove-promotion");
 
     // Clear previous message
     $message.removeClass("promotion-success promotion-error").text("");
 
     if (!code) {
       $message.addClass("promotion-error").text("Vui lòng nhập mã khuyến mãi");
+      toggleClearButton();
       return;
     }
 
@@ -136,7 +162,7 @@ $(document).ready(function () {
           $message.addClass("promotion-success").text(response.message);
           $("#promotion-code").prop("disabled", true);
           $btnApply.hide();
-          $btnRemove.show();
+          toggleClearButton(); // Show clear button since input has value
 
           // Update discount and total
           updatePromotionDiscount(response.discount);
@@ -148,6 +174,7 @@ $(document).ready(function () {
           appliedPromotion = null;
           updatePromotionDiscount(0);
           updateTotals();
+          toggleClearButton();
         }
       },
       error: function (xhr, status, error) {
@@ -156,6 +183,7 @@ $(document).ready(function () {
           .addClass("promotion-error")
           .text("Có lỗi xảy ra. Vui lòng thử lại.");
         appliedPromotion = null;
+        toggleClearButton();
       },
       complete: function () {
         $btnApply.prop("disabled", false).text("Áp dụng");
@@ -166,14 +194,13 @@ $(document).ready(function () {
   function removePromotionCode() {
     const $message = $("#promotion-message");
     const $btnApply = $("#btn-apply-promotion");
-    const $btnRemove = $("#btn-remove-promotion");
 
     // Clear promotion
     appliedPromotion = null;
-    $("#promotion-code").val("").prop("disabled", false);
+    $("#promotion-code").val("").prop("disabled", false).focus();
     $message.removeClass("promotion-success promotion-error").text("");
     $btnApply.show();
-    $btnRemove.hide();
+    toggleClearButton();
 
     // Update discount and total
     updatePromotionDiscount(0);
@@ -288,4 +315,5 @@ $(document).ready(function () {
 
   // Initialize
   updateTotals();
+  toggleClearButton();
 });
