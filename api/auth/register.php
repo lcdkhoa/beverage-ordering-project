@@ -63,12 +63,16 @@ try {
 
     // Validate phone if provided
     if ($dienThoai !== null && !empty($dienThoai)) {
-        if (strlen($dienThoai) > 20) {
-            throw new Exception('Số điện thoại không được vượt quá 20 ký tự');
+        // Remove all non-digit characters for validation
+        $phoneDigits = preg_replace('/\D/', '', $dienThoai);
+        
+        if (strlen($phoneDigits) !== 10) {
+            throw new Exception('Số điện thoại phải có đúng 10 chữ số');
         }
-        // Basic phone validation (numbers and +)
-        if (!preg_match('/^[0-9+\-\s()]+$/', $dienThoai)) {
-            throw new Exception('Số điện thoại không hợp lệ');
+        
+        // Check if phone number starts with 0
+        if (!preg_match('/^0\d{9}$/', $phoneDigits)) {
+            throw new Exception('Số điện thoại phải bắt đầu bằng số 0 và có 10 chữ số');
         }
     }
 
@@ -142,23 +146,12 @@ try {
 
     $newUserId = $pdo->lastInsertId();
 
-    // Auto login after registration
+    // Don't auto login after registration - user needs to login manually
     $fullName = trim($ho . ' ' . $ten);
-    $_SESSION['user_id'] = $newUserId;
-    $_SESSION['username'] = $username;
-    $_SESSION['user_ho'] = $ho;
-    $_SESSION['user_ten'] = $ten;
-    $_SESSION['user_name'] = $fullName;
-    $_SESSION['user_gioi_tinh'] = $gioiTinh;
-    $_SESSION['user_email'] = $email;
-    $_SESSION['user_phone'] = $dienThoai;
-    $_SESSION['user_role'] = $maRole;
-    $_SESSION['user_role_name'] = 'Customer';
-    $_SESSION['logged_in'] = true;
 
     $response = [
         'success' => true,
-        'message' => 'Đăng ký thành công! Bạn đã được đăng nhập tự động.',
+        'message' => 'Đăng ký thành công! Vui lòng đăng nhập để tiếp tục.',
         'user' => [
             'id' => $newUserId,
             'username' => $username,

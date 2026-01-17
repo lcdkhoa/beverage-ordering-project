@@ -35,11 +35,11 @@ $basePath = '../../';
             <div class="login-layout">
                 <!-- Left: Image -->
                 <div class="login-image-wrapper">
-                    <img src="<?php echo $basePath; ?>assets/img/stores/home-page.png" alt="MeowTea Fresh Cafe" class="login-image">
+                    <img src="<?php echo $basePath; ?>assets/img/stores/stores_banner.png" alt="MeowTea Fresh Cafe" class="login-image">
                 </div>
 
                 <!-- Right: Register Form -->
-                <div class="login-form-wrapper">
+                <div class="login-form-wrapper" id="registerFormWrapper">
                     <div class="login-form-container">
                         <h1 class="login-title">Tạo tài khoản mới</h1>
                         <p class="login-subtitle">Đăng ký để nhận nhiều ưu đãi hấp dẫn từ MeowTea Fresh!</p>
@@ -84,8 +84,9 @@ $basePath = '../../';
                                         id="dien_thoai" 
                                         name="dien_thoai" 
                                         class="form-input" 
-                                        placeholder="Nhập số điện thoại"
-                                        maxlength="20"
+                                        placeholder="Nhập số điện thoại (10 chữ số)"
+                                        maxlength="10"
+                                        pattern="0[0-9]{9}"
                                         autocomplete="tel"
                                     >
                                 </div>
@@ -174,6 +175,77 @@ $basePath = '../../';
                             <span class="register-text">Bạn đã có tài khoản?</span>
                             <a href="login.php" class="register-link">Đăng nhập</a>
                         </div>
+                    </div>
+                </div>
+
+                <!-- OTP Verification Screen (Hidden by default) -->
+                <div class="login-form-wrapper" id="otpVerifyWrapper" style="display: none;">
+                    <div class="login-form-container">
+                        <h1 class="login-title">Xác minh</h1>
+                        <p class="login-subtitle">Nhập mã xác minh gồm 6 chữ số được gửi đến <span id="userEmail"></span></p>
+
+                        <form id="otpForm" class="login-form">
+                            <!-- OTP Input Fields -->
+                            <div class="otp-input-group">
+                                <input type="text" class="otp-input" maxlength="1" data-index="0" autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" data-index="1" autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" data-index="2" autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" data-index="3" autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" data-index="4" autocomplete="off">
+                                <input type="text" class="otp-input" maxlength="1" data-index="5" autocomplete="off">
+                            </div>
+
+                            <!-- Resend OTP Timer -->
+                            <div class="otp-resend-wrapper">
+                                <span class="otp-resend-text">Gửi lại mã sau: <span id="otpTimer">60</span>s</span>
+                            </div>
+
+                            <!-- Error Message -->
+                            <div id="otpMessage" class="login-message" style="display: none;"></div>
+
+                            <!-- Verify Button -->
+                            <button type="submit" class="login-btn" id="otpVerifyBtn">
+                                <span class="btn-text">Đăng ký</span>
+                                <span class="btn-loading" style="display: none;">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                                        <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="0.75"/>
+                                    </svg>
+                                    Đang xử lý...
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Success Screen (Hidden by default) -->
+                <div class="login-form-wrapper" id="successWrapper" style="display: none;">
+                    <div class="login-form-container success-container">
+                        <h1 class="login-title">Đăng ký thành công</h1>
+                        <p class="login-subtitle">Chúc mừng bạn đã đăng ký tài khoản thành công!</p>
+
+                        <!-- Success Icon Animation -->
+                        <div class="success-icon-wrapper">
+                            <svg class="success-icon" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                                <!-- Coffee cup -->
+                                <path class="success-cup" d="M60,80 L60,140 Q60,150 70,150 L130,150 Q140,150 140,140 L140,80 Z" fill="#1a4d2e" opacity="0.2"/>
+                                <path class="success-cup" d="M60,80 L60,140 Q60,150 70,150 L130,150 Q140,150 140,140 L140,80 Z" fill="none" stroke="#1a4d2e" stroke-width="3"/>
+                                <!-- Handle -->
+                                <path class="success-handle" d="M140,95 Q155,95 155,110 Q155,125 140,125" fill="none" stroke="#1a4d2e" stroke-width="3"/>
+                                <!-- Steam lines -->
+                                <path class="success-steam steam-1" d="M75,70 Q75,55 85,55" fill="none" stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+                                <path class="success-steam steam-2" d="M100,65 Q100,50 110,50" fill="none" stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+                                <path class="success-steam steam-3" d="M125,70 Q125,55 115,55" fill="none" stroke="#f4a261" stroke-width="2" stroke-linecap="round"/>
+                                <!-- Leaves decoration -->
+                                <ellipse class="success-leaf leaf-1" cx="70" cy="100" rx="8" ry="12" fill="#52b788" transform="rotate(-30 70 100)"/>
+                                <ellipse class="success-leaf leaf-2" cx="130" cy="110" rx="8" ry="12" fill="#52b788" transform="rotate(30 130 110)"/>
+                            </svg>
+                        </div>
+
+                        <!-- Back to Login Button -->
+                        <button type="button" class="login-btn" id="backToLoginBtn">
+                            <span class="btn-text">Trở về đăng nhập</span>
+                        </button>
                     </div>
                 </div>
             </div>

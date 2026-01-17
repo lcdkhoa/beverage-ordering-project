@@ -303,6 +303,212 @@
     text-decoration: underline;
 }
 
+/* ===== OTP VERIFICATION STYLES ===== */
+.otp-input-group {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.otp-input {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background-color: var(--white);
+    color: var(--text-dark);
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.otp-input:focus {
+    outline: none;
+    border-color: var(--primary-green);
+    box-shadow: 0 0 0 3px rgba(26, 77, 46, 0.1);
+}
+
+.otp-input.error {
+    border-color: #e74c3c;
+    animation: shake 0.5s;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    10%,
+    30%,
+    50%,
+    70%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    40%,
+    60%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+.otp-resend-wrapper {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.otp-resend-text {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.otp-resend-link {
+    font-size: 14px;
+    color: var(--primary-green);
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.otp-resend-link:hover {
+    color: var(--light-green);
+    text-decoration: underline;
+}
+
+.otp-resend-link.disabled {
+    color: var(--text-light);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ===== SUCCESS SCREEN STYLES ===== */
+.success-container {
+    text-align: center;
+}
+
+.success-icon-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 40px 0;
+}
+
+.success-icon {
+    width: 200px;
+    height: 200px;
+    animation: fadeInScale 0.6s ease-out;
+}
+
+@keyframes fadeInScale {
+    0% {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Coffee cup animation */
+.success-cup {
+    animation: fillCup 1s ease-out 0.3s both;
+}
+
+@keyframes fillCup {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Handle animation */
+.success-handle {
+    animation: drawHandle 0.5s ease-out 0.8s both;
+}
+
+@keyframes drawHandle {
+    0% {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 100;
+    }
+
+    100% {
+        stroke-dasharray: 100;
+        stroke-dashoffset: 0;
+    }
+}
+
+/* Steam animation */
+.success-steam {
+    animation: steam 2s ease-in-out infinite;
+}
+
+.steam-1 {
+    animation-delay: 1s;
+}
+
+.steam-2 {
+    animation-delay: 1.2s;
+}
+
+.steam-3 {
+    animation-delay: 1.4s;
+}
+
+@keyframes steam {
+
+    0%,
+    100% {
+        opacity: 0;
+        transform: translateY(0);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+}
+
+/* Leaves animation */
+.success-leaf {
+    animation: leafFloat 2s ease-in-out infinite;
+}
+
+.leaf-1 {
+    animation-delay: 1.6s;
+}
+
+.leaf-2 {
+    animation-delay: 1.8s;
+}
+
+@keyframes leafFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotate(0deg);
+    }
+
+    50% {
+        transform: translateY(-5px) rotate(5deg);
+    }
+}
+
 /* Login Page Responsive */
 @media (max-width: 968px) {
     .login-layout {
@@ -348,5 +554,22 @@
 
     .form-group-half {
         margin-bottom: 20px;
+    }
+
+    /* OTP inputs responsive */
+    .otp-input-group {
+        gap: 8px;
+    }
+
+    .otp-input {
+        width: 40px;
+        height: 40px;
+        font-size: 20px;
+    }
+
+    /* Success icon responsive */
+    .success-icon {
+        width: 150px;
+        height: 150px;
     }
 }
