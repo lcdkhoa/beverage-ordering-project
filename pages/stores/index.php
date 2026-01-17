@@ -6,6 +6,28 @@
 
 require_once '../../functions.php';
 
+// Get all carousel images from stores directory
+$carouselDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'assets' . DIRECTORY_SEPARATOR . 'img' . DIRECTORY_SEPARATOR . 'stores';
+$carouselImages = [];
+if (is_dir($carouselDir)) {
+    $files = scandir($carouselDir);
+    foreach ($files as $file) {
+        if ($file !== '.' && $file !== '..' && is_file($carouselDir . DIRECTORY_SEPARATOR . $file)) {
+            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            // Only get numbered store images (1.jpg, 2.jpg, etc.) for carousel
+            if (in_array($ext, ['jpg', 'jpeg', 'png', 'gif', 'webp']) && preg_match('/^\d+\.(jpg|jpeg|png|gif|webp)$/i', $file)) {
+                $carouselImages[] = '../../assets/img/stores/' . $file;
+            }
+        }
+    }
+    // Sort images numerically
+    usort($carouselImages, function($a, $b) {
+        $numA = (int)preg_replace('/[^0-9]/', '', basename($a));
+        $numB = (int)preg_replace('/[^0-9]/', '', basename($b));
+        return $numA - $numB;
+    });
+}
+
 // Get search parameters
 $searchKeyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : '';
 $searchProvince = isset($_GET['province']) ? trim($_GET['province']) : '';
@@ -28,9 +50,14 @@ $totalStores = countStores($searchKeyword, $searchProvince, $searchWard);
 <body>
     <?php include '../../components/header.php'; ?>
 
-    <!-- Hero Section -->
+    <!-- Hero Section - Carousel -->
     <section class="stores-hero">
-        <img src="../../assets/img/stores/stores_banner.png" alt="MeowTea Fresh Store">
+        <?php 
+            $images = !empty($carouselImages) ? $carouselImages : ['../../assets/img/stores/stores_banner.png'];
+            $carouselId = 'stores-carousel';
+            $autoPlayInterval = 3000;
+            include '../../components/carousel.php';
+        ?>
     </section>
 
     <!-- Stores Content -->
