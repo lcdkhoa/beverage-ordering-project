@@ -141,8 +141,9 @@ try {
 
     try {
         // Create order (Note: MaPayment is not in schema, so we store it in session)
+        // Set status to 'Payment_Received' when order is created (đã nhận thanh toán)
         $sql = "INSERT INTO Orders (MaUser, MaStore, DiaChiGiao, PhiVanChuyen, MaPromotion, GiamGia, TongTien, TrangThai) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, 'Pending')";
+                VALUES (?, ?, ?, ?, ?, ?, ?, 'Payment_Received')";
         $stmt = $pdo->prepare($sql);
         $promotionIdForDB = ($promotionId > 0 && !empty($promotionCode)) ? $promotionId : null;
         $stmt->execute([$userId, $storeId, $deliveryAddress, $shippingFee, $promotionIdForDB, $promotionDiscount, $totalAmount]);

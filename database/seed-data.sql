@@ -30,7 +30,7 @@ INSERT INTO `Store` (TenStore, DiaChi, DienThoai, TrangThai) VALUES
 INSERT INTO `User` (Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, MaRole) VALUES
 ('admin', 'admin', 'Nguyễn', 'Quản Lý', 'M', '0912345678', 'admin@shop.com', 1),
 ('staff', 'staff', 'Trần', 'Nhân Viên', 'F', '0987654321', 'staff1@shop.com', 2),
-('customer', 'cust', 'Lê', 'Khách Hàng', 'M', '0911223344', 'customer@gmail.com', 3);
+('cust', 'cust', 'Lê', 'Khách Hàng', 'M', '0911223344', 'customer@gmail.com', 3);
 
 -- Phân công nhân viên vào cửa hàng
 INSERT INTO `User_Store` (MaUser, MaStore) VALUES (2, 1);
@@ -130,22 +130,6 @@ INSERT INTO `Product_Option_Group` (MaSP, MaOptionGroup) VALUES
 
 -- 9. Insert Payment Method
 INSERT INTO `Payment_Method` (TenPayment) VALUES ('Tiền mặt'), ('Chuyển khoản'), ('Momo');
-
--- 10. Sample Order Data (Mô phỏng 1 đơn hàng)
--- Khách hàng (User 3) đặt tại Cửa hàng 1
-INSERT INTO `Orders` (MaUser, MaStore, DiaChiGiao, TongTien, TrangThai) 
-VALUES (3, 1, 'Nhà số 5, Đường ABC', 50000, 'Completed');
-
--- Chi tiết đơn: 1 ly Trà sữa dâu tây (40k)
-INSERT INTO `Order_Item` (MaOrderItem, MaOrder, MaSP, SoLuong, GiaCoBan) 
-VALUES (1, 1, 5, 1, 40000);
-
--- Option cho ly trà sữa đó: 50% Đường, 100% Đá, thêm Pudding (10k)
--- Tổng ly này = 40k + 10k = 50k
-INSERT INTO `Order_Item_Option` (MaOrderItem, MaOptionValue, GiaThem) VALUES 
-(1, 3, 0),   -- 50% Đường
-(1, 5, 0),   -- 100% Đá
-(1, 8, 10000); -- Pudding trứng
 
 -- 12. Insert News
 -- NoiDung lưu đường dẫn tới file markdown: assets/md/news/{MaNews}.md

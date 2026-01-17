@@ -100,8 +100,22 @@ $orderCode = 'AHDW' . str_pad($orderId, 3, '0', STR_PAD_LEFT);
 // Estimated delivery time (1 hour from now)
 $estimatedDelivery = date('H:i d/m/Y', strtotime('+1 hour'));
 
+// Get order status and determine progress steps
+$orderStatus = $order['TrangThai'] ?? 'Payment_Received';
+$orderDate = $order['NgayTao'] ?? date('Y-m-d H:i:s');
+
+// Determine which steps are completed based on order status
+$step1Completed = in_array($orderStatus, ['Payment_Received', 'Order_Received', 'Delivering', 'Completed']);
+$step2Completed = in_array($orderStatus, ['Order_Received', 'Delivering', 'Completed']);
+$step3Completed = in_array($orderStatus, ['Delivering', 'Completed']);
+$step4Completed = ($orderStatus === 'Completed');
+
+// Format order time for display
+$orderTime = date('H:i', strtotime($orderDate));
+
 // Base path for assets
 $basePath = '../../';
+$iconPath = $basePath . 'assets/img/cart/order_result/';
 ?>
 <!DOCTYPE html>
 <html lang="vi">
@@ -131,53 +145,59 @@ $basePath = '../../';
 
             <!-- Order Progress Tracker -->
             <div class="order-progress">
-                <div class="progress-step completed">
+                <!-- Step 1: Đã nhận thanh toán -->
+                <div class="progress-step <?php echo $step1Completed ? 'completed' : ''; ?>">
                     <div class="step-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 6L9 17l-5-5"/>
-                        </svg>
+                        <?php if ($step1Completed): ?>
+                            <img src="<?php echo $iconPath; ?>paid.png" alt="Đã nhận thanh toán">
+                        <?php else: ?>
+                            <img src="<?php echo $iconPath; ?>green/order_accepted.png" alt="Đã nhận thanh toán">
+                        <?php endif; ?>
                     </div>
                     <div class="step-info">
                         <p class="step-title">Đã nhận thanh toán</p>
-                        <p class="step-time"><?php echo date('H:i'); ?></p>
+                        <p class="step-time"><?php echo $step1Completed ? e($orderTime) : '-'; ?></p>
                     </div>
                 </div>
-                <div class="progress-line"></div>
-                <div class="progress-step">
+                <div class="progress-line <?php echo $step1Completed ? 'active' : ''; ?>"></div>
+                
+                <!-- Step 2: Đã nhận đơn -->
+                <div class="progress-step <?php echo $step2Completed ? 'completed' : ''; ?>">
                     <div class="step-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                            <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
-                        </svg>
+                        <img src="<?php echo $iconPath . ($step2Completed ? 'white/order_accepted.png' : 'green/order_accepted.png'); ?>" 
+                             alt="Đã nhận đơn"
+                             onerror="this.src='<?php echo $iconPath . ($step2Completed ? 'white/icon_pick_up.png' : 'green/order_accepted.png'); ?>'">
                     </div>
                     <div class="step-info">
                         <p class="step-title">Đã nhận đơn</p>
-                        <p class="step-time">-</p>
+                        <p class="step-time"><?php echo $step2Completed ? e($orderTime) : '-'; ?></p>
                     </div>
                 </div>
-                <div class="progress-line"></div>
-                <div class="progress-step">
+                <div class="progress-line <?php echo $step2Completed ? 'active' : ''; ?>"></div>
+                
+                <!-- Step 3: Đang giao hàng -->
+                <div class="progress-step <?php echo $step3Completed ? 'completed' : ''; ?>">
                     <div class="step-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
-                        </svg>
+                        <img src="<?php echo $iconPath . ($step3Completed ? 'white/delivered.png' : 'green/delivered.png'); ?>" 
+                             alt="Đang giao hàng"
+                             onerror="this.src='<?php echo $iconPath . ($step3Completed ? 'white/icon_pick_up.png' : 'green/delivered.png'); ?>'">
                     </div>
                     <div class="step-info">
-                        <p class="step-title">Đang vận chuyển</p>
-                        <p class="step-time">-</p>
+                        <p class="step-title">Đang giao hàng</p>
+                        <p class="step-time"><?php echo $step3Completed ? e($orderTime) : '-'; ?></p>
                     </div>
                 </div>
-                <div class="progress-line"></div>
-                <div class="progress-step">
+                <div class="progress-line <?php echo $step3Completed ? 'active' : ''; ?>"></div>
+                
+                <!-- Step 4: Hoàn thành -->
+                <div class="progress-step <?php echo $step4Completed ? 'completed' : ''; ?>">
                     <div class="step-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                            <polyline points="22 4 12 14.01 9 11.01"/>
-                        </svg>
+                        <img src="<?php echo $iconPath . ($step4Completed ? 'white/order_finished.png' : 'green/order_finished.png'); ?>" 
+                             alt="Hoàn thành">
                     </div>
                     <div class="step-info">
                         <p class="step-title">Hoàn thành</p>
-                        <p class="step-time">-</p>
+                        <p class="step-time"><?php echo $step4Completed ? e($orderTime) : '-'; ?></p>
                     </div>
                 </div>
             </div>
