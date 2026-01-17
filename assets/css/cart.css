@@ -139,8 +139,8 @@
 
 .cart-item-options {
     display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-direction: column;
+    gap: 4px;
     margin-top: 8px;
 }
 
@@ -149,7 +149,8 @@
     padding: 4px 10px;
     background: var(--light-green);
     color: var(--primary-green);
-    border-radius: 30px;
+    border-radius: 10px;
+    width: 25%;
     font-size: 13px;
     font-weight: 500;
 }

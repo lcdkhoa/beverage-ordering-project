@@ -292,6 +292,58 @@ function getProductOptions($productId) {
 }
 
 /**
+ * Enrich cart options with full information from database
+ * @param array $options Array of options with option_value_id and price
+ * @return array Enriched options with group_name, value_name, IsMultiple
+ */
+function enrichCartOptions($options) {
+    if (empty($options) || !is_array($options)) {
+        return [];
+    }
+    
+    $pdo = getDBConnection();
+    $enrichedOptions = [];
+    
+    foreach ($options as $option) {
+        $optionValueId = isset($option['option_value_id']) ? (int)$option['option_value_id'] : 0;
+        if (!$optionValueId) {
+            continue;
+        }
+        
+        // Get option value details with group information
+        $sql = "SELECT ov.MaOptionValue, ov.TenGiaTri, ov.GiaThem,
+                       og.MaOptionGroup, og.TenNhom, og.IsMultiple
+                FROM Option_Value ov
+                INNER JOIN Option_Group og ON ov.MaOptionGroup = og.MaOptionGroup
+                WHERE ov.MaOptionValue = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$optionValueId]);
+        $optionData = $stmt->fetch();
+        
+        if ($optionData) {
+            $enrichedOptions[] = [
+                'option_value_id' => $optionValueId,
+                'value_name' => $optionData['TenGiaTri'],
+                'group_name' => $optionData['TenNhom'],
+                'IsMultiple' => (bool)$optionData['IsMultiple'],
+                'price' => isset($option['price']) ? (float)$option['price'] : (float)$optionData['GiaThem']
+            ];
+        } else {
+            // Fallback: keep original data if option not found
+            $enrichedOptions[] = [
+                'option_value_id' => $optionValueId,
+                'value_name' => isset($option['value_name']) ? $option['value_name'] : '',
+                'group_name' => isset($option['group_name']) ? $option['group_name'] : '',
+                'IsMultiple' => isset($option['IsMultiple']) ? (bool)$option['IsMultiple'] : false,
+                'price' => isset($option['price']) ? (float)$option['price'] : 0
+            ];
+        }
+    }
+    
+    return $enrichedOptions;
+}
+
+/**
  * Search products by name
  */
 function searchProducts($keyword, $categoryId = null, $page = 1, $perPage = 12) {

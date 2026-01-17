@@ -39,6 +39,9 @@ try {
         throw new Exception('Product not found');
     }
 
+    // Enrich options with full information from database
+    $enrichedOptions = enrichCartOptions($options);
+
     // Create cart item
     $cartItem = [
         'product_id' => $productId,
@@ -47,7 +50,7 @@ try {
         'quantity' => $quantity,
         'base_price' => $basePrice,
         'total_price' => $totalPrice,
-        'options' => $options,
+        'options' => $enrichedOptions,
         'note' => $note,
         'added_at' => date('Y-m-d H:i:s')
     ];
