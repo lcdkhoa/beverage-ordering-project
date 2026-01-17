@@ -44,6 +44,8 @@ $news = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <!-- News Content Section -->
     <section class="news-content-section">
         <div class="container">
+            <h1 class="news-title" style="font-size: 36px; font-weight: bold; color: var(--primary-green); text-align: center; margin-bottom: 40px;">Tin Tức & Sự Kiện</h1>
+            
             <?php if (!empty($news)): ?>
                 <div class="news-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 30px; margin-bottom: 40px;">
                     <?php foreach ($news as $newsItem): ?>
