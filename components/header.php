@@ -121,7 +121,6 @@ $avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : 
 
             <!-- User Actions -->
             <div class="header-actions">
-                <div class="separator">|</div>
                 <div class="cart-icon">
                     <a href="<?php echo $basePath; ?>pages/cart/index.php" class="cart-link">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
