@@ -1,36 +1,34 @@
 <?php
 /**
- * Carousel Component
- * Reusable carousel với navigation và pagination dots
- * 
- * @param array $images - Mảng đường dẫn hình ảnh
- * @param string $carouselId - ID duy nhất cho carousel (mặc định: 'hero-carousel')
- * @param int $autoPlayInterval - Thời gian tự động chuyển slide (ms, mặc định: 500)
+ * Carousel Component - Simple slide transition
+ * @param array $images - Array of image paths
+ * @param string $carouselId - Unique carousel ID
  */
 if (!isset($images) || empty($images)) {
     return;
 }
 
 $carouselId = $carouselId ?? 'hero-carousel';
-$autoPlayInterval = 3000;
+$totalImages = count($images);
 ?>
+
 <div class="carousel-container" id="<?php echo htmlspecialchars($carouselId); ?>">
     <div class="carousel-wrapper">
-        <div class="carousel-slides">
+        <div class="carousel-slides" style="width: <?php echo $totalImages * 100; ?>%;">
             <?php foreach ($images as $index => $image): ?>
-                <div class="carousel-slide <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>">
-                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Carousel Image <?php echo $index + 1; ?>">
+                <div class="carousel-slide" style="width: <?php echo 100 / $totalImages; ?>%;">
+                    <img src="<?php echo htmlspecialchars($image); ?>" alt="Slide <?php echo $index + 1; ?>">
                 </div>
             <?php endforeach; ?>
         </div>
         
         <!-- Navigation Buttons -->
-        <button class="carousel-btn carousel-prev" aria-label="Previous slide">
+        <button class="carousel-btn carousel-prev" aria-label="Previous">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M15 18l-6-6 6-6"/>
             </svg>
         </button>
-        <button class="carousel-btn carousel-next" aria-label="Next slide">
+        <button class="carousel-btn carousel-next" aria-label="Next">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M9 18l6-6-6-6"/>
             </svg>
@@ -40,91 +38,55 @@ $autoPlayInterval = 3000;
     <!-- Pagination Dots -->
     <div class="carousel-pagination">
         <?php foreach ($images as $index => $image): ?>
-            <button class="carousel-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>" aria-label="Go to slide <?php echo $index + 1; ?>"></button>
+            <button class="carousel-dot <?php echo $index === 0 ? 'active' : ''; ?>" data-index="<?php echo $index; ?>"></button>
         <?php endforeach; ?>
     </div>
 </div>
 
 <script>
 (function() {
-    const carouselId = '<?php echo htmlspecialchars($carouselId); ?>';
-    const autoPlayInterval = <?php echo (int)$autoPlayInterval; ?>;
-    const $carousel = $('#' + carouselId);
+    const carousel = document.getElementById('<?php echo htmlspecialchars($carouselId); ?>');
+    if (!carousel) return;
     
-    if ($carousel.length === 0) return;
-    
-    const $wrapper = $carousel.find('.carousel-wrapper');
-    const $slidesContainer = $carousel.find('.carousel-slides');
-    const $slides = $carousel.find('.carousel-slide');
-    const $dots = $carousel.find('.carousel-dot');
-    const $prevBtn = $carousel.find('.carousel-prev');
-    const $nextBtn = $carousel.find('.carousel-next');
-    const totalSlides = $slides.length;
-
-    let fixedHeight = null;
-    function setCarouselHeight() {
-        // Calculate height only once on first load
-        if (fixedHeight === null) {
-            const header = $('.main-header');
-            const headerHeight = header.length > 0 ? header.outerHeight() : 0;
-            const viewportHeight = window.innerHeight;
-            fixedHeight = viewportHeight - headerHeight;
-            
-            $('.hero-section').css('height', fixedHeight + 'px');
-        }
-        
-        
-        $wrapper.css('height', fixedHeight + 'px');
-        $slidesContainer.css('height', fixedHeight + 'px');
-    }
-    
-    setCarouselHeight();
-    
-    
-    let resizeTimeout = null;
-    $(window).on('resize', function() {
-        if (resizeTimeout) {
-            clearTimeout(resizeTimeout);
-        }
-        resizeTimeout = setTimeout(function() {
-            fixedHeight = null;
-            setCarouselHeight();
-            resizeTimeout = null;
-        }, 250);
-    });
-    
-    if (totalSlides <= 1) return;
+    const slidesContainer = carousel.querySelector('.carousel-slides');
+    const dots = carousel.querySelectorAll('.carousel-dot');
+    const prevBtn = carousel.querySelector('.carousel-prev');
+    const nextBtn = carousel.querySelector('.carousel-next');
+    const totalSlides = <?php echo $totalImages; ?>;
     
     let currentIndex = 0;
     let autoPlayTimer = null;
     
+    // Set carousel height
+    function setHeight() {
+        const header = document.querySelector('.main-header');
+        const headerHeight = header ? header.offsetHeight : 0;
+        const height = window.innerHeight - headerHeight;
+        carousel.querySelector('.carousel-wrapper').style.height = height + 'px';
+    }
+    
+    setHeight();
+    window.addEventListener('resize', setHeight);
+    
+    // Show slide
     function showSlide(index) {
-        // Ensure index is within bounds
         if (index < 0) index = totalSlides - 1;
         if (index >= totalSlides) index = 0;
         
         currentIndex = index;
+        slidesContainer.style.transform = 'translateX(-' + (index * 100 / totalSlides) + '%)';
         
-        // Update slides
-        $slides.removeClass('active');
-        $slides.eq(index).addClass('active');
-        
-        // Update dots
-        $dots.removeClass('active');
-        $dots.eq(index).addClass('active');
+        dots.forEach((dot, i) => {
+            dot.classList.toggle('active', i === index);
+        });
     }
     
-    function nextSlide() {
-        showSlide(currentIndex + 1);
-    }
-    
-    function prevSlide() {
-        showSlide(currentIndex - 1);
-    }
-    
+    // Auto play
     function startAutoPlay() {
         stopAutoPlay();
-        autoPlayTimer = setInterval(nextSlide, autoPlayInterval);
+        autoPlayTimer = setInterval(() => {
+            showSlide(currentIndex + 1);
+        }, 3000); // 3 seconds per slide
     }
     
     function stopAutoPlay() {
@@ -134,29 +96,30 @@ $autoPlayInterval = 3000;
         }
     }
     
-    // Navigation buttons
-    $nextBtn.on('click', function() {
-        nextSlide();
+    // Navigation
+    nextBtn.addEventListener('click', () => {
+        showSlide(currentIndex + 1);
         startAutoPlay();
     });
     
-    $prevBtn.on('click', function() {
-        prevSlide();
+    prevBtn.addEventListener('click', () => {
+        showSlide(currentIndex - 1);
         startAutoPlay();
     });
     
-    // Pagination dots
-    $dots.on('click', function() {
-        const index = parseInt($(this).data('index'));
-        showSlide(index);
-        startAutoPlay();
+    // Dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            showSlide(index);
+            startAutoPlay();
+        });
     });
     
     // Pause on hover
-    $carousel.on('mouseenter', stopAutoPlay);
-    $carousel.on('mouseleave', startAutoPlay);
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
     
-    // Initialize
+    // Start
     showSlide(0);
     startAutoPlay();
 })();

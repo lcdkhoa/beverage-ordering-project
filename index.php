@@ -128,7 +128,7 @@ $stores = getStores(1);
     <section class="best-seller-section">
         <div class="container">
             <div class="best-seller-header">
-                <h2 class="best-seller-title">Best Seller</h2>
+                <h2 class="best-seller-title" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">Best Seller</h2>
                 <a href="pages/menu/index.php" class="view-all-link">Xem tất cả >></a>
             </div>
             <div class="products-grid">
@@ -152,7 +152,7 @@ $stores = getStores(1);
     <!-- News & Events Section -->
     <section class="news-section">
         <div class="container">
-            <div class="news-header">
+            <div class="news-header" style="text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);">
                 <h2 class="news-title">Tin Tức & Sự Kiện</h2>
                 <a href="pages/news/index.php" class="view-all-link">Xem tất cả >></a>
             </div>
