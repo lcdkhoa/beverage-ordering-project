@@ -39,6 +39,64 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute([$orderId, $userId]);
 $order = $stmt->fetch();
 
+// Check if order exists
+if (!$order) {
+    // Render error page if order doesn't exist
+    $basePath = '../../';
+    ?>
+    <!DOCTYPE html>
+    <html lang="vi">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Đơn hàng không tồn tại - MeowTea Fresh</title>
+        <link rel="stylesheet" href="<?php echo $basePath; ?>assets/css/main.css">
+        <link rel="stylesheet" href="<?php echo $basePath; ?>assets/css/cart.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    </head>
+    <body>
+        <?php include '../../components/header.php'; ?>
+
+        <main class="order-result-page">
+            <div class="container">
+                <div class="order-not-found">
+                    <div class="not-found-icon">
+                        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                    </div>
+                    <h1 class="not-found-title">Đơn hàng không tồn tại</h1>
+                    <p class="not-found-message">
+                        Không tìm thấy đơn hàng với mã <strong>#<?php echo e('AHDW' . str_pad($orderId, 3, '0', STR_PAD_LEFT)); ?></strong>
+                    </p>
+                    <p class="not-found-description">
+                        Đơn hàng có thể đã bị xóa hoặc bạn không có quyền truy cập đơn hàng này.
+                    </p>
+                    <div class="not-found-actions">
+                        <a href="index.php" class="btn-back-to-cart">Quay lại giỏ hàng</a>
+                        <a href="../menu/index.php" class="btn-continue-shopping">Tiếp tục mua sắm</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <?php 
+            $href = "#top";
+            include '../../components/back-to-top.php';
+        ?>
+
+        <?php include '../../components/footer.php'; ?>
+
+        <script src="<?php echo $basePath; ?>assets/js/common.js"></script>
+        <script src="<?php echo $basePath; ?>assets/js/main.js"></script>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
 // Get payment method from session or default
 $paymentMethodId = $_SESSION['order_payment_' . $orderId] ?? null;
 $paymentMethodName = 'Ví Zalo Pay'; // Default
@@ -52,11 +110,6 @@ if ($paymentMethodId) {
     }
 }
 $order['PaymentMethod'] = $paymentMethodName;
-
-if (!$order) {
-    header('Location: index.php');
-    exit;
-}
 
 // Get order items
 $sql = "SELECT oi.*, sp.TenSP, sp.HinhAnh
@@ -95,7 +148,7 @@ $totalAmount = $order['TongTien'] ?? 0;
 $promotionDiscount = $totalAmount - $subtotal - $shippingFee;
 
 // Generate order code
-$orderCode = 'AHDW' . str_pad($orderId, 3, '0', STR_PAD_LEFT);
+$orderCode = 'MTF-' . str_pad($orderId, 3, '0', STR_PAD_LEFT);
 
 // Estimated delivery time (1 hour from now)
 $estimatedDelivery = date('H:i d/m/Y', strtotime('+1 hour'));
@@ -240,7 +293,7 @@ $iconPath = $basePath . 'assets/img/cart/order_result/';
                 <p class="support-text">
                     Bạn cần hỗ trợ về đơn hàng? Vui lòng liên hệ:
                 </p>
-                <p class="support-phone">(028) 6868 6868</p>
+                <p class="support-phone">1900 1111 (miễn phí)</p>
             </div>
         </div>
     </main>
