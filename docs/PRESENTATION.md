@@ -170,7 +170,7 @@ Khi trình bày, anh chị có thể nhấn mạnh:
 
 ---
 
-### 3.5. Trang Khuyến mãi (`pages/promotion/index.php`)
+### 3.5. Trang Khuyến mãi (`pages/management/promotion-management.php`)
 
 Trang **Promotion** là nơi:
 
@@ -304,9 +304,9 @@ Website không chỉ là một **trang đặt đồ uống**, mà còn là một
 
 ---
 
-## 4. Trải nghiệm quản trị – Back-office (`pages/management/index.php`)
+## 4. Trải nghiệm quản trị – Back-office (`pages/management/`)
 
-Đối với đội vận hành, trang **Management** là trung tâm điều khiển:
+Đối với đội vận hành, các trang **Management** là trung tâm điều khiển:
 
 - **Quản lý sản phẩm (Product Management)**
   - `api/management/products.php`, `create-product.php`, `delete-product.php`, `update-price.php`:

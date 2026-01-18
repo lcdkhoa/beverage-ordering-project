@@ -61,11 +61,10 @@ projects_web_php/
 │   ├── auth/
 │   ├── career/
 │   ├── cart/
-│   ├── management/
+│   ├── management/        # Các trang quản lý (product-management, promotion-management, order-management)
 │   ├── menu/
 │   ├── news/
 │   ├── profile/
-│   ├── promotion/
 │   └── stores/
 ├── functions.php           # Hàm dùng chung (helper, kết nối DB, ...)
 ├── index.php               # Trang entry chính, router đơn giản
@@ -122,4 +121,6 @@ Tất cả các trang trong danh sách dưới đây đã có file `index.php` t
 - `pages/cart/index.php` - Trang giỏ hàng & checkout
 - `pages/auth/login.php` và `pages/auth/register.php` - Trang đăng nhập / đăng ký
 - `pages/profile/index.php` - Trang hồ sơ người dùng
-- `pages/management/index.php` - Trang quản lý (sản phẩm, khuyến mãi, topping, ...)
+- `pages/management/product-management.php` - Trang quản lý sản phẩm & topping
+- `pages/management/promotion-management.php` - Trang quản lý khuyến mãi
+- `pages/management/order-management.php` - Trang quản lý đơn hàng
