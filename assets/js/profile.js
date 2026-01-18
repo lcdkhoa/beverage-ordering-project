@@ -413,16 +413,22 @@ $(document).ready(function() {
                     });
                 }
                 var optsStr = opts.length ? '<div class="order-detail-item-options">' + opts.join(', ') + '</div>' : '';
+                
+                // Calculate total price including options
                 var giaHienTai = parseFloat(it.GiaCoBan);
-                var giaThamKhao = parseFloat(it.GiaThamKhao || it.SanPhamGiaCoBan || 0);
-                var oldPrice = (giaThamKhao > giaHienTai) ? '<span class="order-detail-item-old-price">' + formatCurrency(giaThamKhao) + '</span>' : '';
+                if (it.options && it.options.length) {
+                    it.options.forEach(function(opt) {
+                        giaHienTai += parseFloat(opt.GiaThem || 0);
+                    });
+                }
+                
                 productsHtml += '<div class="order-detail-product">' +
                     '<div class="order-detail-product-img"><img src="' + escapeHtml(img) + '" alt=""></div>' +
                     '<div class="order-detail-product-info">' +
                     '<p class="order-detail-product-name">x' + (it.SoLuong || 1) + ' ' + escapeHtml(it.TenSP || '') + '</p>' +
                     optsStr +
                     '<div class="order-detail-product-price">' +
-                    '<span class="order-detail-item-current-price">' + formatCurrency(giaHienTai) + '</span> ' + oldPrice +
+                    '<span class="order-detail-item-current-price">' + formatCurrency(giaHienTai) + '</span>' +
                     '</div></div></div>';
             });
         }
@@ -435,7 +441,7 @@ $(document).ready(function() {
             '<div class="order-detail-summary">' +
             '<div class="order-detail-summary-row"><span class="info-label">Tạm tính:</span> <span class="info-value">' + formatCurrency(o.Subtotal || 0) + '</span></div>' +
             '<div class="order-detail-summary-row"><span class="info-label">Phí vận chuyển:</span> <span class="info-value">' + formatCurrency(o.PhiVanChuyen || 0) + '</span></div>' +
-            '<div class="order-detail-summary-row"><span class="info-label">Khuyến mãi:</span> <span class="info-value">-' + formatCurrency(o.GiamGia || 0) + '</span></div>' +
+            '<div class="order-detail-summary-row"><span class="info-label">Khuyến mãi:</span> <span class="info-value">' + ((o.GiamGia || 0) > 0 ? '-' : '') + formatCurrency(o.GiamGia || 0) + '</span></div>' +
             '<div class="order-detail-summary-row total"><span class="info-label">Số tiền thanh toán:</span> <span class="info-value">' + formatCurrency(o.TongTien || 0) + '</span></div>' +
             '</div></div>';
 

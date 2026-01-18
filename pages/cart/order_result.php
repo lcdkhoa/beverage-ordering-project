@@ -131,6 +131,7 @@ foreach ($orderItems as &$item) {
     $stmt->execute([$item['MaOrderItem']]);
     $item['options'] = $stmt->fetchAll();
 }
+unset($item); 
 
 // Calculate totals
 $subtotal = 0;
@@ -307,17 +308,5 @@ $iconPath = $basePath . 'assets/img/cart/order_result/';
 
     <script src="<?php echo $basePath; ?>assets/js/common.js"></script>
     <script src="<?php echo $basePath; ?>assets/js/main.js"></script>
-    
-    <!-- Debug console log -->
-    <script>
-        console.log('=== Order Result Debug Info ===');
-        console.log('Order Items:', <?php echo json_encode($orderItems, JSON_UNESCAPED_UNICODE); ?>);
-        console.log('Subtotal:', <?php echo $subtotal; ?>);
-        console.log('Shipping Fee:', <?php echo $shippingFee; ?>);
-        console.log('Promotion Discount:', <?php echo $promotionDiscount; ?>);
-        console.log('Total Amount:', <?php echo $totalAmount; ?>);
-        console.log('Debug Data:', <?php echo json_encode($debugData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>);
-        console.log('===============================');
-    </script>
 </body>
 </html>

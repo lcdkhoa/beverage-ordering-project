@@ -102,6 +102,7 @@ try {
         $order['NgayTaoFormatted'] = date('d/m/Y', strtotime($order['NgayTao']));
         $order['NgayTaoTime'] = date('H:i:s', strtotime($order['NgayTao']));
     }
+    unset($order); 
 
     $response = [
         'success' => true,
