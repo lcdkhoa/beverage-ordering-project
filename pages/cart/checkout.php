@@ -17,6 +17,15 @@ if (!isLoggedIn()) {
     exit;
 }
 
+// Check if user is admin or staff - redirect to homepage if true
+if (isset($_SESSION['user_role_name'])) {
+    $userRoleLower = strtolower($_SESSION['user_role_name']);
+    if ($userRoleLower === 'admin' || $userRoleLower === 'staff') {
+        header('Location: ../../index.php');
+        exit;
+    }
+}
+
 // Get cart items from session
 $cartItems = isset($_SESSION['cart']) && is_array($_SESSION['cart']) ? $_SESSION['cart'] : [];
 

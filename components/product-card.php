@@ -65,6 +65,19 @@ $imagePath = ltrim($imagePath, '/\\');
 // Tạo đường dẫn đầy đủ
 $productImage = $basePath . $imagePath;
 $fallbackImage = $basePath . 'assets/img/products/product_one.png';
+
+// Check if user can add to cart (only customers can add to cart)
+$canAddToCart = true;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+if (isset($_SESSION['user_role_name'])) {
+    $userRoleLower = strtolower($_SESSION['user_role_name']);
+    // Hide add to cart button for admin and staff
+    if ($userRoleLower === 'admin' || $userRoleLower === 'staff') {
+        $canAddToCart = false;
+    }
+}
 ?>
 <div class="product-card" data-product-id="<?php echo $productId; ?>">
     <div class="product-image-wrapper">
@@ -91,7 +104,7 @@ $fallbackImage = $basePath . 'assets/img/products/product_one.png';
                     <span class="old-price"><?php echo formatCurrency($giaCoBan); ?></span>
                 <?php endif; ?>
             </div>
-            <?php if (!$isTopping): ?>
+            <?php if (!$isTopping && $canAddToCart): ?>
                 <button class="add-to-cart-btn" data-product-id="<?php echo $productId; ?>" title="Thêm vào giỏ hàng">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M12 5v14M5 12h14"/>

@@ -1,0 +1,65 @@
+<!-- Orders Tab -->
+<div id="ordersTab" class="profile-tab">
+    <div class="profile-tab-header">
+        <h1 class="profile-tab-title">Đơn hàng</h1>
+        <p class="profile-tab-subtitle">Xem lịch sử đơn hàng và trạng thái đơn hàng của bạn</p>
+    </div>
+
+    <div class="orders-filters">
+        <div class="orders-filters-left">
+            <div class="filter-group">
+                <label class="filter-label">Trạng thái:</label>
+                <select id="orderStatusFilter" class="filter-select">
+                    <option value="">Tất cả</option>
+                    <option value="received">Đã nhận đơn</option>
+                    <option value="delivering">Đang giao hàng</option>
+                    <option value="completed">Hoàn thành</option>
+                    <option value="cancelled">Cửa hàng hủy</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Thời gian:</label>
+                <select id="orderDaysFilter" class="filter-select">
+                    <option value="7">7 ngày</option>
+                    <option value="30" selected>30 ngày</option>
+                    <option value="90">90 ngày</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="orders-container">
+        <div id="ordersLoading" class="orders-loading" style="display: none;">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="0.75"/>
+            </svg>
+            <p>Đang tải đơn hàng...</p>
+        </div>
+        <div id="ordersEmpty" class="orders-empty" style="display: none;">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+            </svg>
+            <p>Bạn chưa có đơn hàng nào</p>
+            <?php 
+                $text = 'Đặt hàng ngay';
+                $type = 'primary';
+                $href = $basePath . 'pages/menu/index.php';
+                $width = '200px';
+                include '../../components/button.php';
+            ?>
+        </div>
+        <div id="ordersList" class="orders-list orders-list-cards"></div>
+        <div id="ordersPagination" class="orders-pagination" style="display: none;"></div>
+    </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div id="orderDetailModal" class="order-detail-modal" role="dialog" aria-labelledby="orderDetailTitle" aria-modal="true" style="display: none;">
+    <div class="order-detail-overlay"></div>
+    <div class="order-detail-content">
+        <button type="button" class="order-detail-close" aria-label="Đóng">&times;</button>
+        <div id="orderDetailBody"></div>
+    </div>
+</div>

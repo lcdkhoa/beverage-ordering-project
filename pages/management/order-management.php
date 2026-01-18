@@ -1,0 +1,123 @@
+<?php
+/**
+ * Order Management Page
+ * Quản lý đơn hàng - chỉ dành cho Staff và Admin
+ */
+
+require_once '../../functions.php';
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user is logged in
+if (!isset($_SESSION['logged_in']) || $_SESSION['logged_in'] !== true) {
+    header('Location: ../auth/login.php');
+    exit;
+}
+
+// Check if user has Staff or Admin role
+$userRole = $_SESSION['user_role_name'] ?? '';
+if ($userRole !== 'Staff' && $userRole !== 'Admin') {
+    header('Location: ../../index.php');
+    exit;
+}
+
+$isAdmin = ($userRole === 'Admin');
+$basePath = '../../';
+?>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đơn hàng - MeowTea Fresh</title>
+    <link rel="stylesheet" href="../../assets/css/main.css">
+    <link rel="stylesheet" href="../../assets/css/profile.css">
+    <link rel="stylesheet" href="../../assets/css/management.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <?php include '../../components/header.php'; ?>
+
+    <section class="management-section" style="background-color: var(--light-green); min-height: calc(100vh - 200px); padding: 30px;">
+        <div class="container">
+            <div class="management-header">
+                <h1 class="management-title">Quản lý đơn hàng</h1>
+                <p class="management-subtitle">Xem và quản lý tất cả đơn hàng trong hệ thống</p>
+            </div>
+
+            <!-- Filters -->
+            <div class="orders-filters" style="margin-bottom: 30px;">
+                <div class="orders-filters-left">
+                    <div class="filter-group">
+                        <label class="filter-label">Khách hàng:</label>
+                        <select id="manageOrderUserFilter" class="filter-select">
+                            <option value="">Tất cả</option>
+                            <!-- Will be populated by JavaScript -->
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Trạng thái:</label>
+                        <select id="manageOrderStatusFilter" class="filter-select">
+                            <option value="">Tất cả</option>
+                            <option value="payment_received">Đã nhận thanh toán</option>
+                            <option value="processing">Đã nhận đơn</option>
+                            <option value="delivering">Đang giao hàng</option>
+                            <option value="completed">Hoàn thành</option>
+                            <option value="cancelled">Đơn hàng hủy</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">Thời gian:</label>
+                        <select id="manageOrderDaysFilter" class="filter-select">
+                            <option value="1">Trong ngày</option>
+                            <option value="7">7 ngày</option>
+                            <option value="30" selected>30 ngày</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Orders Container -->
+            <div class="orders-container" style="background: var(--white); border-radius: 30px; padding: 30px; box-shadow: var(--shadow);">
+                <div id="manageOrdersLoading" class="orders-loading" style="display: none;">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10" stroke-opacity="0.25"/>
+                        <path d="M12 2a10 10 0 0 1 10 10" stroke-opacity="0.75"/>
+                    </svg>
+                    <p>Đang tải đơn hàng...</p>
+                </div>
+                <div id="manageOrdersEmpty" class="orders-empty" style="display: none;">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                    </svg>
+                    <p>Không có đơn hàng nào</p>
+                </div>
+                <div id="manageOrdersList" class="orders-list orders-list-cards"></div>
+                <div id="manageOrdersPagination" class="orders-pagination" style="display: none;"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Detail Modal -->
+    <div id="manageOrderDetailModal" class="order-detail-modal" role="dialog" aria-labelledby="manageOrderDetailTitle" aria-modal="true" style="display: none;">
+        <div class="order-detail-overlay"></div>
+        <div class="order-detail-content">
+            <button type="button" class="order-detail-close" aria-label="Đóng">&times;</button>
+            <div id="manageOrderDetailBody"></div>
+        </div>
+    </div>
+
+    <?php 
+        $bgType = 'light-green';
+        include '../../components/back-to-top.php';
+    ?>
+
+    <?php include '../../components/footer.php'; ?>
+
+    <script src="../../assets/js/common.js"></script>
+    <script src="../../assets/js/manage-orders.js"></script>
+</body>
+</html>

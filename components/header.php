@@ -51,6 +51,16 @@ $isPromotion = strpos($currentPath, '/pages/promotion/') !== false;
 // Check if user is logged in
 $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 
+// Check if user can use cart (only customers can use cart)
+$canUseCart = true;
+if ($isLoggedIn && isset($_SESSION['user_role_name'])) {
+    $userRoleLower = strtolower($_SESSION['user_role_name']);
+    // Hide cart for admin and staff
+    if ($userRoleLower === 'admin' || $userRoleLower === 'staff') {
+        $canUseCart = false;
+    }
+}
+
 // Ensure $_SESSION['user'] array exists for cart functions
 if ($isLoggedIn && !isset($_SESSION['user'])) {
     $_SESSION['user'] = [
@@ -66,8 +76,8 @@ if ($isLoggedIn && !isset($_SESSION['user'])) {
     ];
 }
 
-// Load cart from database if logged in and not loaded yet
-if ($isLoggedIn && isset($_SESSION['user']['MaUser']) && !isset($_SESSION['cart_loaded_from_db'])) {
+// Load cart from database if logged in and not loaded yet (only for customers)
+if ($isLoggedIn && $canUseCart && isset($_SESSION['user']['MaUser']) && !isset($_SESSION['cart_loaded_from_db'])) {
     $userId = $_SESSION['user']['MaUser'];
     $storeId = isset($_SESSION['selected_store']) ? (int)$_SESSION['selected_store'] : 1;
     
@@ -156,6 +166,7 @@ $avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : 
 
             <!-- User Actions -->
             <div class="header-actions">
+                <?php if ($canUseCart): ?>
                 <div class="cart-icon">
                     <a href="<?php echo $basePath; ?>pages/cart/index.php" class="cart-link">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -166,6 +177,7 @@ $avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : 
                     </a>
                 </div>
                 <div class="separator">|</div>
+                <?php endif; ?>
                 <?php if ($isLoggedIn): ?>
                     <!-- User Info (when logged in) -->
                     <div class="user-info-wrapper">
@@ -208,6 +220,16 @@ $avatarImagePath = $isLoggedIn ? getAvatarImagePath($userGioiTinh, $basePath) : 
                                         <path d="M2 17l10 5 10-5M2 12l10 5 10-5"/>
                                     </svg>
                                     <span>Quản lý khuyến mãi</span>
+                                </a>
+                                <?php endif; ?>
+                                <?php if ($showManagement): ?>
+                                <a href="<?php echo $basePath; ?>pages/management/order-management.php" class="dropdown-item">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                                        <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+                                        <path d="M9 12h6M9 16h6"/>
+                                    </svg>
+                                    <span>Quản lý đơn hàng</span>
                                 </a>
                                 <?php endif; ?>
                                 <a href="<?php echo $basePath; ?>api/auth/logout.php" class="dropdown-item">

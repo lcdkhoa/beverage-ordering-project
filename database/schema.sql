@@ -157,6 +157,13 @@ CREATE TABLE `Payment_Method` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 13. Bảng ORDERS
+-- TrangThai values: 
+--   - Pending / Payment_Received: Đã nhận thanh toán (chờ xác nhận)
+--   - Processing: Đã nhận đơn (đã xác nhận)
+--   - Delivering: Đang giao hàng
+--   - Completed: Hoàn thành
+--   - Cancelled: Khách hàng hủy
+--   - Store_Cancelled: Cửa hàng hủy
 DROP TABLE IF EXISTS `Orders`;
 CREATE TABLE `Orders` (
     `MaOrder` INT AUTO_INCREMENT PRIMARY KEY,

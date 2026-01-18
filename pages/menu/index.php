@@ -6,6 +6,21 @@
 
 require_once '../../functions.php';
 
+// Start session to check user role
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Check if user can add to cart (only customers can add to cart)
+$canAddToCart = true;
+if (isset($_SESSION['user_role_name'])) {
+    $userRoleLower = strtolower($_SESSION['user_role_name']);
+    // Hide add to cart button for admin and staff
+    if ($userRoleLower === 'admin' || $userRoleLower === 'staff') {
+        $canAddToCart = false;
+    }
+}
+
 // Get parameters
 $categoryId = isset($_GET['category']) ? (int)$_GET['category'] : null;
 $keyword = isset($_GET['search']) ? trim($_GET['search']) : '';
@@ -293,6 +308,7 @@ if ($showBestSeller) {
                             </div>
                             
                             <!-- Action Buttons -->
+                            <?php if ($canAddToCart): ?>
                             <div class="product-actions" style="position: fixed; bottom: 0; background-color: var(--white); padding: 20px; border-top: 1px solid var(--border-color);">
                                 <button type="button" id="modal-add-to-cart-btn" class="btn-add-cart">
                                     Thêm vào giỏ
@@ -304,6 +320,11 @@ if ($showBestSeller) {
                                     </a>
                                 </button>
                             </div>
+                            <?php else: ?>
+                            <div class="product-actions" style="position: fixed; bottom: 0; background-color: var(--white); padding: 20px; border-top: 1px solid var(--border-color); text-align: center;">
+                                <p style="color: var(--text-light); font-size: 14px;">Tài khoản Admin/Staff không thể thêm sản phẩm vào giỏ hàng</p>
+                            </div>
+                            <?php endif; ?>
                         </form>
                     </div>
                 </div>
