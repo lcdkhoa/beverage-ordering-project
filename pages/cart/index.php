@@ -64,7 +64,7 @@ $basePath = '../../';
                     <span class="cart-header-col">Đơn giá</span>
                     <span class="cart-header-col">Số lượng</span>
                     <span class="cart-header-col">Thành tiền</span>
-                    <span class="cart-header-col">Xóa</span>
+                    
                 </div>
 
                 <!-- Cart Items -->
@@ -77,6 +77,8 @@ $basePath = '../../';
                         $itemTotal = isset($item['total_price']) ? (float)$item['total_price'] : $basePrice * $quantity;
                         $options = isset($item['options']) ? $item['options'] : [];
                         $note = isset($item['note']) ? $item['note'] : '';
+                        // Calculate price per unit including options
+                        $pricePerUnit = $quantity > 0 ? ($itemTotal / $quantity) : $basePrice;
                         
                         // Enrich options if they are in old format (only option_value_id and price)
                         if (!empty($options) && !isset($options[0]['value_name'])) {
@@ -135,7 +137,7 @@ $basePath = '../../';
                                     </div>
                                 </div>
                                 <div class="cart-item-price">
-                                    <span class="price-value"><?php echo formatCurrency($basePrice); ?></span>
+                                    <span class="price-value"><?php echo formatCurrency($pricePerUnit); ?></span>
                                 </div>
                                 <div class="cart-item-quantity">
                                     <button class="quantity-btn minus-btn" data-item-index="<?php echo $index; ?>">-</button>

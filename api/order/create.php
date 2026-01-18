@@ -58,11 +58,14 @@ try {
     }
 
     $shippingFee = 30000; // Default shipping fee
-    
-    // Get delivery address (for now, use default)
-    $deliveryAddress = "54/31 Đ. Phổ Quang, Phường 2, Quận Tân Bình, Hồ Chí Minh";
 
-    // Get database connection
+    $deliveryAddress = isset($_POST['delivery_address']) ? trim($_POST['delivery_address']) : '';
+    if ($deliveryAddress === '') {
+        throw new Exception('Địa chỉ giao hàng không được để trống. Vui lòng nhập địa chỉ.');
+    }
+    $nguoiNhan = getFullName($user['ho'] ?? '', $user['ten'] ?? '');
+    $dienThoaiGiao = $user['phone'] ?? '';
+
     $pdo = getDBConnection();
     
     // Validate promotion if provided
@@ -140,19 +143,14 @@ try {
     $pdo->beginTransaction();
 
     try {
-        // Create order (Note: MaPayment is not in schema, so we store it in session)
-        // Set status to 'Payment_Received' when order is created (đã nhận thanh toán)
-        $sql = "INSERT INTO Orders (MaUser, MaStore, DiaChiGiao, PhiVanChuyen, MaPromotion, GiamGia, TongTien, TrangThai) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, 'Payment_Received')";
+        $sql = "INSERT INTO Orders (MaUser, MaStore, MaPayment, DiaChiGiao, NguoiNhan, DienThoaiGiao, PhiVanChuyen, MaPromotion, GiamGia, TongTien, TrangThai) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Payment_Received')";
         $stmt = $pdo->prepare($sql);
         $promotionIdForDB = ($promotionId > 0 && !empty($promotionCode)) ? $promotionId : null;
-        $stmt->execute([$userId, $storeId, $deliveryAddress, $shippingFee, $promotionIdForDB, $promotionDiscount, $totalAmount]);
+        $stmt->execute([$userId, $storeId, $paymentMethod, $deliveryAddress, $nguoiNhan, $dienThoaiGiao, $shippingFee, $promotionIdForDB, $promotionDiscount, $totalAmount]);
         $orderId = $pdo->lastInsertId();
-        
-        // Store payment method in session for this order
         $_SESSION['order_payment_' . $orderId] = $paymentMethod;
 
-        // Create order items
         foreach ($cartItems as $item) {
             $productId = isset($item['product_id']) ? (int)$item['product_id'] : 0;
             $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
@@ -162,7 +160,6 @@ try {
                 continue;
             }
 
-            // Insert order item
             $sql = "INSERT INTO Order_Item (MaOrder, MaSP, SoLuong, GiaCoBan) 
                     VALUES (?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
@@ -191,8 +188,7 @@ try {
         // Clear cart after successful order
         $_SESSION['cart'] = [];
 
-        // Generate order code
-        $orderCode = 'AHDW' . str_pad($orderId, 3, '0', STR_PAD_LEFT);
+        $orderCode = '#' . str_pad($orderId, 9, '0', STR_PAD_LEFT);
 
         $response = [
             'success' => true,

@@ -9,11 +9,12 @@
 if (!isset($product)) return;
 
 $productName = e($product['TenSP']);
-$productPrice = formatCurrency($product['GiaCoBan']);
-$productId = $product['MaSP'];
-
-// Check if this is a topping
 $isTopping = isset($product['IsTopping']) && $product['IsTopping'] === true;
+$giaNiemYet = isset($product['GiaNiemYet']) ? (float)$product['GiaNiemYet'] : (float)($product['GiaCoBan'] ?? 0);
+$giaCoBan = isset($product['GiaCoBan']) ? (float)$product['GiaCoBan'] : $giaNiemYet;
+$productPrice = formatCurrency($giaNiemYet);
+$productId = $product['MaSP'];
+$showOldPrice = (!$isTopping && $giaCoBan > $giaNiemYet);
 
 // Get rating data from database
 $rating = isset($product['Rating']) && $product['Rating'] !== null ? (float)$product['Rating'] : 0;
@@ -86,8 +87,8 @@ $fallbackImage = $basePath . 'assets/img/products/product_one.png';
         <div class="product-price">
             <div class="price-info">
                 <span class="current-price"><?php echo $productPrice; ?></span>
-                <?php if (!$isTopping): ?>
-                    <span class="old-price"><?php echo formatCurrency($product['GiaCoBan'] * 1.3); ?></span>
+                <?php if (isset($showOldPrice) && $showOldPrice): ?>
+                    <span class="old-price"><?php echo formatCurrency($giaCoBan); ?></span>
                 <?php endif; ?>
             </div>
             <?php if (!$isTopping): ?>

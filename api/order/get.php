@@ -1,7 +1,8 @@
 <?php
 /**
  * Get Orders API
- * Lấy danh sách đơn hàng của user hiện tại
+ * List orders for current user with pagination and filters
+ * Query: page, per_page (default 10), status, days (7|30|90, default 30)
  */
 
 header('Content-Type: application/json');
@@ -11,10 +12,9 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$response = ['success' => false, 'message' => '', 'orders' => []];
+$response = ['success' => false, 'message' => '', 'orders' => [], 'total' => 0, 'total_pages' => 0, 'page' => 1, 'per_page' => 10];
 
 try {
-    // Check if user is logged in
     if (!isLoggedIn()) {
         throw new Exception('User not logged in');
     }
@@ -22,78 +22,95 @@ try {
     $user = getCurrentUser();
     $userId = $user['id'];
 
-    // Get database connection
+    $page = max(1, (int)($_GET['page'] ?? 1));
+    $perPage = min(20, max(1, (int)($_GET['per_page'] ?? 10)));
+    $status = trim($_GET['status'] ?? '');
+    $days = (int)($_GET['days'] ?? 30);
+    if (!in_array($days, [7, 30, 90], true)) {
+        $days = 30;
+    }
+
     $pdo = getDBConnection();
 
-    // Get orders with store information
-    $sql = "SELECT o.*, s.TenStore, s.DiaChi as StoreAddress, s.DienThoai as StorePhone
+    $where = ["o.MaUser = ?"];
+    $params = [$userId];
+
+    if ($days > 0) {
+        $where[] = "o.NgayTao >= DATE_SUB(NOW(), INTERVAL ? DAY)";
+        $params[] = $days;
+    }
+
+    if ($status !== '') {
+        $statusMap = [
+            'received' => ['Payment_Received', 'Pending'],
+            'delivering' => ['Delivering', 'Processing'],
+            'completed' => ['Completed'],
+            'cancelled' => ['Cancelled', 'Store_Cancelled']
+        ];
+        if (isset($statusMap[$status])) {
+            $placeholders = implode(',', array_fill(0, count($statusMap[$status]), '?'));
+            $where[] = "o.TrangThai IN ($placeholders)";
+            $params = array_merge($params, $statusMap[$status]);
+        }
+    }
+
+    $whereClause = implode(' AND ', $where);
+
+    // Count total
+    $sqlCount = "SELECT COUNT(*) AS cnt FROM Orders o WHERE $whereClause";
+    $stmt = $pdo->prepare($sqlCount);
+    $stmt->execute($params);
+    $total = (int)$stmt->fetch(PDO::FETCH_ASSOC)['cnt'];
+    $totalPages = $total > 0 ? (int)ceil($total / $perPage) : 1;
+    $page = min($page, max(1, $totalPages));
+    $offset = ($page - 1) * $perPage;
+
+    // Fetch orders (list only, no items for list view)
+    $sql = "SELECT o.*, s.TenStore
             FROM Orders o
             INNER JOIN Store s ON o.MaStore = s.MaStore
-            WHERE o.MaUser = ?
-            ORDER BY o.NgayTao DESC";
+            WHERE $whereClause
+            ORDER BY o.NgayTao DESC
+            LIMIT ? OFFSET ?";
+    $params[] = $perPage;
+    $params[] = $offset;
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$userId]);
+    $stmt->execute($params);
     $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-    // Get order items and options for each order
     foreach ($orders as &$order) {
         $orderId = $order['MaOrder'];
-        
-        // Generate order code
-        $order['OrderCode'] = 'AHDW' . str_pad($orderId, 3, '0', STR_PAD_LEFT);
-        
-        // Get payment method from session or default
-        $paymentMethodId = $_SESSION['order_payment_' . $orderId] ?? null;
+        $order['OrderCode'] = '#' . str_pad($orderId, 9, '0', STR_PAD_LEFT);
+
         $paymentMethodName = 'Chưa xác định';
-        if ($paymentMethodId) {
-            $sql = "SELECT TenPayment FROM Payment_Method WHERE MaPayment = ?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$paymentMethodId]);
-            $pm = $stmt->fetch();
+        $paymentId = $order['MaPayment'] ?? $_SESSION['order_payment_' . $orderId] ?? null;
+        if ($paymentId) {
+            $st = $pdo->prepare("SELECT TenPayment FROM Payment_Method WHERE MaPayment = ?");
+            $st->execute([$paymentId]);
+            $pm = $st->fetch();
             if ($pm) {
                 $paymentMethodName = $pm['TenPayment'];
             }
         }
         $order['PaymentMethod'] = $paymentMethodName;
-        
-        // Get order items
-        $sql = "SELECT oi.*, sp.TenSP, sp.HinhAnh
-                FROM Order_Item oi
-                INNER JOIN SanPham sp ON oi.MaSP = sp.MaSP
-                WHERE oi.MaOrder = ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([$orderId]);
-        $orderItems = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        
-        // Get order item options
-        foreach ($orderItems as &$item) {
-            $sql = "SELECT oio.*, ov.TenGiaTri, og.TenNhom
-                    FROM Order_Item_Option oio
-                    INNER JOIN Option_Value ov ON oio.MaOptionValue = ov.MaOptionValue
-                    INNER JOIN Option_Group og ON ov.MaOptionGroup = og.MaOptionGroup
-                    WHERE oio.MaOrderItem = ?";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$item['MaOrderItem']]);
-            $item['options'] = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            // Calculate item total
-            $itemTotal = ($item['GiaCoBan'] * $item['SoLuong']);
-            foreach ($item['options'] as $option) {
-                $itemTotal += ($option['GiaThem'] * $item['SoLuong']);
-            }
-            $item['ItemTotal'] = $itemTotal;
-        }
-        
-        $order['items'] = $orderItems;
-        
-        // Format date
-        $order['NgayTaoFormatted'] = date('d/m/Y H:i', strtotime($order['NgayTao']));
+
+        // Item count for list
+        $st = $pdo->prepare("SELECT COALESCE(SUM(SoLuong), 0) AS n FROM Order_Item WHERE MaOrder = ?");
+        $st->execute([$orderId]);
+        $order['ItemCount'] = (int)$st->fetch(PDO::FETCH_ASSOC)['n'];
+
+        $order['NgayTaoFormatted'] = date('d/m/Y', strtotime($order['NgayTao']));
+        $order['NgayTaoTime'] = date('H:i:s', strtotime($order['NgayTao']));
     }
 
     $response = [
         'success' => true,
         'message' => 'Lấy danh sách đơn hàng thành công',
-        'orders' => $orders
+        'orders' => $orders,
+        'total' => $total,
+        'total_pages' => $totalPages,
+        'page' => $page,
+        'per_page' => $perPage
     ];
 
 } catch (Exception $e) {

@@ -88,6 +88,14 @@ $basePath = '../../';
                             </svg>
                             <span>Đổi mật khẩu</span>
                         </a>
+                        <a href="<?php echo $basePath; ?>api/auth/logout.php" class="profile-nav-item">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                                <polyline points="16 17 21 12 16 7"/>
+                                <line x1="21" y1="12" x2="9" y2="12"/>
+                            </svg>
+                            <span>Đăng xuất</span>
+                        </a>
                     </nav>
                 </div>
 
@@ -264,8 +272,31 @@ $basePath = '../../';
                     <!-- Orders Tab -->
                     <div id="ordersTab" class="profile-tab">
                         <div class="profile-tab-header">
-                            <h1 class="profile-tab-title">Đơn hàng của tôi</h1>
+                            <h1 class="profile-tab-title">Đơn hàng</h1>
                             <p class="profile-tab-subtitle">Xem lịch sử đơn hàng và trạng thái đơn hàng của bạn</p>
+                        </div>
+
+                        <div class="orders-filters">
+                            <div class="orders-filters-left">
+                                <div class="filter-group">
+                                    <label class="filter-label">Trạng thái:</label>
+                                    <select id="orderStatusFilter" class="filter-select">
+                                        <option value="">Tất cả</option>
+                                        <option value="received">Đã nhận đơn</option>
+                                        <option value="delivering">Đang giao hàng</option>
+                                        <option value="completed">Hoàn thành</option>
+                                        <option value="cancelled">Cửa hàng hủy</option>
+                                    </select>
+                                </div>
+                                <div class="filter-group">
+                                    <label class="filter-label">Thời gian:</label>
+                                    <select id="orderDaysFilter" class="filter-select">
+                                        <option value="7">7 ngày</option>
+                                        <option value="30" selected>30 ngày</option>
+                                        <option value="90">90 ngày</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="orders-container">
@@ -290,7 +321,17 @@ $basePath = '../../';
                                     include '../../components/button.php';
                                 ?>
                             </div>
-                            <div id="ordersList" class="orders-list"></div>
+                            <div id="ordersList" class="orders-list orders-list-cards"></div>
+                            <div id="ordersPagination" class="orders-pagination" style="display: none;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Order Detail Modal -->
+                    <div id="orderDetailModal" class="order-detail-modal" role="dialog" aria-labelledby="orderDetailTitle" aria-modal="true" style="display: none;">
+                        <div class="order-detail-overlay"></div>
+                        <div class="order-detail-content">
+                            <button type="button" class="order-detail-close" aria-label="Đóng">&times;</button>
+                            <div id="orderDetailBody"></div>
                         </div>
                     </div>
 

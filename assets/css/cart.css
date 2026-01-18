@@ -149,8 +149,8 @@
     padding: 4px 10px;
     background: var(--light-green);
     color: var(--primary-green);
-    border-radius: 10px;
-    width: 25%;
+    border-radius: 30px;
+    width: max-content;
     font-size: 13px;
     font-weight: 500;
 }
@@ -506,6 +506,58 @@
 
 .change-address-link:hover {
     color: #0f3d1f;
+}
+
+.address-edit-row .address-edit-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.address-edit-row .order-note-input {
+    min-height: 70px;
+}
+
+.address-edit-hint {
+    display: block;
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+}
+
+.address-edit-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-save-address,
+.btn-cancel-address {
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+.btn-save-address {
+    background: var(--primary-green);
+    color: var(--white);
+}
+
+.btn-save-address:hover {
+    background: #0f3d1f;
+}
+
+.btn-cancel-address {
+    background: var(--border-color);
+    color: var(--text-dark);
+}
+
+.btn-cancel-address:hover {
+    background: #ccc;
 }
 
 .store-selection-group {

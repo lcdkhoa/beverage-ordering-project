@@ -135,7 +135,7 @@ foreach ($orderItems as &$item) {
 // Calculate totals
 $subtotal = 0;
 foreach ($orderItems as $item) {
-    $subtotal += ($item['GiaCoBan'] * $item['SoLuong']);
+    $subtotal += ($item['GiaNiemYet'] * $item['SoLuong']);
     if (isset($item['options'])) {
         foreach ($item['options'] as $option) {
             $subtotal += ($option['GiaThem'] * $item['SoLuong']);

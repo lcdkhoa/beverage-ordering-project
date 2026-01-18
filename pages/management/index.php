@@ -125,8 +125,14 @@ $basePath = '../../';
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="product-price">Giá bán (₫) <span class="required">*</span></label>
-                        <input type="number" id="product-price" name="gia_co_ban" class="form-input" min="0" step="1" required>
+                        <label for="product-price">Giá niêm yết (₫) <span class="required">*</span></label>
+                        <input type="number" id="product-price" name="gia_niem_yet" class="form-input" min="0" step="1" required>
+                        <small class="form-help">Giá bán thật, dùng để tính toán</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="product-reference-price">Giá tham khảo (₫)</label>
+                        <input type="number" id="product-reference-price" name="gia_co_ban" class="form-input" min="0" step="1" placeholder="Để trống = giá niêm yết">
+                        <small class="form-help">Giá gạch ngang ở menu, chỉ tham khảo</small>
                     </div>
                     <div class="form-group">
                         <label for="product-image">Hình ảnh</label>

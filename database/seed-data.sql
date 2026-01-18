@@ -26,21 +26,22 @@ INSERT INTO `Store` (TenStore, DiaChi, DienThoai, TrangThai) VALUES
 -- Đà Nẵng (1 cửa hàng)
 ('Hải Châu', '789 Trần Phú, Hải Châu 1, Hải Châu, Đà Nẵng', '033492835', 1);
 
--- 3. Insert User (Password giả định là plain text cho demo, thực tế cần hash)
-INSERT INTO `User` (Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, MaRole) VALUES
-('admin', 'admin', 'Nguyễn', 'Quản Lý', 'M', '0912345678', 'admin@shop.com', 1),
-('staff', 'staff', 'Trần', 'Nhân Viên', 'F', '0987654321', 'staff1@shop.com', 2),
-('cust', 'cust', 'Lê', 'Khách Hàng', 'M', '0911223344', 'customer@gmail.com', 3);
+-- 3. Insert User (Password plain text for demo; use hash in production)
+-- Schema: Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, TrangThai, MaRole, DiaChi
+INSERT INTO `User` (Username, Password, Ho, Ten, GioiTinh, DienThoai, Email, TrangThai, MaRole, DiaChi) VALUES
+('admin', 'admin', 'Nguyễn', 'Quản Lý', 'M', '0912345678', 'admin@shop.com', 1, 1, NULL),
+('staff', 'staff', 'Trần', 'Nhân Viên', 'F', '0987654321', 'staff1@shop.com', 1, 2, NULL),
+('cust', 'cust', 'Lê', 'Khách Hàng', 'M', '0911223344', 'customer@gmail.com', 1, 3, 'Số 07 đường Nguyễn Bỉnh Khiêm, phường Bến Nghé, quận 1, TP Hồ Chí Minh');
 
 -- Phân công nhân viên vào cửa hàng
 INSERT INTO `User_Store` (MaUser, MaStore) VALUES (2, 1);
 
--- 4. Insert Category
-INSERT INTO `Category` (TenCategory) VALUES 
-('Cà phê truyền thống'), 
-('Trà sữa'), 
-('Trà trái cây'),
-('Yogurt');
+-- 4. Insert Category (TenCategory, TrangThai)
+INSERT INTO `Category` (TenCategory, TrangThai) VALUES 
+('Cà phê truyền thống', 1), 
+('Trà sữa', 1), 
+('Trà trái cây', 1),
+('Yogurt', 1);
 
 -- 5. Insert Option Group
 INSERT INTO `Option_Group` (TenNhom, IsMultiple) VALUES 
@@ -70,34 +71,34 @@ INSERT INTO `Option_Value` (TenGiaTri, GiaThem, HinhAnh, MaOptionGroup) VALUES
 ('Sương sáo', 5000, 'assets/img/products/topping/topping-suongsao.png', 3),
 ('Cù năng', 5000, 'assets/img/products/topping/toppingcunang.png', 3);
 
--- 7. Insert SanPham
+-- 7. Insert SanPham (GiaNiemYet = giá thật/tính toán, GiaCoBan = giá gạch ngang/tham khảo)
 -- Cà phê truyền thống (MaCategory = 1)
-INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
-('Cà phê Cappuccino', 35000, 'assets/img/products/caphe/caphe-cappucchino.png', 4.65, 245, 1),
-('Cà phê đen truyền thống', 25000, 'assets/img/products/caphe/caphe-dentruyenthong.png', 4.50, 328, 1),
-('Cà phê muối', 32000, 'assets/img/products/caphe/caphe-muoi.png', 4.75, 189, 1),
-('Cà phê sữa đá', 29000, 'assets/img/products/caphe/caphe-suada.png', 4.80, 456, 1);
+INSERT INTO `SanPham` (TenSP, GiaNiemYet, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
+('Cà phê Cappuccino', 38000, 45000, 'assets/img/products/caphe/caphe-cappucchino.png', 4.65, 245, 1),
+('Cà phê đen truyền thống', 27000, 30000, 'assets/img/products/caphe/caphe-dentruyenthong.png', 4.50, 328, 1),
+('Cà phê muối', 39000, 42000, 'assets/img/products/caphe/caphe-muoi.png', 4.75, 189, 1),
+('Cà phê sữa đá', 29000, 34000, 'assets/img/products/caphe/caphe-suada.png', 4.80, 456, 1);
 
 -- Trà sữa (MaCategory = 2)
-INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
-('Trà sữa dâu tây', 40000, 'assets/img/products/trasua/trasua-dautay.png', 4.85, 512, 2),
-('Trà sữa flan', 42000, 'assets/img/products/trasua/trasua-flan.png', 4.90, 645, 2),
-('Trà sữa Matcha', 40000, 'assets/img/products/trasua/trasua-mathca.png', 4.70, 432, 2),
-('Trà sữa socola', 38000, 'assets/img/products/trasua/trasua-socola.png', 4.65, 298, 2),
-('Trà sữa thái xanh', 39000, 'assets/img/products/trasua/trasua-thaixanh.png', 4.75, 356, 2),
-('Trà sữa việt quất', 40000, 'assets/img/products/trasua/trasua-vietquat.png', 4.80, 421, 2);
+INSERT INTO `SanPham` (TenSP, GiaNiemYet, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
+('Trà sữa dâu tây', 45000, 50000, 'assets/img/products/trasua/trasua-dautay.png', 4.85, 512, 2),
+('Trà sữa flan', 49000, 52000, 'assets/img/products/trasua/trasua-flan.png', 4.90, 645, 2),
+('Trà sữa Matcha', 48000, 50000, 'assets/img/products/trasua/trasua-mathca.png', 4.70, 432, 2),
+('Trà sữa socola', 38000, 48000, 'assets/img/products/trasua/trasua-socola.png', 4.65, 298, 2),
+('Trà sữa thái xanh', 45000, 49000, 'assets/img/products/trasua/trasua-thaixanh.png', 4.75, 356, 2),
+('Trà sữa việt quất', 45000, 50000, 'assets/img/products/trasua/trasua-vietquat.png', 4.80, 421, 2);
 
 -- Trà trái cây (MaCategory = 3)
-INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
-('Trà trái cây đào', 35000, 'assets/img/products/tratraicay/tratc-dao.png', 4.60, 234, 3),
-('Trà trái cây khóm', 35000, 'assets/img/products/tratraicay/tratc-khom.png', 4.55, 198, 3),
-('Trà trái cây sen vàng', 36000, 'assets/img/products/tratraicay/tratc-senvang.png', 4.70, 267, 3),
-('Trà trái cây vải', 35000, 'assets/img/products/tratraicay/tratc-vai.png', 4.65, 189, 3);
+INSERT INTO `SanPham` (TenSP, GiaNiemYet, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
+('Trà trái cây đào', 39000, 45000, 'assets/img/products/tratraicay/tratc-dao.png', 4.60, 234, 3),
+('Trà trái cây khóm', 39000, 45000, 'assets/img/products/tratraicay/tratc-khom.png', 4.55, 198, 3),
+('Trà trái cây sen vàng', 39000, 46000, 'assets/img/products/tratraicay/tratc-senvang.png', 4.70, 267, 3),
+('Trà trái cây vải', 42000, 45000, 'assets/img/products/tratraicay/tratc-vai.png', 4.65, 189, 3);
 
 -- Yogurt (MaCategory = 4)
-INSERT INTO `SanPham` (TenSP, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
-('Yogurt truyền thống', 38000, 'assets/img/products/yogurt/truyenthong.png', 4.75, 312, 4),
-('Yogurt dâu tây', 40000, 'assets/img/products/yogurt/dautay.png', 4.80, 278, 4);
+INSERT INTO `SanPham` (TenSP, GiaNiemYet, GiaCoBan, HinhAnh, Rating, SoLuotRating, MaCategory) VALUES
+('Yogurt truyền thống', 38000, 40000, 'assets/img/products/yogurt/truyenthong.png', 4.75, 312, 4),
+('Yogurt dâu tây', 40000, 45000, 'assets/img/products/yogurt/dautay.png', 4.80, 278, 4);
 
 -- 8. Link SanPham với Option Group (Product_Option_Group)
 -- Cà phê (SP 1-4): Đường (1) và Đá (2)
@@ -129,7 +130,12 @@ INSERT INTO `Product_Option_Group` (MaSP, MaOptionGroup) VALUES
 (16, 1), (16, 2), (16, 3);  -- Yogurt dâu tây
 
 -- 9. Insert Payment Method
-INSERT INTO `Payment_Method` (TenPayment) VALUES ('Tiền mặt'), ('Chuyển khoản'), ('Momo');
+INSERT INTO `Payment_Method` (TenPayment) VALUES ('Tiền mặt'), ('Chuyển khoản'), ('Momo'), ('VNPay');
+
+-- 10. Insert Promotion (Code, LoaiGiamGia, GiaTri, GiaTriToiDa, NgayBatDau, NgayKetThuc, TrangThai)
+INSERT INTO `Promotion` (Code, LoaiGiamGia, GiaTri, GiaTriToiDa, NgayBatDau, NgayKetThuc, TrangThai) VALUES
+('WELCOME10', 'Percentage', 10, 20000, NULL, NULL, 1),
+('FIXED5K', 'Fixed', 5000, NULL, NULL, NULL, 1);
 
 -- 12. Insert News
 -- NoiDung lưu đường dẫn tới file markdown: assets/md/news/{MaNews}.md

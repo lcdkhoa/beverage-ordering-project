@@ -20,15 +20,16 @@ $(document).ready(function() {
         $header.attr('aria-expanded', isExpanded);
     });
 
-    // Tab switching
+    // Tab switching (only for items with data-tab; allow default for links like logout)
     $('.profile-nav-item').on('click', function(e) {
-        e.preventDefault();
         const tab = $(this).data('tab');
-        
+        if (!tab) return; // e.g. logout link - let browser navigate
+
+        e.preventDefault();
         // Update nav active state
         $('.profile-nav-item').removeClass('active');
         $(this).addClass('active');
-        
+
         // Update tab content
         $('.profile-tab').removeClass('active');
         if (tab === 'info') {
@@ -230,157 +231,232 @@ $(document).ready(function() {
         });
     });
 
-    // Load orders function
-    function loadOrders() {
-        const $loading = $('#ordersLoading');
-        const $empty = $('#ordersEmpty');
-        const $list = $('#ordersList');
-        
+    // Orders filters: reload on change (reset to page 1)
+    $('#orderStatusFilter, #orderDaysFilter').on('change', function() {
+        loadOrders(1);
+    });
+
+    // Order detail modal: close
+    $('#orderDetailModal .order-detail-overlay, #orderDetailModal .order-detail-close').on('click', function() {
+        $('#orderDetailModal').hide();
+    });
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' && $('#orderDetailModal').is(':visible')) {
+            $('#orderDetailModal').hide();
+        }
+    });
+
+    // Load orders with pagination and filters
+    function loadOrders(page) {
+        page = page || 1;
+        var $loading = $('#ordersLoading');
+        var $empty = $('#ordersEmpty');
+        var $list = $('#ordersList');
+        var $pagination = $('#ordersPagination');
+
         $loading.show();
         $empty.hide();
         $list.hide();
-        
+        $pagination.hide();
+
+        var params = {
+            page: page,
+            per_page: 10,
+            status: $('#orderStatusFilter').val() || '',
+            days: $('#orderDaysFilter').val() || 30
+        };
+
         $.ajax({
             url: '../../api/order/get.php',
             method: 'GET',
+            data: { page: params.page, per_page: params.per_page, status: params.status, days: params.days },
             dataType: 'json',
-            success: function(response) {
+            success: function(res) {
                 $loading.hide();
-                
-                if (response.success && response.orders && response.orders.length > 0) {
-                    renderOrders(response.orders);
+                if (res.success && res.orders && res.orders.length > 0) {
+                    renderOrders(res.orders);
+                    renderOrdersPagination(res);
                     $list.show();
+                    if (res.total_pages > 1) {
+                        $pagination.show();
+                    }
                 } else {
                     $empty.show();
                 }
             },
-            error: function(xhr, status, error) {
-                console.error('Load orders error:', error);
+            error: function(xhr, status, err) {
+                console.error('Load orders error:', err);
                 $loading.hide();
                 $empty.show();
             }
         });
     }
 
-    // Render orders list
+    // Render order list cards (design: compact with Xem chi tiết)
     function renderOrders(orders) {
-        const $list = $('#ordersList');
+        var $list = $('#ordersList');
         $list.empty();
-        
-        orders.forEach(function(order) {
-            const orderHtml = `
-                <div class="order-card">
-                    <div class="order-header">
-                        <div class="order-header-left">
-                            <h3 class="order-code">Mã đơn: #${order.OrderCode}</h3>
-                            <p class="order-date">Ngày đặt: ${order.NgayTaoFormatted}</p>
-                        </div>
-                        <div class="order-header-right">
-                            <span class="order-status status-${getStatusClass(order.TrangThai)}">${getStatusText(order.TrangThai)}</span>
-                        </div>
-                    </div>
-                    <div class="order-body">
-                        <div class="order-store">
-                            <strong>Cửa hàng:</strong> ${escapeHtml(order.TenStore)}
-                        </div>
-                        <div class="order-items">
-                            ${renderOrderItems(order.items)}
-                        </div>
-                        <div class="order-summary">
-                            <div class="order-summary-row">
-                                <span>Tạm tính:</span>
-                                <span>${formatCurrency(calculateSubtotal(order.items))}</span>
-                            </div>
-                            <div class="order-summary-row">
-                                <span>Phí vận chuyển:</span>
-                                <span>${formatCurrency(order.PhiVanChuyen || 0)}</span>
-                            </div>
-                            <div class="order-summary-row order-total">
-                                <span>Tổng tiền:</span>
-                                <span>${formatCurrency(order.TongTien)}</span>
-                            </div>
-                        </div>
-                        <div class="order-footer">
-                            <div class="order-payment">
-                                <strong>Phương thức thanh toán:</strong> ${escapeHtml(order.PaymentMethod)}
-                            </div>
-                            <div class="order-address">
-                                <strong>Địa chỉ giao hàng:</strong> ${escapeHtml(order.DiaChiGiao)}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            $list.append(orderHtml);
+        orders.forEach(function(o) {
+            var dateTime = (o.NgayTaoFormatted || '') + ' | ' + (o.NgayTaoTime || '');
+            var statusClass = getStatusClass(o.TrangThai);
+            var statusText = getStatusText(o.TrangThai);
+            var card = $('<div class="order-card order-card-compact">')
+                .append(
+                    '<div class="order-card-header">' +
+                    '<span class="order-status-badge status-' + statusClass + '">' + escapeHtml(statusText) + '</span>' +
+                    '</div>' +
+                    '<div class="order-card-body">' +
+                    '<h3 class="order-card-code">Mã đơn ' + escapeHtml(o.OrderCode) + '</h3>' +
+                    '<p class="order-card-date">' + escapeHtml(dateTime) + '</p>' +
+                    '<p class="order-card-store">Cửa hàng: ' + escapeHtml(o.TenStore) + '</p>' +
+                    '<p class="order-card-qty">Số lượng: ' + (o.ItemCount || 0) + ' Sản phẩm</p>' +
+                    '<div class="order-card-footer">' +
+                    '<a href="#" class="order-card-detail-link" data-order-id="' + o.MaOrder + '">Xem chi tiết</a>' +
+                    '<span class="order-card-total">Tổng tiền: ' + formatCurrency(o.TongTien) + '</span>' +
+                    '</div>' +
+                    '</div>'
+                );
+            $list.append(card);
+        });
+        $list.find('.order-card-detail-link').on('click', function(e) {
+            e.preventDefault();
+            openOrderDetail(parseInt($(this).data('order-id'), 10));
         });
     }
 
-    // Render order items
-    function renderOrderItems(items) {
-        if (!items || items.length === 0) {
-            return '<p class="no-items">Không có sản phẩm</p>';
+    // Pagination: "Trang X trên Y" and prev/next, numbers
+    function renderOrdersPagination(res) {
+        var total = res.total || 0;
+        var totalPages = res.total_pages || 1;
+        var page = res.page || 1;
+        var $p = $('#ordersPagination');
+        $p.empty();
+        if (totalPages <= 1) return;
+
+        var start = Math.max(1, page - 2);
+        var end = Math.min(totalPages, page + 2);
+        var nums = '';
+        for (var i = start; i <= end; i++) {
+            nums += '<button type="button" class="pagination-number' + (i === page ? ' active' : '') + '" data-page="' + i + '">' + i + '</button>';
         }
-        
-        let html = '<div class="order-items-list">';
-        items.forEach(function(item) {
-            const optionsHtml = item.options && item.options.length > 0 
-                ? '<div class="item-options">' + item.options.map(function(opt) {
-                    return `<span class="item-option">${escapeHtml(opt.TenNhom)}: ${escapeHtml(opt.TenGiaTri)}</span>`;
-                }).join(', ') + '</div>'
-                : '';
-            
-            html += `
-                <div class="order-item">
-                    <div class="item-info">
-                        <span class="item-name">${escapeHtml(item.TenSP)}</span>
-                        ${optionsHtml}
-                        <span class="item-quantity">x${item.SoLuong}</span>
-                    </div>
-                    <div class="item-price">${formatCurrency(item.ItemTotal || (item.GiaCoBan * item.SoLuong))}</div>
-                </div>
-            `;
+        var html = '<div class="orders-pagination-inner">' +
+            '<p class="pagination-info">Trang ' + page + ' trên ' + totalPages + '</p>' +
+            '<div class="pagination-controls">' +
+            '<button type="button" class="pagination-arrow" data-page="' + (page - 1) + '"' + (page <= 1 ? ' disabled' : '') + '>&lt;</button>' +
+            '<div class="pagination-numbers">' + nums + '</div>' +
+            '<button type="button" class="pagination-arrow" data-page="' + (page + 1) + '"' + (page >= totalPages ? ' disabled' : '') + '>&gt;</button>' +
+            '</div>' +
+            '</div>';
+        $p.html(html);
+        $p.find('.pagination-number, .pagination-arrow').on('click', function() {
+            var p = parseInt($(this).data('page'), 10);
+            if (p >= 1 && p <= totalPages) loadOrders(p);
         });
-        html += '</div>';
-        return html;
     }
 
-    // Calculate subtotal from items
-    function calculateSubtotal(items) {
-        if (!items || items.length === 0) return 0;
-        let subtotal = 0;
-        items.forEach(function(item) {
-            subtotal += (item.ItemTotal || (item.GiaCoBan * item.SoLuong));
+    // Open order detail modal: fetch get_one and render 4 sections
+    function openOrderDetail(orderId) {
+        var $modal = $('#orderDetailModal');
+        var $body = $('#orderDetailBody');
+        $body.html('<div class="order-detail-loading">Đang tải...</div>');
+        $modal.show();
+
+        $.ajax({
+            url: '../../api/order/get_one.php',
+            method: 'GET',
+            data: { id: orderId },
+            dataType: 'json',
+            success: function(res) {
+                if (res.success && res.order) {
+                    $body.html(renderOrderDetail(res.order));
+                } else {
+                    $body.html('<p class="order-detail-error">Không tải được đơn hàng.</p>');
+                }
+            },
+            error: function() {
+                $body.html('<p class="order-detail-error">Có lỗi xảy ra. Vui lòng thử lại.</p>');
+            }
         });
-        return subtotal;
     }
 
-    // Get status class for styling
+    // Render order detail (4 sections as in design)
+    function renderOrderDetail(o) {
+        var statusClass = getStatusClass(o.TrangThai);
+        var statusText = getStatusText(o.TrangThai);
+        var basePath = '../../';
+        var sect1 = '<div class="order-detail-section">' +
+            '<h3 class="order-detail-section-title">Thông tin đơn hàng</h3>' +
+            '<div class="order-detail-info-grid">' +
+            '<div class="info-item"><span class="info-label">Mã đơn hàng:</span> <span class="info-value">' + escapeHtml(o.OrderCode) + '</span></div>' +
+            '<div class="info-item"><span class="info-label">Thời gian đặt hàng:</span> <span class="info-value">' + escapeHtml(o.NgayTaoFormatted) + '</span></div>' +
+            '<div class="info-item"><span class="info-label">Trạng thái:</span> <span class="order-detail-status status-' + statusClass + '">' + escapeHtml(statusText) + '</span></div>' +
+            '<div class="info-item"><span class="info-label">Hình thức thanh toán:</span> <span class="info-value">' + escapeHtml(o.PaymentMethod) + '</span></div>' +
+            '</div></div>';
+
+        var sect2 = '<div class="order-detail-section">' +
+            '<h3 class="order-detail-section-title">Thông tin nhận hàng</h3>' +
+            '<div class="order-detail-info-grid">' +
+            '<div class="info-item"><span class="info-label">Họ và tên:</span> <span class="info-value">' + escapeHtml(o.NguoiNhan || '') + '</span></div>' +
+            '<div class="info-item"><span class="info-label">Số điện thoại:</span> <span class="info-value">' + escapeHtml(o.DienThoaiGiao || '') + '</span></div>' +
+            '<div class="info-item full"><span class="info-label">Địa chỉ nhận hàng:</span> <span class="info-value">' + escapeHtml(o.DiaChiGiao || '') + '</span></div>' +
+            '</div></div>';
+
+        var productsHtml = '';
+        if (o.items && o.items.length > 0) {
+            o.items.forEach(function(it) {
+                var img = (it.HinhAnh && it.HinhAnh.indexOf('http') !== 0) ? (basePath + (it.HinhAnh || 'assets/img/products/product_one.png')) : (it.HinhAnh || (basePath + 'assets/img/products/product_one.png'));
+                var opts = [];
+                if (it.options && it.options.length) {
+                    it.options.forEach(function(opt) {
+                        var t = (parseFloat(opt.GiaThem) || 0) > 0 ? '+ ' + (opt.TenGiaTri || '') : (opt.TenGiaTri || '');
+                        opts.push(escapeHtml(t));
+                    });
+                }
+                var optsStr = opts.length ? '<div class="order-detail-item-options">' + opts.join(', ') + '</div>' : '';
+                var giaHienTai = parseFloat(it.GiaCoBan);
+                var giaThamKhao = parseFloat(it.GiaThamKhao || it.SanPhamGiaCoBan || 0);
+                var oldPrice = (giaThamKhao > giaHienTai) ? '<span class="order-detail-item-old-price">' + formatCurrency(giaThamKhao) + '</span>' : '';
+                productsHtml += '<div class="order-detail-product">' +
+                    '<div class="order-detail-product-img"><img src="' + escapeHtml(img) + '" alt=""></div>' +
+                    '<div class="order-detail-product-info">' +
+                    '<p class="order-detail-product-name">x' + (it.SoLuong || 1) + ' ' + escapeHtml(it.TenSP || '') + '</p>' +
+                    optsStr +
+                    '<div class="order-detail-product-price">' +
+                    '<span class="order-detail-item-current-price">' + formatCurrency(giaHienTai) + '</span> ' + oldPrice +
+                    '</div></div></div>';
+            });
+        }
+        var sect3 = '<div class="order-detail-section">' +
+            '<h3 class="order-detail-section-title">Sản phẩm (' + (o.items ? o.items.length : 0) + ')</h3>' +
+            '<div class="order-detail-products">' + (productsHtml || '<p>Không có sản phẩm</p>') + '</div></div>';
+
+        var sect4 = '<div class="order-detail-section">' +
+            '<h3 class="order-detail-section-title">Số tiền thanh toán</h3>' +
+            '<div class="order-detail-summary">' +
+            '<div class="order-detail-summary-row"><span class="info-label">Tạm tính:</span> <span class="info-value">' + formatCurrency(o.Subtotal || 0) + '</span></div>' +
+            '<div class="order-detail-summary-row"><span class="info-label">Phí vận chuyển:</span> <span class="info-value">' + formatCurrency(o.PhiVanChuyen || 0) + '</span></div>' +
+            '<div class="order-detail-summary-row"><span class="info-label">Khuyến mãi:</span> <span class="info-value">-' + formatCurrency(o.GiamGia || 0) + '</span></div>' +
+            '<div class="order-detail-summary-row total"><span class="info-label">Số tiền thanh toán:</span> <span class="info-value">' + formatCurrency(o.TongTien || 0) + '</span></div>' +
+            '</div></div>';
+
+        return sect1 + sect2 + sect3 + sect4;
+    }
+
     function getStatusClass(status) {
-        const statusLower = (status || '').toLowerCase();
-        if (statusLower === 'completed' || statusLower === 'hoàn thành') {
-            return 'completed';
-        } else if (statusLower === 'pending' || statusLower === 'chờ xử lý') {
-            return 'pending';
-        } else if (statusLower === 'processing' || statusLower === 'đang xử lý') {
-            return 'processing';
-        } else if (statusLower === 'cancelled' || statusLower === 'đã hủy') {
-            return 'cancelled';
-        }
-        return 'default';
+        var s = (status || '').toLowerCase();
+        if (s === 'completed') return 'completed';
+        if (s === 'cancelled' || s === 'store_cancelled') return 'cancelled';
+        if (s === 'delivering' || s === 'processing') return 'delivering';
+        if (s === 'payment_received' || s === 'pending') return 'received';
+        return 'received';
     }
 
-    // Get status text in Vietnamese
     function getStatusText(status) {
-        const statusLower = (status || '').toLowerCase();
-        const statusMap = {
-            'pending': 'Chờ xử lý',
-            'processing': 'Đang xử lý',
-            'completed': 'Hoàn thành',
-            'cancelled': 'Đã hủy',
-            'delivering': 'Đang giao hàng'
-        };
-        return statusMap[statusLower] || status || 'Chờ xử lý';
+        var s = (status || '').toLowerCase();
+        if (s === 'completed') return 'Hoàn thành';
+        if (s === 'cancelled' || s === 'store_cancelled') return 'Cửa hàng hủy';
+        if (s === 'delivering' || s === 'processing') return 'Đang giao hàng';
+        if (s === 'payment_received' || s === 'pending') return 'Đã nhận đơn';
+        return 'Đã nhận đơn';
     }
-
-    // Use formatCurrency and escapeHtml from common.js
 });

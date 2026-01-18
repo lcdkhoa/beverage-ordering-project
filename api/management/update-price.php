@@ -41,8 +41,8 @@ try {
     // Get database connection
     $pdo = getDBConnection();
 
-    // Update product price
-    $sql = "UPDATE SanPham SET GiaCoBan = ? WHERE MaSP = ?";
+    // Update product selling price (GiaNiemYet)
+    $sql = "UPDATE SanPham SET GiaNiemYet = ? WHERE MaSP = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$newPrice, $productId]);
 

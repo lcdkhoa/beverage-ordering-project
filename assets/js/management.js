@@ -286,7 +286,8 @@ $(document).ready(function () {
     // Validation
     const tenSP = $("#product-name").val().trim();
     const maCategory = $("#product-category").val();
-    const giaCoBan = $("#product-price").val();
+    const giaNiemYet = $("#product-price").val();
+    const giaCoBan = $("#product-reference-price").val().trim();
     const imageFile = $("#product-image")[0].files[0];
 
     if (!tenSP) {
@@ -299,8 +300,8 @@ $(document).ready(function () {
       return;
     }
 
-    if (!giaCoBan || giaCoBan < 0) {
-      showAlert("Vui lòng nhập giá bán hợp lệ", "error", ".management-content");
+    if (!giaNiemYet || giaNiemYet < 0) {
+      showAlert("Vui lòng nhập giá niêm yết hợp lệ", "error", ".management-content");
       return;
     }
 
@@ -308,7 +309,8 @@ $(document).ready(function () {
     const formData = new FormData();
     formData.append("ten_sp", tenSP);
     formData.append("ma_category", maCategory);
-    formData.append("gia_co_ban", giaCoBan);
+    formData.append("gia_niem_yet", giaNiemYet);
+    if (giaCoBan !== "") formData.append("gia_co_ban", giaCoBan);
     formData.append("hinh_anh", imageFile);
 
     // Submit via AJAX
@@ -672,7 +674,7 @@ $(document).ready(function () {
         categoryProducts.forEach(function (product) {
           const imagePath =
             product.HinhAnh || "assets/img/products/product_one.png";
-          const price = formatCurrency(product.GiaCoBan);
+          const price = formatCurrency(product.GiaNiemYet || product.GiaCoBan);
 
           html += "<tr>";
           html += "<td>" + product.MaSP + "</td>";
@@ -700,7 +702,7 @@ $(document).ready(function () {
               escapeHtml(product.TenSP) +
               '" ' +
               'data-product-price="' +
-              product.GiaCoBan +
+              (product.GiaNiemYet || product.GiaCoBan) +
               '">';
             html +=
               '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">';

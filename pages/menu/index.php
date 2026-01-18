@@ -267,6 +267,7 @@ if ($showBestSeller) {
                         <form id="modal-product-form">
                             <input type="hidden" id="modal-product-id" name="product_id">
                             <input type="hidden" id="modal-base-price" name="base_price">
+                            <input type="hidden" id="modal-reference-price" name="reference_price">
                             
                             <div id="modal-option-groups" style="margin-top: 20px;"></div>
                             

@@ -13,6 +13,27 @@ $(document).ready(function () {
       .text(length + "/52 ký tự");
   });
 
+  // Address: show edit block
+  $("#change-address-btn").on("click", function (e) {
+    e.preventDefault();
+    $("#delivery-address-input").val($("#delivery-address").val());
+    $("#address-edit-block").slideDown(300);
+    $("#delivery-address-input").focus();
+  });
+
+  $("#btn-cancel-address").on("click", function () {
+    $("#address-edit-block").slideUp(300);
+  });
+
+  // Save delivery address for this order only (does not update User.DiaChi)
+  $("#btn-save-address").on("click", function () {
+    const val = $("#delivery-address-input").val().trim();
+    $("#delivery-address").val(val);
+    $("#delivery-address-display").text(val || "Chưa có địa chỉ");
+    $("#change-address-btn").text(val ? "Đổi địa chỉ" : "Thêm địa chỉ");
+    $("#address-edit-block").slideUp(300);
+  });
+
   // VAT invoice checkbox
   $("#vat-invoice").on("change", function () {
     if ($(this).is(":checked")) {
@@ -238,6 +259,13 @@ $(document).ready(function () {
       return;
     }
 
+    const deliveryAddr = $("#delivery-address").val().trim();
+    if (!deliveryAddr) {
+      alert("Vui lòng nhập địa chỉ giao hàng");
+      $("#change-address-btn").trigger("click");
+      return;
+    }
+
     const province = $("#province-select").val();
     if (!province) {
       alert("Vui lòng chọn Tỉnh/Thành phố");
@@ -276,6 +304,7 @@ $(document).ready(function () {
     const orderData = {
       store_id: storeId,
       payment_method: paymentMethod,
+      delivery_address: $("#delivery-address").val().trim(),
       order_note: $("#order-note").val(),
       vat_invoice: $("#vat-invoice").is(":checked") ? 1 : 0,
       vat_email: $("input[name='vat_email']").val() || "",

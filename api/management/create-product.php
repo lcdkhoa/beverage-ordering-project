@@ -27,7 +27,8 @@ try {
 
     // Get POST data
     $tenSP = isset($_POST['ten_sp']) ? trim($_POST['ten_sp']) : '';
-    $giaCoBan = isset($_POST['gia_co_ban']) ? trim($_POST['gia_co_ban']) : '';
+    $giaNiemYet = isset($_POST['gia_niem_yet']) ? trim($_POST['gia_niem_yet']) : '';
+    $giaCoBan = isset($_POST['gia_co_ban']) && $_POST['gia_co_ban'] !== '' ? trim($_POST['gia_co_ban']) : null;
     $maCategory = isset($_POST['ma_category']) ? (int)$_POST['ma_category'] : 0;
 
     // Validation
@@ -35,8 +36,17 @@ try {
         throw new Exception('Vui lòng nhập tên sản phẩm');
     }
 
-    if (empty($giaCoBan) || !is_numeric($giaCoBan) || $giaCoBan < 0) {
-        throw new Exception('Giá bán không hợp lệ');
+    if (empty($giaNiemYet) || !is_numeric($giaNiemYet) || $giaNiemYet < 0) {
+        throw new Exception('Giá niêm yết không hợp lệ');
+    }
+    $giaNiemYet = (float)$giaNiemYet;
+    if ($giaCoBan !== null) {
+        if (!is_numeric($giaCoBan) || $giaCoBan < 0) {
+            throw new Exception('Giá tham khảo không hợp lệ');
+        }
+        $giaCoBan = (float)$giaCoBan;
+    } else {
+        $giaCoBan = $giaNiemYet;
     }
 
     if (!$maCategory) {
@@ -126,11 +136,11 @@ try {
         }
     }
 
-    // Insert new product
-    $sql = "INSERT INTO SanPham (TenSP, GiaCoBan, HinhAnh, MaCategory, TrangThai) 
-            VALUES (?, ?, ?, ?, 1)";
+    // Insert new product (GiaNiemYet = selling price, GiaCoBan = reference/strikethrough)
+    $sql = "INSERT INTO SanPham (TenSP, GiaNiemYet, GiaCoBan, HinhAnh, MaCategory, TrangThai) 
+            VALUES (?, ?, ?, ?, ?, 1)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$tenSP, $giaCoBan, $hinhAnh, $maCategory]);
+    $stmt->execute([$tenSP, $giaNiemYet, $giaCoBan, $hinhAnh, $maCategory]);
 
     $productId = $pdo->lastInsertId();
 

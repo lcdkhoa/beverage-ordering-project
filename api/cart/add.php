@@ -28,6 +28,7 @@ try {
     $note = isset($_POST['note']) ? trim($_POST['note']) : '';
     $basePrice = isset($_POST['base_price']) ? (float)$_POST['base_price'] : 0;
     $totalPrice = isset($_POST['total_price']) ? (float)$_POST['total_price'] : 0;
+    $referencePrice = (isset($_POST['reference_price']) && $_POST['reference_price'] !== '') ? (float)$_POST['reference_price'] : null;
 
     if (!$productId) {
         throw new Exception('Product ID is required');
@@ -42,7 +43,7 @@ try {
     // Enrich options with full information from database
     $enrichedOptions = enrichCartOptions($options);
 
-    // Create cart item
+    // Create cart item (base_price = GiaNiemYet, reference_price = GiaCoBan for strikethrough)
     $cartItem = [
         'product_id' => $productId,
         'product_name' => $product['TenSP'],
@@ -50,6 +51,7 @@ try {
         'quantity' => $quantity,
         'base_price' => $basePrice,
         'total_price' => $totalPrice,
+        'reference_price' => $referencePrice,
         'options' => $enrichedOptions,
         'note' => $note,
         'added_at' => date('Y-m-d H:i:s')

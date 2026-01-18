@@ -105,12 +105,20 @@ $(document).ready(function () {
     const product = data.product;
     const optionGroups = data.optionGroups;
 
-    // Set product info
+    // Set product info: GiaNiemYet = price for calc, GiaCoBan = reference (strikethrough)
+    const giaNiemYet = product.GiaNiemYet ?? product.GiaCoBan ?? 0;
+    const giaCoBan = product.GiaCoBan ?? product.GiaNiemYet ?? giaNiemYet;
     $("#modal-product-id").val(product.MaSP);
-    $("#modal-base-price").val(product.GiaCoBan);
+    $("#modal-base-price").val(giaNiemYet);
     $("#modal-product-name").text(product.TenSP);
-    $("#modal-current-price").text(formatCurrency(product.GiaCoBan));
-    $("#modal-old-price").text(formatCurrency(product.GiaCoBan * 1.3));
+    $("#modal-current-price").text(formatCurrency(giaNiemYet));
+    if (giaCoBan > giaNiemYet) {
+      $("#modal-old-price").text(formatCurrency(giaCoBan)).show();
+      $("#modal-reference-price").val(giaCoBan);
+    } else {
+      $("#modal-old-price").hide();
+      $("#modal-reference-price").val("");
+    }
 
     // Set product image
     const imagePath = product.HinhAnh || "assets/img/products/product_one.png";
@@ -318,6 +326,8 @@ $(document).ready(function () {
           base_price: basePrice,
           total_price: total,
         };
+        var refPrice = parseFloat($("#modal-reference-price").val() || 0);
+        if (refPrice > basePrice) formData.reference_price = refPrice;
 
         // Send to cart API
         $.ajax({

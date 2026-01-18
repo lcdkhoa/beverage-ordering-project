@@ -44,14 +44,15 @@ try {
         ];
     }
     
-    // Format response
+    // Format response: GiaNiemYet = price for calculation, GiaCoBan = reference (strikethrough)
     $response = [
         'success' => true,
         'data' => [
             'product' => [
                 'MaSP' => $product['MaSP'],
                 'TenSP' => $product['TenSP'],
-                'GiaCoBan' => (float)$product['GiaCoBan'],
+                'GiaNiemYet' => (float)($product['GiaNiemYet'] ?? $product['GiaCoBan']),
+                'GiaCoBan' => (float)($product['GiaCoBan'] ?? $product['GiaNiemYet']),
                 'HinhAnh' => $product['HinhAnh'] ?? 'assets/img/products/product_one.png'
             ],
             'optionGroups' => array_values($optionGroups)

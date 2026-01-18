@@ -30,6 +30,7 @@ $user = getCurrentUser();
 $userFullName = getFullName($user['ho'] ?? '', $user['ten'] ?? '');
 $userPhone = $user['phone'] ?? '';
 $userEmail = $user['email'] ?? '';
+$userAddress = $_SESSION['user_dia_chi'] ?? '';
 
 // Get stores and payment methods
 $stores = getStores();
@@ -80,13 +81,20 @@ $basePath = '../../';
                                 <span class="info-value"><?php echo e($userPhone); ?></span>
                             </div>
                             <div class="info-row">
-                                <span class="info-label">Địa chỉ:</span>
-                                <span class="info-value">Văn phòng</span>
-                                <a href="#" class="change-address-link">Đổi địa chỉ</a>
+                                <span class="info-label">Địa chỉ giao hàng:</span>
+                                <span class="info-value" id="delivery-address-display"><?php echo e($userAddress ?: 'Chưa có địa chỉ'); ?></span>
+                                <a href="#" class="change-address-link" id="change-address-btn"><?php echo $userAddress ? 'Đổi địa chỉ' : 'Thêm địa chỉ'; ?></a>
                             </div>
-                            <div class="info-row address-row">
-                                <span class="info-value">54/31 Đ. Phổ Quang, Phường 2, Quận Tân Bình, Hồ Chí Minh</span>
+                            <div class="info-row address-row address-edit-row" id="address-edit-block" style="display: none;">
+                                <div class="address-edit-inner">
+                                    <textarea class="order-note-input" id="delivery-address-input" placeholder="Nhập địa chỉ giao hàng" maxlength="500" rows="3"><?php echo e($userAddress); ?></textarea>
+                                    <div class="address-edit-actions">
+                                        <button type="button" class="btn-save-address" id="btn-save-address">Lưu</button>
+                                        <button type="button" class="btn-cancel-address" id="btn-cancel-address">Hủy</button>
+                                    </div>
+                                </div>
                             </div>
+                            <input type="hidden" id="delivery-address" value="<?php echo e($userAddress); ?>">
                         </div>
                     </section>
 
@@ -225,6 +233,8 @@ $basePath = '../../';
                                 $quantity = isset($item['quantity']) ? (int)$item['quantity'] : 1;
                                 $itemTotal = isset($item['total_price']) ? (float)$item['total_price'] : $basePrice * $quantity;
                                 $options = isset($item['options']) ? $item['options'] : [];
+                                // Calculate price per unit including options
+                                $pricePerUnit = $quantity > 0 ? ($itemTotal / $quantity) : $basePrice;
                             ?>
                                 <div class="summary-item">
                                     <div class="summary-item-image">
@@ -247,9 +257,11 @@ $basePath = '../../';
                                             </div>
                                         <?php endif; ?>
                                         <div class="summary-item-price">
-                                            <span class="current-price"><?php echo formatCurrency($basePrice); ?></span>
-                                            <?php if ($basePrice < 45000): ?>
-                                                <span class="old-price">45.000₫</span>
+                                            <span class="current-price"><?php echo formatCurrency($pricePerUnit); ?></span>
+                                            <?php 
+                                            $refPrice = isset($item['reference_price']) ? (float)$item['reference_price'] : 0;
+                                            if ($refPrice > $pricePerUnit): ?>
+                                                <span class="old-price"><?php echo formatCurrency($refPrice); ?></span>
                                             <?php endif; ?>
                                         </div>
                                     </div>

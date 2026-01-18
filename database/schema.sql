@@ -61,6 +61,7 @@ DROP TABLE IF EXISTS `SanPham`;
 CREATE TABLE `SanPham` (
     `MaSP` INT AUTO_INCREMENT PRIMARY KEY,
     `TenSP` VARCHAR(200) NOT NULL,
+    `GiaNiemYet` DECIMAL(15, 0) NOT NULL DEFAULT 0,
     `GiaCoBan` DECIMAL(15, 0) NOT NULL DEFAULT 0,
     `HinhAnh` VARCHAR(255),
     `TrangThai` TINYINT(1) DEFAULT 1,
@@ -160,7 +161,10 @@ CREATE TABLE `Orders` (
     `MaOrder` INT AUTO_INCREMENT PRIMARY KEY,
     `MaUser` INT NOT NULL,
     `MaStore` INT NOT NULL,
+    `MaPayment` INT DEFAULT NULL,
     `DiaChiGiao` TEXT NOT NULL,
+    `NguoiNhan` VARCHAR(200) DEFAULT NULL,
+    `DienThoaiGiao` VARCHAR(20) DEFAULT NULL,
     `PhiVanChuyen` DECIMAL(15, 0) DEFAULT 0,
     `MaPromotion` INT DEFAULT NULL,
     `GiamGia` DECIMAL(15, 0) DEFAULT 0,
@@ -169,7 +173,8 @@ CREATE TABLE `Orders` (
     `NgayTao` DATETIME DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT `FK_Order_User` FOREIGN KEY (`MaUser`) REFERENCES `User` (`MaUser`),
     CONSTRAINT `FK_Order_Store` FOREIGN KEY (`MaStore`) REFERENCES `Store` (`MaStore`),
-    CONSTRAINT `FK_Order_Promotion` FOREIGN KEY (`MaPromotion`) REFERENCES `Promotion` (`MaPromotion`)
+    CONSTRAINT `FK_Order_Promotion` FOREIGN KEY (`MaPromotion`) REFERENCES `Promotion` (`MaPromotion`),
+    CONSTRAINT `FK_Order_Payment` FOREIGN KEY (`MaPayment`) REFERENCES `Payment_Method` (`MaPayment`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 14. Bảng ORDER_ITEM
@@ -179,7 +184,7 @@ CREATE TABLE `Order_Item` (
     `MaOrder` INT NOT NULL,
     `MaSP` INT NOT NULL,
     `SoLuong` INT DEFAULT 1,
-    `GiaCoBan` DECIMAL(15, 0) NOT NULL,
+    `GiaNiemYet` DECIMAL(15, 0) NOT NULL,
     CONSTRAINT `FK_OI_Order` FOREIGN KEY (`MaOrder`) REFERENCES `Orders` (`MaOrder`) ON DELETE CASCADE,
     CONSTRAINT `FK_OI_SP` FOREIGN KEY (`MaSP`) REFERENCES `SanPham` (`MaSP`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
