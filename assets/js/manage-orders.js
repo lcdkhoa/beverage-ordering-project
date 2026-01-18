@@ -218,6 +218,9 @@ $(document).ready(function() {
                 if (res.success && res.order) {
                     $body.html(renderManageOrderDetail(res.order));
                     
+                    // Initialize collapsible sections
+                    initCollapsibleSections();
+                    
                     // Attach event handlers for action buttons
                     $('#acceptOrderBtn').on('click', function() {
                         updateOrderStatus(orderId, 'accept');
@@ -237,29 +240,40 @@ $(document).ready(function() {
         });
     }
 
+    // Initialize collapsible sections
+    function initCollapsibleSections() {
+        $('#manageOrderDetailBody').off('click', '.order-detail-section.collapsible .order-detail-section-title');
+        $('#manageOrderDetailBody').on('click', '.order-detail-section.collapsible .order-detail-section-title', function() {
+            var $section = $(this).closest('.order-detail-section');
+            $section.toggleClass('collapsed');
+        });
+    }
+
     // Render manage order detail (with action buttons if payment_received)
     function renderManageOrderDetail(o) {
         var statusClass = getManageStatusClass(o.TrangThai);
         var statusText = getManageStatusText(o.TrangThai);
         var basePath = '../../';
         
-        var sect1 = '<div class="order-detail-section">' +
+        var sect1 = '<div class="order-detail-section collapsible">' +
             '<h3 class="order-detail-section-title">Thông tin đơn hàng</h3>' +
+            '<div class="order-detail-section-content">' +
             '<div class="order-detail-info-grid">' +
             '<div class="info-item"><span class="info-label">Mã đơn hàng:</span> <span class="info-value">' + escapeHtml(o.OrderCode) + '</span></div>' +
             '<div class="info-item"><span class="info-label">Khách hàng:</span> <span class="info-value">' + escapeHtml(o.CustomerName) + '</span></div>' +
             '<div class="info-item"><span class="info-label">Thời gian đặt hàng:</span> <span class="info-value">' + escapeHtml(o.NgayTaoFormatted) + '</span></div>' +
             '<div class="info-item"><span class="info-label">Trạng thái:</span> <span class="order-detail-status status-' + statusClass + '">' + escapeHtml(statusText) + '</span></div>' +
             '<div class="info-item"><span class="info-label">Hình thức thanh toán:</span> <span class="info-value">' + escapeHtml(o.PaymentMethod) + '</span></div>' +
-            '</div></div>';
+            '</div></div></div>';
 
-        var sect2 = '<div class="order-detail-section">' +
+        var sect2 = '<div class="order-detail-section collapsible">' +
             '<h3 class="order-detail-section-title">Thông tin nhận hàng</h3>' +
+            '<div class="order-detail-section-content">' +
             '<div class="order-detail-info-grid">' +
             '<div class="info-item"><span class="info-label">Họ và tên:</span> <span class="info-value">' + escapeHtml(o.NguoiNhan || '') + '</span></div>' +
             '<div class="info-item"><span class="info-label">Số điện thoại:</span> <span class="info-value">' + escapeHtml(o.DienThoaiGiao || '') + '</span></div>' +
             '<div class="info-item full"><span class="info-label">Địa chỉ nhận hàng:</span> <span class="info-value">' + escapeHtml(o.DiaChiGiao || '') + '</span></div>' +
-            '</div></div>';
+            '</div></div></div>';
 
         var productsHtml = '';
         if (o.items && o.items.length > 0) {
@@ -291,9 +305,10 @@ $(document).ready(function() {
                     '</div></div></div>';
             });
         }
-        var sect3 = '<div class="order-detail-section">' +
+        var sect3 = '<div class="order-detail-section collapsible">' +
             '<h3 class="order-detail-section-title">Sản phẩm (' + (o.items ? o.items.length : 0) + ')</h3>' +
-            '<div class="order-detail-products">' + (productsHtml || '<p>Không có sản phẩm</p>') + '</div></div>';
+            '<div class="order-detail-section-content">' +
+            '<div class="order-detail-products">' + (productsHtml || '<p>Không có sản phẩm</p>') + '</div></div></div>';
 
         var sect4 = '<div class="order-detail-section">' +
             '<h3 class="order-detail-section-title">Số tiền thanh toán</h3>' +
