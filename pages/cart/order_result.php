@@ -159,8 +159,8 @@ $orderStatus = $order['TrangThai'] ?? 'Payment_Received';
 $orderDate = $order['NgayTao'] ?? date('Y-m-d H:i:s');
 
 // Determine which steps are completed based on order status
-$step1Completed = in_array($orderStatus, ['Payment_Received', 'Order_Received', 'Delivering', 'Completed']);
-$step2Completed = in_array($orderStatus, ['Order_Received', 'Delivering', 'Completed']);
+$step1Completed = in_array($orderStatus, ['Payment_Received', 'Pending', 'Processing', 'Order_Received', 'Delivering', 'Completed']);
+$step2Completed = in_array($orderStatus, ['Processing', 'Order_Received', 'Delivering', 'Completed']);
 $step3Completed = in_array($orderStatus, ['Delivering', 'Completed']);
 $step4Completed = ($orderStatus === 'Completed');
 

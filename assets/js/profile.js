@@ -354,7 +354,7 @@ $(document).ready(function() {
         });
     }
 
-    // Open order detail modal: fetch get_one and render 4 sections
+    // Open order detail modal: load from PHP view
     function openOrderDetail(orderId) {
         var $modal = $('#orderDetailModal');
         var $body = $('#orderDetailBody');
@@ -362,91 +362,29 @@ $(document).ready(function() {
         $modal.show();
 
         $.ajax({
-            url: '../../api/order/get_one.php',
+            url: 'order-detail-view.php',
             method: 'GET',
             data: { id: orderId },
-            dataType: 'json',
-            success: function(res) {
-                if (res.success && res.order) {
-                    $body.html(renderOrderDetail(res.order));
-                } else {
-                    $body.html('<p class="order-detail-error">Không tải được đơn hàng.</p>');
-                }
+            success: function(html) {
+                $body.html(html);
+                // Initialize collapsible sections
+                initCollapsibleSections();
             },
             error: function() {
                 $body.html('<p class="order-detail-error">Có lỗi xảy ra. Vui lòng thử lại.</p>');
             }
         });
     }
-
-    // Render order detail (4 sections as in design)
-    function renderOrderDetail(o) {
-        var statusClass = getStatusClass(o.TrangThai);
-        var statusText = getStatusText(o.TrangThai);
-        var basePath = '../../';
-        var sect1 = '<div class="order-detail-section">' +
-            '<h3 class="order-detail-section-title">Thông tin đơn hàng</h3>' +
-            '<div class="order-detail-info-grid">' +
-            '<div class="info-item"><span class="info-label">Mã đơn hàng:</span> <span class="info-value">' + escapeHtml(o.OrderCode) + '</span></div>' +
-            '<div class="info-item"><span class="info-label">Thời gian đặt hàng:</span> <span class="info-value">' + escapeHtml(o.NgayTaoFormatted) + '</span></div>' +
-            '<div class="info-item"><span class="info-label">Trạng thái:</span> <span class="order-detail-status status-' + statusClass + '">' + escapeHtml(statusText) + '</span></div>' +
-            '<div class="info-item"><span class="info-label">Hình thức thanh toán:</span> <span class="info-value">' + escapeHtml(o.PaymentMethod) + '</span></div>' +
-            '</div></div>';
-
-        var sect2 = '<div class="order-detail-section">' +
-            '<h3 class="order-detail-section-title">Thông tin nhận hàng</h3>' +
-            '<div class="order-detail-info-grid">' +
-            '<div class="info-item"><span class="info-label">Họ và tên:</span> <span class="info-value">' + escapeHtml(o.NguoiNhan || '') + '</span></div>' +
-            '<div class="info-item"><span class="info-label">Số điện thoại:</span> <span class="info-value">' + escapeHtml(o.DienThoaiGiao || '') + '</span></div>' +
-            '<div class="info-item full"><span class="info-label">Địa chỉ nhận hàng:</span> <span class="info-value">' + escapeHtml(o.DiaChiGiao || '') + '</span></div>' +
-            '</div></div>';
-
-        var productsHtml = '';
-        if (o.items && o.items.length > 0) {
-            o.items.forEach(function(it) {
-                var img = (it.HinhAnh && it.HinhAnh.indexOf('http') !== 0) ? (basePath + (it.HinhAnh || 'assets/img/products/product_one.png')) : (it.HinhAnh || (basePath + 'assets/img/products/product_one.png'));
-                var opts = [];
-                if (it.options && it.options.length) {
-                    it.options.forEach(function(opt) {
-                        var t = (parseFloat(opt.GiaThem) || 0) > 0 ? '+ ' + (opt.TenGiaTri || '') : (opt.TenGiaTri || '');
-                        opts.push(escapeHtml(t));
-                    });
-                }
-                var optsStr = opts.length ? '<div class="order-detail-item-options">' + opts.join(', ') + '</div>' : '';
-                
-                // Calculate total price including options
-                var giaHienTai = parseFloat(it.GiaCoBan);
-                if (it.options && it.options.length) {
-                    it.options.forEach(function(opt) {
-                        giaHienTai += parseFloat(opt.GiaThem || 0);
-                    });
-                }
-                
-                productsHtml += '<div class="order-detail-product">' +
-                    '<div class="order-detail-product-img"><img src="' + escapeHtml(img) + '" alt=""></div>' +
-                    '<div class="order-detail-product-info">' +
-                    '<p class="order-detail-product-name">x' + (it.SoLuong || 1) + ' ' + escapeHtml(it.TenSP || '') + '</p>' +
-                    optsStr +
-                    '<div class="order-detail-product-price">' +
-                    '<span class="order-detail-item-current-price">' + formatCurrency(giaHienTai) + '</span>' +
-                    '</div></div></div>';
-            });
-        }
-        var sect3 = '<div class="order-detail-section">' +
-            '<h3 class="order-detail-section-title">Sản phẩm (' + (o.items ? o.items.length : 0) + ')</h3>' +
-            '<div class="order-detail-products">' + (productsHtml || '<p>Không có sản phẩm</p>') + '</div></div>';
-
-        var sect4 = '<div class="order-detail-section">' +
-            '<h3 class="order-detail-section-title">Số tiền thanh toán</h3>' +
-            '<div class="order-detail-summary">' +
-            '<div class="order-detail-summary-row"><span class="info-label">Tạm tính:</span> <span class="info-value">' + formatCurrency(o.Subtotal || 0) + '</span></div>' +
-            '<div class="order-detail-summary-row"><span class="info-label">Phí vận chuyển:</span> <span class="info-value">' + formatCurrency(o.PhiVanChuyen || 0) + '</span></div>' +
-            '<div class="order-detail-summary-row"><span class="info-label">Khuyến mãi:</span> <span class="info-value">' + ((o.GiamGia || 0) > 0 ? '-' : '') + formatCurrency(o.GiamGia || 0) + '</span></div>' +
-            '<div class="order-detail-summary-row total"><span class="info-label">Số tiền thanh toán:</span> <span class="info-value">' + formatCurrency(o.TongTien || 0) + '</span></div>' +
-            '</div></div>';
-
-        return sect1 + sect2 + sect3 + sect4;
+    
+    // Initialize collapsible sections
+    function initCollapsibleSections() {
+        $('#orderDetailBody').off('click', '.order-detail-section.collapsible .order-detail-section-title');
+        $('#orderDetailBody').on('click', '.order-detail-section.collapsible .order-detail-section-title', function() {
+            var $section = $(this).closest('.order-detail-section');
+            $section.toggleClass('collapsed');
+        });
     }
+
 
     function getStatusClass(status) {
         var s = (status || '').toLowerCase();
