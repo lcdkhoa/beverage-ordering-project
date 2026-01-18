@@ -80,7 +80,7 @@ try {
 
     foreach ($orders as &$order) {
         $orderId = $order['MaOrder'];
-        $order['OrderCode'] = '#' . str_pad($orderId, 9, '0', STR_PAD_LEFT);
+        $order['OrderCode'] = '#MTF' . str_pad($orderId, 5, '0', STR_PAD_LEFT);
 
         $paymentMethodName = 'Chưa xác định';
         $paymentId = $order['MaPayment'] ?? $_SESSION['order_payment_' . $orderId] ?? null;

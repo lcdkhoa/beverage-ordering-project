@@ -69,7 +69,7 @@ if (!$order) {
                     </div>
                     <h1 class="not-found-title">Đơn hàng không tồn tại</h1>
                     <p class="not-found-message">
-                        Không tìm thấy đơn hàng với mã <strong>#<?php echo e('AHDW' . str_pad($orderId, 3, '0', STR_PAD_LEFT)); ?></strong>
+                        Không tìm thấy đơn hàng với mã <strong>#<?php echo e('MTF' . str_pad($orderId, 5, '0', STR_PAD_LEFT)); ?></strong>
                     </p>
                     <p class="not-found-description">
                         Đơn hàng có thể đã bị xóa hoặc bạn không có quyền truy cập đơn hàng này.
@@ -148,7 +148,7 @@ $totalAmount = $order['TongTien'] ?? 0;
 $promotionDiscount = $order['GiamGia'] ?? 0;
 
 // Generate order code
-$orderCode = 'MTF-' . str_pad($orderId, 3, '0', STR_PAD_LEFT);
+$orderCode = 'MTF' . str_pad($orderId, 5, '0', STR_PAD_LEFT);
 
 // Estimated delivery time (1 hour from now)
 $estimatedDelivery = date('H:i d/m/Y', strtotime('+1 hour'));

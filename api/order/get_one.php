@@ -19,7 +19,12 @@ try {
         throw new Exception('User not logged in');
     }
 
-    $userId = (getCurrentUser())['id'];
+    $currentUser = getCurrentUser();
+    $userId = $currentUser['id'] ?? null;
+    if (!$userId) {
+        throw new Exception('User ID not found');
+    }
+
     $orderId = (int)($_GET['id'] ?? 0);
     if ($orderId <= 0) {
         throw new Exception('Invalid order id');
@@ -39,7 +44,7 @@ try {
         throw new Exception('Order not found');
     }
 
-    $order['OrderCode'] = '#' . str_pad($order['MaOrder'], 9, '0', STR_PAD_LEFT);
+    $order['OrderCode'] = '#MTF' . str_pad($order['MaOrder'], 5, '0', STR_PAD_LEFT);
     $order['NgayTaoFormatted'] = date('d/m/Y H:i:s', strtotime($order['NgayTao']));
 
     $paymentMethodName = 'Chưa xác định';
@@ -86,7 +91,9 @@ try {
         $st->execute([$item['MaOrderItem']]);
         $item['options'] = $st->fetchAll(PDO::FETCH_ASSOC);
 
-        $itemTotal = (float)$item['GiaCoBan'] * (int)$item['SoLuong'];
+        // Use GiaNiemYet (price at time of order) instead of GiaCoBan
+        $item['GiaCoBan'] = $item['GiaNiemYet']; // For compatibility with frontend
+        $itemTotal = (float)$item['GiaNiemYet'] * (int)$item['SoLuong'];
         foreach ($item['options'] as $opt) {
             $itemTotal += (float)$opt['GiaThem'] * (int)$item['SoLuong'];
         }
