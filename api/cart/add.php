@@ -60,6 +60,18 @@ try {
     // Add to cart (for now, just append - later can merge same items)
     $_SESSION['cart'][] = $cartItem;
 
+    // If user is logged in, save cart to database
+    if (isset($_SESSION['user']) && isset($_SESSION['user']['MaUser'])) {
+        $userId = $_SESSION['user']['MaUser'];
+        $storeId = isset($_SESSION['selected_store']) ? (int)$_SESSION['selected_store'] : 1;
+        
+        // Save to database (but don't fail the request if it fails)
+        $dbSaved = saveCartToDB($userId, $storeId);
+        if (!$dbSaved) {
+            error_log("Warning: Failed to save cart to database for user " . $userId);
+        }
+    }
+
     // Count total items
     $cartCount = 0;
     foreach ($_SESSION['cart'] as $item) {

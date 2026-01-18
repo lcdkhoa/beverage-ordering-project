@@ -44,6 +44,19 @@ try {
         $_SESSION['cart'][$itemIndex]['note'] = trim($_POST['note']);
     }
 
+    // If user is logged in, save cart to database
+    if (isset($_SESSION['user']) && isset($_SESSION['user']['MaUser'])) {
+        require_once '../../functions.php';
+        $userId = $_SESSION['user']['MaUser'];
+        $storeId = isset($_SESSION['selected_store']) ? (int)$_SESSION['selected_store'] : 1;
+        
+        // Save to database (but don't fail the request if it fails)
+        $dbSaved = saveCartToDB($userId, $storeId);
+        if (!$dbSaved) {
+            error_log("Warning: Failed to save cart to database for user " . $userId);
+        }
+    }
+
     // Calculate total cart count
     $cartCount = 0;
     $totalAmount = 0;

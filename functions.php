@@ -709,4 +709,200 @@ function getToppings() {
     return $formattedToppings;
 }
 
+/**
+ * Save cart to database for logged in user
+ * Lưu giỏ hàng từ session vào database
+ * @param int $userId - User ID
+ * @param int $storeId - Store ID
+ * @return bool - Success status
+ */
+function saveCartToDB($userId, $storeId) {
+    if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+        error_log("saveCartToDB: Cart is empty, nothing to save");
+        return true; // Nothing to save
+    }
+
+    error_log("saveCartToDB: Starting save for User ID: $userId, Store ID: $storeId, Items: " . count($_SESSION['cart']));
+
+    $pdo = getDBConnection();
+    
+    try {
+        $pdo->beginTransaction();
+        
+        // Check if user already has a cart for this store
+        $stmt = $pdo->prepare("SELECT MaCart FROM Cart WHERE MaUser = ? AND MaStore = ?");
+        $stmt->execute([$userId, $storeId]);
+        $existingCart = $stmt->fetch();
+        
+        if ($existingCart) {
+            $cartId = $existingCart['MaCart'];
+            error_log("saveCartToDB: Found existing cart ID: $cartId");
+            // Clear existing cart items
+            $stmt = $pdo->prepare("DELETE FROM Cart_Item WHERE MaCart = ?");
+            $stmt->execute([$cartId]);
+        } else {
+            // Create new cart
+            error_log("saveCartToDB: Creating new cart");
+            $stmt = $pdo->prepare("INSERT INTO Cart (MaUser, MaStore, NgayTao) VALUES (?, ?, NOW())");
+            $stmt->execute([$userId, $storeId]);
+            $cartId = $pdo->lastInsertId();
+            error_log("saveCartToDB: Created new cart ID: $cartId");
+        }
+        
+        // Insert cart items from session
+        foreach ($_SESSION['cart'] as $index => $item) {
+            error_log("saveCartToDB: Processing item $index - Product ID: " . ($item['product_id'] ?? 'N/A'));
+            
+            // Insert cart item with note
+            $note = isset($item['note']) ? $item['note'] : null;
+            $stmt = $pdo->prepare("INSERT INTO Cart_Item (MaCart, MaSP, SoLuong, GiaNiemYet, GhiChu) VALUES (?, ?, ?, ?, ?)");
+            $stmt->execute([
+                $cartId,
+                $item['product_id'],
+                $item['quantity'],
+                $item['base_price'],
+                $note
+            ]);
+            $cartItemId = $pdo->lastInsertId();
+            error_log("saveCartToDB: Inserted cart item ID: $cartItemId");
+            
+            // Insert cart item options
+            if (!empty($item['options'])) {
+                error_log("saveCartToDB: Item has " . count($item['options']) . " options");
+                foreach ($item['options'] as $option) {
+                    $stmt = $pdo->prepare("INSERT INTO Cart_Item_Option (MaCartItem, MaOptionValue, GiaThem) VALUES (?, ?, ?)");
+                    $stmt->execute([
+                        $cartItemId,
+                        $option['option_value_id'],
+                        $option['price']
+                    ]);
+                }
+            }
+        }
+        
+        $pdo->commit();
+        error_log("saveCartToDB: Successfully saved cart to DB");
+        return true;
+        
+    } catch (Exception $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        error_log("saveCartToDB ERROR: " . $e->getMessage());
+        error_log("saveCartToDB ERROR Trace: " . $e->getTraceAsString());
+        return false;
+    } catch (PDOException $e) {
+        if ($pdo->inTransaction()) {
+            $pdo->rollBack();
+        }
+        error_log("saveCartToDB PDO ERROR: " . $e->getMessage());
+        error_log("saveCartToDB PDO ERROR Code: " . $e->getCode());
+        return false;
+    }
+}
+
+/**
+ * Load cart from database for logged in user
+ * Tải giỏ hàng từ database vào session
+ * @param int $userId - User ID
+ * @param int $storeId - Store ID
+ * @return bool - Success status
+ */
+function loadCartFromDB($userId, $storeId) {
+    $pdo = getDBConnection();
+    
+    try {
+        // Get cart for this user and store
+        $stmt = $pdo->prepare("SELECT MaCart FROM Cart WHERE MaUser = ? AND MaStore = ?");
+        $stmt->execute([$userId, $storeId]);
+        $cart = $stmt->fetch();
+        
+        if (!$cart) {
+            return true; // No cart in database
+        }
+        
+        $cartId = $cart['MaCart'];
+        
+        // Get cart items
+        $stmt = $pdo->prepare("
+            SELECT ci.*, sp.TenSP, sp.HinhAnh, sp.GiaCoBan
+            FROM Cart_Item ci
+            INNER JOIN SanPham sp ON ci.MaSP = sp.MaSP
+            WHERE ci.MaCart = ?
+        ");
+        $stmt->execute([$cartId]);
+        $cartItems = $stmt->fetchAll();
+        
+        // Clear session cart before loading from DB
+        $_SESSION['cart'] = [];
+        
+        // Load items into session
+        foreach ($cartItems as $item) {
+            // Get item options
+            $stmt = $pdo->prepare("
+                SELECT cio.*, ov.TenGiaTri, og.TenNhom
+                FROM Cart_Item_Option cio
+                INNER JOIN Option_Value ov ON cio.MaOptionValue = ov.MaOptionValue
+                INNER JOIN Option_Group og ON ov.MaOptionGroup = og.MaOptionGroup
+                WHERE cio.MaCartItem = ?
+            ");
+            $stmt->execute([$item['MaCartItem']]);
+            $options = $stmt->fetchAll();
+            
+            // Format options
+            $formattedOptions = [];
+            $totalPrice = $item['GiaNiemYet'];
+            
+            foreach ($options as $option) {
+                $formattedOptions[] = [
+                    'option_value_id' => $option['MaOptionValue'],
+                    'option_name' => $option['TenGiaTri'],
+                    'group_name' => $option['TenNhom'],
+                    'price' => (float)$option['GiaThem']
+                ];
+                $totalPrice += (float)$option['GiaThem'];
+            }
+            
+            $totalPrice *= $item['SoLuong'];
+            
+            // Add to session cart
+            $_SESSION['cart'][] = [
+                'product_id' => $item['MaSP'],
+                'product_name' => $item['TenSP'],
+                'product_image' => $item['HinhAnh'] ?? 'assets/img/products/product_one.png',
+                'quantity' => $item['SoLuong'],
+                'base_price' => (float)$item['GiaNiemYet'],
+                'total_price' => $totalPrice,
+                'reference_price' => (float)$item['GiaCoBan'],
+                'options' => $formattedOptions,
+                'note' => $item['GhiChu'] ?? '',
+                'added_at' => date('Y-m-d H:i:s')
+            ];
+        }
+        
+        return true;
+        
+    } catch (Exception $e) {
+        error_log("Error loading cart from DB: " . $e->getMessage());
+        return false;
+    }
+}
+
+/**
+ * Merge session cart with database cart
+ * Gộp giỏ hàng session với database khi user login
+ * @param int $userId - User ID
+ * @param int $storeId - Store ID
+ * @return bool - Success status
+ */
+function mergeCartWithDB($userId, $storeId) {
+    // If session cart is empty, just load from DB
+    if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+        return loadCartFromDB($userId, $storeId);
+    }
+    
+    // If session cart has items, save to DB (overwrite)
+    return saveCartToDB($userId, $storeId);
+}
+
 ?>

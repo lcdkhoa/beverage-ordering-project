@@ -160,7 +160,7 @@ try {
                 continue;
             }
 
-            $sql = "INSERT INTO Order_Item (MaOrder, MaSP, SoLuong, GiaCoBan) 
+            $sql = "INSERT INTO Order_Item (MaOrder, MaSP, SoLuong, GiaNiemYet) 
                     VALUES (?, ?, ?, ?)";
             $stmt = $pdo->prepare($sql);
             $stmt->execute([$orderId, $productId, $quantity, $basePrice]);
@@ -169,8 +169,15 @@ try {
             // Insert order item options if any
             if (isset($item['options']) && is_array($item['options'])) {
                 foreach ($item['options'] as $option) {
+                    // Check both 'value_id' and 'option_value_id' for compatibility
+                    $optionValueId = 0;
                     if (isset($option['value_id'])) {
                         $optionValueId = (int)$option['value_id'];
+                    } elseif (isset($option['option_value_id'])) {
+                        $optionValueId = (int)$option['option_value_id'];
+                    }
+                    
+                    if ($optionValueId > 0) {
                         $optionPrice = isset($option['price']) ? (float)$option['price'] : 0;
 
                         $sql = "INSERT INTO Order_Item_Option (MaOrderItem, MaOptionValue, GiaThem) 

@@ -77,6 +77,29 @@ try {
     $_SESSION['user_role_name'] = $user['TenRole'];
     $_SESSION['logged_in'] = true;
 
+    // Store user info in array format for cart functions
+    $_SESSION['user'] = [
+        'MaUser' => $user['MaUser'],
+        'Username' => $user['Username'],
+        'Ho' => $user['Ho'],
+        'Ten' => $user['Ten'],
+        'Email' => $user['Email'],
+        'DienThoai' => $user['DienThoai'],
+        'DiaChi' => $user['DiaChi'] ?? '',
+        'MaRole' => $user['MaRole'],
+        'TenRole' => $user['TenRole']
+    ];
+
+    // Load cart from database for logged in user
+    require_once '../../functions.php';
+    $storeId = isset($_SESSION['selected_store']) ? (int)$_SESSION['selected_store'] : 1;
+    
+    // Merge session cart with database cart
+    $cartMerged = mergeCartWithDB($user['MaUser'], $storeId);
+    if (!$cartMerged) {
+        error_log("Warning: Failed to merge cart from database for user " . $user['MaUser']);
+    }
+
     $response = [
         'success' => true,
         'message' => 'Đăng nhập thành công',

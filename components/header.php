@@ -51,6 +51,41 @@ $isPromotion = strpos($currentPath, '/pages/promotion/') !== false;
 // Check if user is logged in
 $isLoggedIn = isset($_SESSION['logged_in']) && $_SESSION['logged_in'] === true;
 
+// Ensure $_SESSION['user'] array exists for cart functions
+if ($isLoggedIn && !isset($_SESSION['user'])) {
+    $_SESSION['user'] = [
+        'MaUser' => $_SESSION['user_id'] ?? null,
+        'Username' => $_SESSION['username'] ?? '',
+        'Ho' => $_SESSION['user_ho'] ?? '',
+        'Ten' => $_SESSION['user_ten'] ?? '',
+        'Email' => $_SESSION['user_email'] ?? '',
+        'DienThoai' => $_SESSION['user_phone'] ?? '',
+        'DiaChi' => $_SESSION['user_dia_chi'] ?? '',
+        'MaRole' => $_SESSION['user_role'] ?? null,
+        'TenRole' => $_SESSION['user_role_name'] ?? ''
+    ];
+}
+
+// Load cart from database if logged in and not loaded yet
+if ($isLoggedIn && isset($_SESSION['user']['MaUser']) && !isset($_SESSION['cart_loaded_from_db'])) {
+    $userId = $_SESSION['user']['MaUser'];
+    $storeId = isset($_SESSION['selected_store']) ? (int)$_SESSION['selected_store'] : 1;
+    
+    // Load cart from database (only if session cart is empty)
+    if (!isset($_SESSION['cart']) || empty($_SESSION['cart'])) {
+        $cartLoaded = loadCartFromDB($userId, $storeId);
+        if ($cartLoaded) {
+            $_SESSION['cart_loaded_from_db'] = true;
+        }
+    } else {
+        // If session cart has items, merge with DB (session takes priority)
+        $cartMerged = mergeCartWithDB($userId, $storeId);
+        if ($cartMerged) {
+            $_SESSION['cart_loaded_from_db'] = true;
+        }
+    }
+}
+
 // Check user role for management access
 $userRole = $isLoggedIn ? ($_SESSION['user_role_name'] ?? '') : '';
 $showManagement = $isLoggedIn && ($userRole === 'Staff' || $userRole === 'Admin');

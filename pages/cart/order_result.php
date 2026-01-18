@@ -145,7 +145,7 @@ foreach ($orderItems as $item) {
 
 $shippingFee = $order['PhiVanChuyen'] ?? 0;
 $totalAmount = $order['TongTien'] ?? 0;
-$promotionDiscount = $totalAmount - $subtotal - $shippingFee;
+$promotionDiscount = $order['GiamGia'] ?? 0;
 
 // Generate order code
 $orderCode = 'MTF-' . str_pad($orderId, 3, '0', STR_PAD_LEFT);
@@ -278,7 +278,7 @@ $iconPath = $basePath . 'assets/img/cart/order_result/';
                     <?php if ($promotionDiscount > 0): ?>
                     <div class="summary-detail-row">
                         <span class="detail-label">Khuyến mãi</span>
-                        <span class="detail-value promotion-value">-<?php echo formatCurrency($promotionDiscount); ?></span>
+                        <span class="detail-value" style="color: #e74c3c;">-<?php echo formatCurrency($promotionDiscount); ?></span>
                     </div>
                     <?php endif; ?>
                     <div class="summary-detail-row total-row">
@@ -307,5 +307,17 @@ $iconPath = $basePath . 'assets/img/cart/order_result/';
 
     <script src="<?php echo $basePath; ?>assets/js/common.js"></script>
     <script src="<?php echo $basePath; ?>assets/js/main.js"></script>
+    
+    <!-- Debug console log -->
+    <script>
+        console.log('=== Order Result Debug Info ===');
+        console.log('Order Items:', <?php echo json_encode($orderItems, JSON_UNESCAPED_UNICODE); ?>);
+        console.log('Subtotal:', <?php echo $subtotal; ?>);
+        console.log('Shipping Fee:', <?php echo $shippingFee; ?>);
+        console.log('Promotion Discount:', <?php echo $promotionDiscount; ?>);
+        console.log('Total Amount:', <?php echo $totalAmount; ?>);
+        console.log('Debug Data:', <?php echo json_encode($debugData, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>);
+        console.log('===============================');
+    </script>
 </body>
 </html>
