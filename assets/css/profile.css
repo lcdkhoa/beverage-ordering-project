@@ -202,7 +202,6 @@
 .form-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
 }
 
 .form-section-title {
@@ -271,7 +270,6 @@
   overflow: hidden;
   transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
   opacity: 1;
-  margin-top: 20px;
 }
 
 .collapsible-content.collapsed {
@@ -284,7 +282,8 @@
 .form-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
+  gap: 30px;
+  margin-bottom: 10px;
 }
 
 .form-group {
@@ -359,6 +358,7 @@
   resize: vertical;
   min-height: 80px;
   line-height: 1.5;
+  border-radius: 10px;
 }
 
 .form-input:disabled,
