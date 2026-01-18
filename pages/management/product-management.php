@@ -50,7 +50,10 @@ $basePath = '../../';
             <!-- Products Section -->
             <div id="products-section" class="management-section-content active">
                 <div class="management-header">
-                    <h1 class="page-title">Quản lý sản phẩm</h1>
+                    <div class="management-header-left">
+                        <h1 class="management-title">Quản lý sản phẩm</h1>
+                        <p class="management-subtitle">Quản lý danh mục sản phẩm và thông tin chi tiết</p>
+                    </div>
                     <?php if ($isAdmin): ?>
                         <?php 
                             $text = 'Thêm sản phẩm mới';
@@ -75,7 +78,10 @@ $basePath = '../../';
             <!-- Toppings Section -->
             <div id="toppings-section" class="management-section-content">
                 <div class="management-header">
-                    <h1 class="page-title">Quản lý Topping</h1>
+                    <div class="management-header-left">
+                        <h1 class="management-title">Quản lý Topping</h1>
+                        <p class="management-subtitle">Quản lý các loại topping bổ sung cho sản phẩm</p>
+                    </div>
                     <?php if ($isAdmin): ?>
                         <?php 
                             $text = 'Thêm topping mới';

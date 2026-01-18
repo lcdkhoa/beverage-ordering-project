@@ -9,6 +9,43 @@ $(document).ready(function() {
     loadManageOrders(1);
     loadUserFilter();
 
+    // Search input with debounce
+    let searchTimeout;
+    $('#manageOrderSearchInput').on('input', function() {
+        const searchValue = $(this).val().trim();
+        
+        // Show/hide clear button
+        if (searchValue) {
+            $('#clearSearchBtn').show();
+        } else {
+            $('#clearSearchBtn').hide();
+        }
+
+        // Clear previous timeout
+        clearTimeout(searchTimeout);
+        
+        // Set new timeout for search (300ms delay)
+        searchTimeout = setTimeout(function() {
+            loadManageOrders(1);
+        }, 300);
+    });
+
+    // Search on Enter key
+    $('#manageOrderSearchInput').on('keypress', function(e) {
+        if (e.which === 13) { // Enter key
+            e.preventDefault();
+            clearTimeout(searchTimeout);
+            loadManageOrders(1);
+        }
+    });
+
+    // Clear search button
+    $('#clearSearchBtn').on('click', function() {
+        $('#manageOrderSearchInput').val('');
+        $(this).hide();
+        loadManageOrders(1);
+    });
+
     // Manage Orders filters: reload on change (reset to page 1)
     $('#manageOrderUserFilter, #manageOrderStatusFilter, #manageOrderDaysFilter').on('change', function() {
         loadManageOrders(1);
@@ -65,7 +102,8 @@ $(document).ready(function() {
             per_page: 10,
             user_id: $('#manageOrderUserFilter').val() || '',
             status: $('#manageOrderStatusFilter').val() || '',
-            days: $('#manageOrderDaysFilter').val() || 30
+            days: $('#manageOrderDaysFilter').val() || 30,
+            search: $('#manageOrderSearchInput').val().trim() || ''
         };
 
         $.ajax({
@@ -83,6 +121,13 @@ $(document).ready(function() {
                         $pagination.show();
                     }
                 } else {
+                    // Update empty message based on search status
+                    var searchValue = $('#manageOrderSearchInput').val().trim();
+                    if (searchValue) {
+                        $empty.find('p').text('Không tìm thấy đơn hàng có mã "' + searchValue + '"');
+                    } else {
+                        $empty.find('p').text('Không có đơn hàng nào');
+                    }
                     $empty.show();
                 }
             },
@@ -302,17 +347,17 @@ $(document).ready(function() {
         if (s === 'completed') return 'completed';
         if (s === 'cancelled' || s === 'store_cancelled') return 'cancelled';
         if (s === 'delivering') return 'delivering';
-        if (s === 'processing') return 'delivering';
-        if (s === 'payment_received' || s === 'pending') return 'received';
-        return 'received';
+        if (s === 'processing' || s === 'order_received') return 'received';
+        if (s === 'payment_received' || s === 'pending') return 'payment-received';
+        return 'payment-received';
     }
 
     function getManageStatusText(status) {
         var s = (status || '').toLowerCase();
         if (s === 'completed') return 'Hoàn thành';
-        if (s === 'cancelled' || s === 'store_cancelled') return 'Đơn hàng hủy';
-        if (s === 'delivering') return 'Đang giao hàng';
-        if (s === 'processing') return 'Đã nhận đơn';
+        if (s === 'cancelled' || s === 'store_cancelled') return 'Hủy đơn';
+        if (s === 'delivering') return 'Đang vận chuyển';
+        if (s === 'processing' || s === 'order_received') return 'Đã nhận đơn';
         if (s === 'payment_received' || s === 'pending') return 'Đã nhận thanh toán';
         return 'Đã nhận thanh toán';
     }

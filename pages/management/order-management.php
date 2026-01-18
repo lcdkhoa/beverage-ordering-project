@@ -43,8 +43,10 @@ $basePath = '../../';
     <section class="management-section" style="background-color: var(--light-green); min-height: calc(100vh - 200px); padding: 30px;">
         <div class="container">
             <div class="management-header">
-                <h1 class="management-title">Quản lý đơn hàng</h1>
-                <p class="management-subtitle">Xem và quản lý tất cả đơn hàng trong hệ thống</p>
+                <div class="management-header-left">
+                    <h1 class="management-title">Quản lý đơn hàng</h1>
+                    <p class="management-subtitle">Xem và quản lý tất cả đơn hàng trong hệ thống</p>
+                </div>
             </div>
 
             <!-- Filters -->
@@ -54,7 +56,6 @@ $basePath = '../../';
                         <label class="filter-label">Khách hàng:</label>
                         <select id="manageOrderUserFilter" class="filter-select">
                             <option value="">Tất cả</option>
-                            <!-- Will be populated by JavaScript -->
                         </select>
                     </div>
                     <div class="filter-group">
@@ -63,9 +64,9 @@ $basePath = '../../';
                             <option value="">Tất cả</option>
                             <option value="payment_received">Đã nhận thanh toán</option>
                             <option value="processing">Đã nhận đơn</option>
-                            <option value="delivering">Đang giao hàng</option>
+                            <option value="delivering">Đang vận chuyển</option>
                             <option value="completed">Hoàn thành</option>
-                            <option value="cancelled">Đơn hàng hủy</option>
+                            <option value="cancelled">Hủy đơn</option>
                         </select>
                     </div>
                     <div class="filter-group">
@@ -76,6 +77,28 @@ $basePath = '../../';
                             <option value="30" selected>30 ngày</option>
                         </select>
                     </div>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="orders-search-bar">
+                <div class="search-input-wrapper">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="m21 21-4.35-4.35"/>
+                    </svg>
+                    <input 
+                        type="text" 
+                        id="manageOrderSearchInput" 
+                        class="search-input" 
+                        placeholder="Tìm kiếm theo mã đơn hàng (VD: MTF00001)..."
+                    >
+                    <button type="button" id="clearSearchBtn" class="clear-search-btn" style="display: none;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
                 </div>
             </div>
 

@@ -544,6 +544,12 @@ select.form-input:disabled {
   color: var(--text-dark);
   background: var(--white);
   cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231a4d2e' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 16px;
+  padding-right: 36px;
 }
 
 .filter-select:focus {
@@ -650,24 +656,29 @@ select.form-input:disabled {
   white-space: nowrap;
 }
 
+.order-status-badge.status-payment-received {
+  background: #F9EAFF;
+  color: #8748D5;
+}
+
 .order-status-badge.status-received {
-  background: #fff8e1;
-  color: #f9a825;
+  background: #FFFBEB;
+  color: #AE6E0F;
 }
 
 .order-status-badge.status-delivering {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #F1F9FD;
+  color: #204999;
 }
 
 .order-status-badge.status-completed {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: #E8EDE8;
+  color: #143711;
 }
 
 .order-status-badge.status-cancelled {
-  background: #ffebee;
-  color: #c62828;
+  background: #FEE9E7;
+  color: #EC221F;
 }
 
 .order-card-body {
@@ -913,24 +924,29 @@ select.form-input:disabled {
   font-weight: 600;
 }
 
+.order-detail-status.status-payment-received {
+  background: #F9EAFF;
+  color: #8748D5;
+}
+
 .order-detail-status.status-received {
-  background: #fff3e0;
-  color: #e65100;
+  background: #FFFBEB;
+  color: #AE6E0F;
 }
 
 .order-detail-status.status-delivering {
-  background: #e3f2fd;
-  color: #1976d2;
+  background: #F1F9FD;
+  color: #204999;
 }
 
 .order-detail-status.status-completed {
-  background: #e8f5e9;
-  color: #2e7d32;
+  background: #E8EDE8;
+  color: #143711;
 }
 
 .order-detail-status.status-cancelled {
-  background: #ffebee;
-  color: #c62828;
+  background: #FEE9E7;
+  color: #EC221F;
 }
 
 .order-detail-products {
@@ -1043,24 +1059,29 @@ select.form-input:disabled {
   white-space: nowrap;
 }
 
-.order-status.status-pending {
-  background: #fff3cd;
-  color: #856404;
+.order-status.status-payment-received {
+  background: #F9EAFF;
+  color: #8748D5;
 }
 
-.order-status.status-processing {
-  background: #cfe2ff;
-  color: #084298;
+.order-status.status-received {
+  background: #FFFBEB;
+  color: #AE6E0F;
+}
+
+.order-status.status-delivering {
+  background: #F1F9FD;
+  color: #204999;
 }
 
 .order-status.status-completed {
-  background: #d1e7dd;
-  color: #0f5132;
+  background: #E8EDE8;
+  color: #143711;
 }
 
 .order-status.status-cancelled {
-  background: #f8d7da;
-  color: #842029;
+  background: #FEE9E7;
+  color: #EC221F;
 }
 
 .order-status.status-default {

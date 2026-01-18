@@ -452,17 +452,19 @@ $(document).ready(function() {
         var s = (status || '').toLowerCase();
         if (s === 'completed') return 'completed';
         if (s === 'cancelled' || s === 'store_cancelled') return 'cancelled';
-        if (s === 'delivering' || s === 'processing') return 'delivering';
-        if (s === 'payment_received' || s === 'pending') return 'received';
-        return 'received';
+        if (s === 'delivering') return 'delivering';
+        if (s === 'processing' || s === 'order_received') return 'received';
+        if (s === 'payment_received' || s === 'pending') return 'payment-received';
+        return 'payment-received';
     }
 
     function getStatusText(status) {
         var s = (status || '').toLowerCase();
         if (s === 'completed') return 'Hoàn thành';
-        if (s === 'cancelled' || s === 'store_cancelled') return 'Cửa hàng hủy';
-        if (s === 'delivering' || s === 'processing') return 'Đang giao hàng';
-        if (s === 'payment_received' || s === 'pending') return 'Đã nhận đơn';
-        return 'Đã nhận đơn';
+        if (s === 'cancelled' || s === 'store_cancelled') return 'Hủy đơn';
+        if (s === 'delivering') return 'Đang vận chuyển';
+        if (s === 'processing' || s === 'order_received') return 'Đã nhận đơn';
+        if (s === 'payment_received' || s === 'pending') return 'Đã nhận thanh toán';
+        return 'Đã nhận thanh toán';
     }
 });

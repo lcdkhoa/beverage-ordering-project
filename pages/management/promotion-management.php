@@ -42,7 +42,10 @@ $basePath = '../../';
     <section class="management-section">
         <div class="container">
             <div class="management-header">
-                <h1 class="page-title">Quản lý khuyến mãi</h1>
+                <div class="management-header-left">
+                    <h1 class="management-title">Quản lý khuyến mãi</h1>
+                    <p class="management-subtitle">Tạo và quản lý các mã khuyến mãi, giảm giá</p>
+                </div>
                 <?php 
                     $text = 'Thêm khuyến mãi mới';
                     $type = 'primary';

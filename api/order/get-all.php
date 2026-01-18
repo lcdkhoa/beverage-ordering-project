@@ -32,6 +32,7 @@ try {
     $userId = isset($_GET['user_id']) && $_GET['user_id'] !== '' ? (int)$_GET['user_id'] : null;
     $status = trim($_GET['status'] ?? '');
     $days = (int)($_GET['days'] ?? 30);
+    $search = trim($_GET['search'] ?? '');
     if (!in_array($days, [1, 7, 30], true)) {
         $days = 30;
     }
@@ -67,6 +68,12 @@ try {
             $where[] = "o.TrangThai IN ($placeholders)";
             $params = array_merge($params, $statusMap[$status]);
         }
+    }
+
+    if ($search !== '') {
+        $where[] = "CONCAT('#MTF', LPAD(o.MaOrder, 5, '0')) LIKE ?";
+        $searchParam = '%' . $search . '%';
+        $params[] = $searchParam;
     }
 
     $whereClause = implode(' AND ', $where);

@@ -11,10 +11,11 @@
                 <label class="filter-label">Trạng thái:</label>
                 <select id="orderStatusFilter" class="filter-select">
                     <option value="">Tất cả</option>
+                    <option value="payment-received">Đã nhận thanh toán</option>
                     <option value="received">Đã nhận đơn</option>
-                    <option value="delivering">Đang giao hàng</option>
+                    <option value="delivering">Đang vận chuyển</option>
                     <option value="completed">Hoàn thành</option>
-                    <option value="cancelled">Cửa hàng hủy</option>
+                    <option value="cancelled">Hủy đơn</option>
                 </select>
             </div>
             <div class="filter-group">
