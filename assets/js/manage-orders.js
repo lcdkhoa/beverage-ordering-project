@@ -266,7 +266,7 @@ $(document).ready(function() {
             '<div class="info-item"><span class="info-label">Hình thức thanh toán:</span> <span class="info-value">' + escapeHtml(o.PaymentMethod) + '</span></div>' +
             '</div></div></div>';
 
-        var sect2 = '<div class="order-detail-section collapsible">' +
+        var sect2 = '<div class="order-detail-section collapsible collapsed">' +
             '<h3 class="order-detail-section-title">Thông tin nhận hàng</h3>' +
             '<div class="order-detail-section-content">' +
             '<div class="order-detail-info-grid">' +
@@ -305,7 +305,7 @@ $(document).ready(function() {
                     '</div></div></div>';
             });
         }
-        var sect3 = '<div class="order-detail-section collapsible">' +
+        var sect3 = '<div class="order-detail-section collapsible collapsed">' +
             '<h3 class="order-detail-section-title">Sản phẩm (' + (o.items ? o.items.length : 0) + ')</h3>' +
             '<div class="order-detail-section-content">' +
             '<div class="order-detail-products">' + (productsHtml || '<p>Không có sản phẩm</p>') + '</div></div></div>';

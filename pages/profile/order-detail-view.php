@@ -222,7 +222,7 @@ $statusClass = getStatusClass($orderStatus);
 </div>
 
 <!-- Thông tin đơn hàng -->
-<div class="order-detail-section collapsible">
+<div class="order-detail-section collapsible collapsed">
     <h3 class="order-detail-section-title">Thông tin đơn hàng</h3>
     <div class="order-detail-section-content">
         <div class="order-detail-info-grid">
@@ -249,7 +249,7 @@ $statusClass = getStatusClass($orderStatus);
 </div>
 
 <!-- Thông tin nhận hàng -->
-<div class="order-detail-section collapsible">
+<div class="order-detail-section collapsible collapsed">
     <h3 class="order-detail-section-title">Thông tin nhận hàng</h3>
     <div class="order-detail-section-content">
         <div class="order-detail-info-grid">
@@ -270,7 +270,7 @@ $statusClass = getStatusClass($orderStatus);
 </div>
 
 <!-- Sản phẩm -->
-<div class="order-detail-section collapsible">
+<div class="order-detail-section collapsible collapsed">
     <h3 class="order-detail-section-title">Sản phẩm (<?php echo count($orderItems); ?>)</h3>
     <div class="order-detail-section-content">
         <div class="order-detail-products">
